@@ -31,3 +31,4 @@ alias ls="eza -Ghl --color=always --icons=always"
 
 set -Ux EDITOR nvim
 set fzf_history_time_format %d-%m-%y
+set -g fish_user_paths /home/napalm/.local/bin
