@@ -1,14 +1,12 @@
 #!/bin/env bash
 
-# if [ -d "$HOME"/build/test ]; then
-#   echo -n "Yes"
-# else
-#   echo -n "NO"
-# fi
-TESTDIR=$HOME/build/test/
+TESTDIR=$HOME/build/test/links
 
 file_name=("one two tree")
-
-for file in $file_name; do
-  mkdir -p "$TESTDIR"/"$file"
-done
+if [ -d "$TESTDIR" ]; then
+  mkdir -p "$TESTDIR"
+else
+  for file in $file_name; do
+    mkdir -p "$TESTDIR"/"$file"
+  done
+fi
