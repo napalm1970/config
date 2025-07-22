@@ -22,6 +22,7 @@ zoxide init --cmd cd fish | source
 alias pamcan=pacman
 alias v=nvim
 alias hh="shutdown -h now"
+alias rr="reboot"
 alias fc="nvim ~/.config/fish/config.fish"
 alias hc="nvim ~/.config/hypr/hyprland.conf"
 alias wc="nvim ~/.config/waybar/config.jsonc"
