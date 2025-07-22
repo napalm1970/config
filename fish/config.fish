@@ -28,6 +28,7 @@ alias wc="nvim ~/.config/waybar/config.jsonc"
 alias cat="bat"
 alias y="yazi"
 alias ls="eza -Ghl --color=always --icons=always"
+alias lg="lazygit"
 
 set -Ux EDITOR nvim
 set fzf_history_time_format %d-%m-%y
