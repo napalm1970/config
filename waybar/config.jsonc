@@ -11,7 +11,8 @@
   ],
   "modules-center": [
     "clock",
-    "hyprland/language"
+    // "hyprland/language"
+    "custom/keyboard-layout"
   ],
   "modules-right": [
     //   "mpd",
@@ -44,6 +45,11 @@
     "format-en": "us",
     "format-ru": "ru",
     "keyboard-name": " "
+  },
+  "custom/keyboard-layout": {
+    "return-type": "json",
+    "exec": "hypr-kbd-layout",
+    "format": "{}"
   },
   "persistent_workspaces": {
     "1": [],
