@@ -59,9 +59,9 @@ exec-once = /lib/polkit-gnome/polkit-gnome-authentication-agent-1
 
 # See https://wiki.hyprland.org/Configuring/Environment-variables/
 
-# env = HYPRCURSOR_THEME,catppuccin-mocha-dark-cursors
-# env = HYPRCURSOR_SIZE,24 
-# env = XCURSOR_SIZE,24
+env = HYPRCURSOR_THEME,catppuccin-mocha-dark-cursors
+env = HYPRCURSOR_SIZE,24 
+env = XCURSOR_SIZE,24
 # env = HYPRCURSOR_SIZE,24
 
 env = XDG_CURRENT_DESKTOP,Hyprland
@@ -214,11 +214,12 @@ misc {
 
 # https://wiki.hyprland.org/Configuring/Variables/#input
 input {
-    kb_layout = us,ru
+    kb_layout = us, ru
     kb_variant =
     kb_model =
-    kb_options = ctrl:nocaps
+    kb_options = grp:win_space_toggle
     kb_rules =
+
     follow_mouse = 1
 
     sensitivity = 0 # -1.0 - 1.0, 0 means no modification.
@@ -227,7 +228,6 @@ input {
         natural_scroll = false
     }
 }
-
 
 # https://wiki.hyprland.org/Configuring/Variables/#gestures
 gestures {
@@ -239,9 +239,6 @@ gestures {
 device {
     name = epic-mouse-v1
     sensitivity = -0.5
-
-    name =  telink-wireless-receiver
-    kb_layout = us,ru
 }
 
 
@@ -265,7 +262,6 @@ bind = $mainMod, F, fullscreen
 bind = $mainMod, R, exec, ~/.config/waybar/launch.sh
 bind = $mainMod, b, exec, $BROWSER
 bind = $mainMod, t, exec, tor
-bind = $mainMod, SPACE, exec, hyprctl switchxkblayout telink-wireless-receiver next 
 
 # Move focus with mainMod + arrow keys
 bind = $mainMod, left, movefocus, l
