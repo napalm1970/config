@@ -23,6 +23,7 @@ alias pamcan=pacman
 alias v=nvim
 alias hh="shutdown -h now"
 alias rr="reboot"
+alias gg="lazygit"
 alias fc="nvim ~/.config/fish/config.fish"
 alias hc="nvim ~/.config/hypr/hyprland.conf"
 alias wbc="nvim ~/.config/waybar/config.jsonc"
