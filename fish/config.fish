@@ -31,7 +31,9 @@ alias cat="bat"
 alias y="yazi"
 alias ls="eza -Ghl --color=always --icons=always"
 alias upd="paru -Syu"
+alias doc="evince &"
 
 set -Ux EDITOR nvim
 set fzf_history_time_format %d-%m-%y
 set -g fish_user_paths /home/napalm/.local/bin
+fish_add_path $HOME/.local/bin
