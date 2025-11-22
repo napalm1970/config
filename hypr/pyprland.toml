@@ -1,0 +1,29 @@
+[pyprland]
+plugins = ["scratchpads"]
+
+[scratchpads.term]
+animation = "fromTop"
+command = "kitty --class kitty-dropterm"
+class = "kitty-dropterm"
+size = "90% 60%"
+max_size = "1920px 100%"
+margin = 50
+
+[scratchpads.volume]
+animation = "fromRight"
+command = "pavucontrol"
+class = "org.pulseaudio.pavucontrol"
+size = "40% 90%"
+unfocus = "hide"
+lazy = true
+
+
+[scratchpads.calc]
+animation = "fromRight"
+command = "gnome-calculator"
+class = "org.gnome.Calculator"
+size = "40% 90%"
+unfocus = "hide"
+lazy = true
+
+
