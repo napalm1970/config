@@ -2,9 +2,10 @@ window {
   margin: 0px;
   border: 1px solid #88c0d0;
   background-color: #2e3440;
-  /* opacity: 0.5; */
-  font-family: 'JetBrains Mono';
-  font-size: 15px
+  opacity: 0.5;
+  font-family: 'FiraCode Nerd Font';
+  font-size: 9px;
+  border-radius: 25px
 }
 
 #input {
@@ -12,6 +13,7 @@ window {
   border: none;
   color: #d8dee9;
   background-color: #3b4252;
+  border-radius: 25px
 }
 
 #inner-box {
