@@ -46,3 +46,8 @@ fish_add_path /home/napalm/esp/ESP8266_RTOS_SDK/components/partition_table/
 fish_add_path /home/napalm/.espressif/tools/xtensa-lx106-elf/esp-2020r3-49-gd5524c1-8.4.0/xtensa-lx106-elf/bin
 fish_add_path /home/napalm/.espressif/python_env/rtos3.4_py3.13_env/bin
 fish_add_path /home/napalm/esp/ESP8266_RTOS_SDK/tools
+
+set -x SDK_PATH $HOME/esp/ESP8266_NONOS_SDK/
+set -x BIN_PATH $HOME/esp/ESP8266_NONOS_SDK/bin/
+
+# fish_add_path $HOME/esp/xtensa-lx106-elf/bin
