@@ -3,6 +3,8 @@
 from datetime import datetime
 import json
 import subprocess
+import os
+import glob
 from gi.repository import Gtk, GLib, Adw, Gdk
 import gi
 gi.require_version('Gtk', '4.0')
@@ -10,6 +12,39 @@ gi.require_version('Adw', '1')
 
 
 APP_ID = "org.example.hyprland-status-widget"
+
+
+def get_battery_status():
+    """Fetches the current battery status."""
+    try:
+        battery_dir = glob.glob('/sys/class/power_supply/BAT*')[0]
+    except IndexError:
+        return "NO BAT"
+
+    try:
+        with open(os.path.join(battery_dir, 'capacity'), 'r') as f:
+            capacity = int(f.read().strip())
+
+        with open(os.path.join(battery_dir, 'status'), 'r') as f:
+            status = f.read().strip()
+    except FileNotFoundError:
+        return "ERR"
+
+    icon = ''  # Default: nf-fa-battery_full
+
+    if status == 'Charging':
+        icon = ''  # nf-fa-bolt (flash)
+    elif status == 'Discharging':
+        if capacity > 75:
+            icon = ''  # nf-fa-battery_full
+        elif capacity > 50:
+            icon = ''  # nf-fa-battery_three_quarters
+        elif capacity > 25:
+            icon = ''  # nf-fa-battery_half
+        else:
+            icon = ''  # nf-fa-battery_quarter
+
+    return f"{icon} {capacity}%"
 
 
 def get_keyboard_layout():
@@ -46,8 +81,9 @@ class MainWindow(Gtk.ApplicationWindow):
 
     def update_text(self):
         layout = get_keyboard_layout()
+        battery = get_battery_status()
         current_time = datetime.now().strftime('%H:%M:%S')
-        self.label.set_text(f"{layout} | {current_time}")
+        self.label.set_text(f"{layout} | {battery} | {current_time}")
         return True  # Required for timeout_add to repeat
 
 
@@ -70,7 +106,8 @@ if __name__ == "__main__":
     css_provider = Gtk.CssProvider()
     css_provider.load_from_data("""
     .widget-label {
-        font-size: 1.5em;
+        font-family: "JetBrains Mono Nerd Font";
+        font-size: 1.0em;
         font-weight: bold;
         color: white;
     }
