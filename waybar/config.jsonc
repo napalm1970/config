@@ -7,7 +7,9 @@
   "modules-center": [
     "clock",
     "hyprland/language",
-    "custom/keyboard-layout"
+    "keyboard-state"
+
+    // "custom/keyboard-layout"
   ],
   "modules-right": [
     "pulseaudio",
@@ -16,7 +18,6 @@
     "backlight",
     "battery",
     "tray",
-    "keyboard-state"
   ],
   "hyprland/workspaces": {
     "disable-scroll": true,
@@ -37,8 +38,7 @@
   "hyprland/language": {
     "format": "{}",
     "format-en": "us",
-    "format-ru": "ru",
-    "keyboard-name": " "
+    "format-ru": "ru"
   },
   "custom/keyboard-layout": {
     "return-type": "json",
@@ -54,7 +54,7 @@
   },
   "keyboard-state": {
     "capslock": true,
-    "format": "{name} {icon}",
+    "format": "{icon}",
     "format-icons": {
       "locked": "",
       "unlocked": ""
