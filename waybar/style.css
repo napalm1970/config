@@ -283,7 +283,7 @@ label:focus {
 }
 
 #keyboard-state {
-    background: #97e1ad;
+    background: transparent;
     color: #9e70bc;
     padding: 0 0px;
     margin: 0 5px;
