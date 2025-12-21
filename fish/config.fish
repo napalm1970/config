@@ -30,7 +30,7 @@ alias wbc="nvim ~/.config/waybar/config.jsonc"
 alias cat="bat"
 alias y="yazi"
 alias ls="eza -Ghl --color=always --icons=always"
-alias upd="paru -Syu"
+alias upd="yay -Syu"
 alias doc="evince &"
 alias c="clear"
 
