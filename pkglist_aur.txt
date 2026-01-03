@@ -1,10 +1,10 @@
+checkupdates-systemd-git
 coolterm-bin
 dracula-cursors-git
 dracula-icons-git
 esplorer
 gdrive
 keymapper
-paru
 paru-debug
 platformio-git
 portproton
