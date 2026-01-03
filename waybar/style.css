@@ -396,3 +396,12 @@ label:focus {
 #privacy-item.audio-out {
     background-color: #0069d4; /* Цвет фона */
 }
+
+#custom-weather {
+       color: #88c0d0; /* Голубой цвет в стиле Nord */
+        padding: 0 10px;
+    }
+    
+    #custom-weather.error {
+        color: #bf616a; /* Красный, если ошибка */
+    }
