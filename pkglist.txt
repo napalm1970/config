@@ -151,6 +151,7 @@ qt6-wayland
 radeontop
 rclone
 resvg
+rkhunter
 rocm-hip-sdk
 rocm-opencl-sdk
 rygel
