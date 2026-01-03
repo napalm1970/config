@@ -402,6 +402,20 @@ label:focus {
         padding: 0 10px;
     }
     
-    #custom-weather.error {
-        color: #bf616a; /* Красный, если ошибка */
-    }
+#custom-weather.error {
+    color: #bf616a; /* Красный, если ошибка */
+}
+
+#custom-updates {
+    color: #ebcb8b; /* Yellow/Orange for updates */
+    padding: 0 10px;
+}
+
+#custom-updates.updates-critical {
+    color: #bf616a; /* Red for many updates */
+    animation-name: blink;
+    animation-duration: 0.5s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}

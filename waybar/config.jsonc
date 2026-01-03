@@ -26,6 +26,7 @@
     "memory",
     "backlight",
     "battery",
+    "custom/updates",
     "tray"
   ],
   // Конфигурация отдельных модулей.
@@ -376,5 +377,13 @@
     "return-type": "json",
     "exec": "python3 /home/napalm/Documents/config/waybar/weather.py",
     "on-click": "xdg-open https://wttr.in/Sompa,Kohtla-Jarve"
+  },
+  "custom/updates": {
+    "format": "{}",
+    "tooltip": true,
+    "interval": 3600,
+    "return-type": "json",
+    "exec": "python3 /home/napalm/Documents/config/waybar/updates.py",
+    "on-click": "kitty -e sh -c 'yay; echo Done - Press enter to exit; read'"
   }
 }
