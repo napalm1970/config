@@ -45,6 +45,13 @@ def main():
     if total_count > 20:
         css_class = "updates-critical"
         
+    # Save count to tmp file for external widgets
+    try:
+        with open("/tmp/pending_updates", "w") as f:
+            f.write(str(total_count))
+    except Exception:
+        pass
+
     output = {
         "text": f"📦 {total_count}",
         "tooltip": "\n".join(tooltip),
