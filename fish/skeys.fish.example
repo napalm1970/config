@@ -1,0 +1,3 @@
+set -Ux GITHUB_PERSONAL_ACCESS_TOKEN "your_token_here"
+set -Ux AVANTE_GEMINI_API_KEY "your_key_here"
+set -Ux EXA_API_KEY "your_key_here"

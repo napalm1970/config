@@ -52,6 +52,20 @@ def main():
     except Exception:
         pass
 
+    # Send notification if updates are available
+    if total_count > 0:
+        urgency = "normal"
+        if total_count > 20:
+            urgency = "critical"
+        
+        try:
+            # Check if we should notify (simple check to avoid spam if script runs frequently)
+            # Since waybar runs this every hour, immediate notification is fine.
+            msg = f"Available: {total_count}\nNative: {len(native)}\nAUR: {len(aur)}"
+            subprocess.Popen(["notify-send", "-u", urgency, "-i", "software-update-available", "System Updates", msg])
+        except Exception:
+            pass
+
     output = {
         "text": f"📦 {total_count}",
         "tooltip": "\n".join(tooltip),
