@@ -102,6 +102,7 @@ linux
 linux-firmware
 loupe
 lshw
+lynis
 malcontent
 man-db
 man-pages
