@@ -8,6 +8,7 @@ base
 base-devel
 bat
 bear
+bind
 btop
 btrfs-progs
 catfish
@@ -113,6 +114,7 @@ mplayer
 nano
 nautilus
 neovim
+net-tools
 network-manager-applet
 networkmanager
 nmap
