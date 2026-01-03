@@ -1,0 +1,10 @@
+[Trigger]
+Operation = Install
+Operation = Remove
+Type = Package
+Target = *
+
+[Action]
+Description = Обновление списка пакетов в ~/Documents/config...
+When = PostTransaction
+Exec = /usr/bin/bash /home/napalm/Documents/config/scripts/update-pkglist.sh
