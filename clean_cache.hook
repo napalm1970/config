@@ -1,0 +1,11 @@
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Operation = Remove
+Type = Package
+Target = *
+
+[Action]
+Description = Очистка кэша старых пакетов (оставляем 2 версии)...
+When = PostTransaction
+Exec = /usr/bin/paccache -rk2
