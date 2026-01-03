@@ -130,6 +130,7 @@ pipewire
 pipewire-alsa
 pipewire-jack
 pipewire-pulse
+pkgfile
 platformio-core-udev
 polkit-kde-agent
 poppler-glib
