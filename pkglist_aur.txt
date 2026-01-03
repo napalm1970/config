@@ -18,3 +18,4 @@ usbasp-udev
 wvkbd
 yay
 yay-debug
+dracula-gtk-theme

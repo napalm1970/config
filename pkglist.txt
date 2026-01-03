@@ -203,3 +203,5 @@ yelp
 zip
 zoxide
 zram-generator
+nodejs
+npm
