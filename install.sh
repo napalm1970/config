@@ -178,6 +178,54 @@ if command -v fish &> /dev/null; then
     log_success "Сокращения Fish добавлены (dot, conf, gs, gp)."
 fi
 
+# 7. Установка плагинов Fish (Fisher)
+if command -v fish &> /dev/null; then
+    log_info "Проверка Fisher и плагинов..."
+    # Проверяем наличие fisher функций
+    if ! as_user fish -c "functions -q fisher"; then
+        log_info "Установка Fisher..."
+        if [ "$DRY_RUN" = false ]; then
+             as_user fish -c "curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher"
+        else
+             log_dry "Установил бы Fisher через curl"
+        fi
+    fi
+    
+    # Установка плагинов из файла
+    if [ -f "$DOTFILES_DIR/fish/fish_plugins" ]; then
+        log_info "Обновление плагинов Fish..."
+        as_user fish -c "fisher update"
+    fi
+fi
+
+# 8. Установка Gemini CLI
+if ! command -v gemini &> /dev/null; then
+    if command -v npm &> /dev/null; then
+        log_info "Установка Gemini CLI..."
+        # Используем глобальную установку npm (потребует sudo или прав на папку)
+        run_cmd sudo npm install -g gemini-chat-cli
+    else
+        log_error "npm не найден. Не могу установить Gemini CLI."
+    fi
+else
+    log_success "Gemini CLI уже установлен."
+fi
+
+# 9. Применение настроек GTK
+if command -v gsettings &> /dev/null; then
+    log_info "Применение темы GTK (Dracula) и иконок..."
+    # Нужно выполнять в сессии пользователя (dbus), но в скрипте установки это сложно.
+    # Мы просто выведем команды, которые пользователь может запустить сам, или попробуем применить.
+    if [ "$DRY_RUN" = false ]; then
+        # Попытка применить настройки, если dbus доступен
+        as_user gsettings set org.gnome.desktop.interface gtk-theme "Dracula" 2>/dev/null
+        as_user gsettings set org.gnome.desktop.interface icon-theme "Dracula" 2>/dev/null
+        as_user gsettings set org.gnome.desktop.interface cursor-theme "Obsidian" 2>/dev/null
+    else
+        log_dry "gsettings set gtk-theme Dracula"
+    fi
+fi
+
 if [ "$DRY_RUN" = true ]; then
     echo -e "\n${YELLOW}--- КОНЕЦ ХОЛОСТОГО ПРОГОНА ---${NC}"
 else
