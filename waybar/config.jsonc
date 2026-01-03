@@ -375,7 +375,7 @@
     "tooltip": true,
     "interval": 1800,
     "return-type": "json",
-    "exec": "python3 /home/napalm/Documents/config/waybar/weather.py",
+    "exec": "python3 ~/Documents/config/waybar/weather.py",
     "on-click": "xdg-open https://wttr.in/Sompa,Kohtla-Jarve"
   },
   "custom/updates": {
@@ -383,7 +383,7 @@
     "tooltip": true,
     "interval": 3600,
     "return-type": "json",
-    "exec": "python3 /home/napalm/Documents/config/waybar/updates.py",
+    "exec": "python3 ~/Documents/config/waybar/updates.py",
     "on-click": "kitty -e sh -c 'yay; echo Done - Press enter to exit; read'"
   }
 }

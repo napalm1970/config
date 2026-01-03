@@ -7,4 +7,4 @@ Target = *
 [Action]
 Description = Обновление списка пакетов в ~/Documents/config...
 When = PostTransaction
-Exec = /usr/bin/bash /home/napalm/Documents/config/scripts/update-pkglist.sh
+Exec = /usr/bin/bash -c "HOME=/home/$(logname) /usr/bin/bash $HOME/Documents/config/scripts/update-pkglist.sh"
