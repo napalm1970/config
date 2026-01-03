@@ -16,7 +16,7 @@
   "modules-center": [
     "clock",
     "hyprland/language",
-    "custom/keyboard-layout"
+    "custom/weather"
   ],
   // Модули, отображаемые в правой части панели Waybar.
   "modules-right": [
@@ -333,7 +333,7 @@
     },
     // Команда, выполняемая по клику.
     "on-click": "pavucontrol"
-  },  // Пользовательский модуль для отображения информации о воспроизводимом медиа.
+  }, // Пользовательский модуль для отображения информации о воспроизводимом медиа.
   "custom/media": {
     // Формат отображения информации о медиа.
     "format": "{icon} {text}",
@@ -368,5 +368,13 @@
       "suspend": "systemctl suspend",
       "hibernate": "systemctl hibernate"
     }
+  },
+  "custom/weather": {
+    "format": "{}",
+    "tooltip": true,
+    "interval": 1800,
+    "return-type": "json",
+    "exec": "python3 /home/napalm/Documents/config/waybar/weather.py",
+    "on-click": "xdg-open https://wttr.in/Sompa,Kohtla-Jarve"
   }
 }
