@@ -14,6 +14,7 @@ catfish
 cdrtools
 chafa
 chrono-date
+clamav
 clang
 cpio
 cyme
