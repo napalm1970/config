@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 import json
 import urllib.request
+import urllib.error
+import time
 import sys
-import os
+import socket
 
 # Configuration
 CITY = "Sompa,Kohtla-Jarve"
-# Using format=j1 for JSON output from wttr.in
 URL = f"https://wttr.in/{CITY}?format=j1"
+MAX_RETRIES = 10
+RETRY_DELAY = 5
 
 weather_icons = {
     "113": "☀️",  # Sunny
@@ -60,24 +63,39 @@ weather_icons = {
     "395": "❄️",  # HeavySnowShowers
 }
 
-try:
-    with urllib.request.urlopen(URL) as response:
-        data = json.loads(response.read().decode())
-        
-        current_condition = data['current_condition'][0]
-        temp_C = current_condition['temp_C']
-        weather_code = current_condition['weatherCode']
-        weather_desc = current_condition['weatherDesc'][0]['value']
-        feels_like = current_condition['FeelsLikeC']
-        humidity = current_condition['humidity']
-        wind_speed = current_condition['windspeedKmph']
-        
-        icon = weather_icons.get(weather_code, "")
-        
-        text = f"{icon} {temp_C}°C".strip()
-        tooltip = f"<b>{weather_desc}</b>\nОщущается как: {feels_like}°C\nВлажность: {humidity}%\nВетер: {wind_speed} km/h"
-        
-        print(json.dumps({"text": text, "tooltip": tooltip, "class": "weather"}))
+def get_weather():
+    for attempt in range(MAX_RETRIES):
+        try:
+            # Set a timeout for the request
+            with urllib.request.urlopen(URL, timeout=5) as response:
+                data = json.loads(response.read().decode())
+                
+                current_condition = data['current_condition'][0]
+                temp_C = current_condition['temp_C']
+                weather_code = current_condition['weatherCode']
+                weather_desc = current_condition['weatherDesc'][0]['value']
+                feels_like = current_condition['FeelsLikeC']
+                humidity = current_condition['humidity']
+                wind_speed = current_condition['windspeedKmph']
+                
+                icon = weather_icons.get(weather_code, "")
+                
+                text = f"{icon} {temp_C}°C".strip()
+                tooltip = f"<b>{weather_desc}</b>\nОщущается как: {feels_like}°C\nВлажность: {humidity}%\nВетер: {wind_speed} km/h"
+                
+                print(json.dumps({"text": text, "tooltip": tooltip, "class": "weather"}))
+                return
 
-except Exception as e:
-    print(json.dumps({"text": "Weather N/A", "tooltip": f"Error: {str(e)}"}))
+        except (urllib.error.URLError, socket.timeout):
+            # Network error, wait and retry
+            time.sleep(RETRY_DELAY)
+        except Exception as e:
+            # Other errors (e.g. JSON parse), fail immediately
+            print(json.dumps({"text": "Error", "tooltip": str(e)}))
+            return
+
+    # If we exhausted all retries
+    print(json.dumps({"text": "🚫", "tooltip": "No Internet Connection"}))
+
+if __name__ == "__main__":
+    get_weather()
