@@ -46,19 +46,23 @@ run_cmd() {
     fi
 }
 
-# 1. Обновление системы и установка зависимостей
-log_info "Обновление системы..."
-run_cmd sudo pacman -Syu --noconfirm
+# 1. Подготовка и установка yay
+log_info "Синхронизация баз данных pacman..."
+run_cmd sudo pacman -Sy
 
-if ! command -v git &> /dev/null; then
-    log_info "Git не найден. Установка..."
-    run_cmd sudo pacman -S --noconfirm git
+# Проверка и установка зависимостей для сборки (git, base-devel)
+PACKAGES_TO_INSTALL=""
+if ! command -v git &> /dev/null; then PACKAGES_TO_INSTALL="$PACKAGES_TO_INSTALL git"; fi
+if ! pacman -Qi base-devel &> /dev/null; then PACKAGES_TO_INSTALL="$PACKAGES_TO_INSTALL base-devel"; fi
+
+if [ -n "$PACKAGES_TO_INSTALL" ]; then
+    log_info "Установка зависимостей для сборки yay ($PACKAGES_TO_INSTALL)..."
+    run_cmd sudo pacman -S --noconfirm --needed $PACKAGES_TO_INSTALL
 fi
 
-# 2. Проверка и установка yay (AUR helper)
+# Проверка и установка yay
 if ! command -v yay &> /dev/null; then
     log_info "yay не найден. Установка yay..."
-    run_cmd sudo pacman -S --needed --noconfirm base-devel
     run_cmd git clone https://aur.archlinux.org/yay.git /tmp/yay
     if [ "$DRY_RUN" = false ]; then
         cd /tmp/yay
@@ -66,10 +70,18 @@ if ! command -v yay &> /dev/null; then
         cd "$DOTFILES_DIR"
         rm -rf /tmp/yay
     else
-        log_dry "Установка yay из AUR..."
+        log_dry "Сборка и установка yay..."
     fi
 else
     log_success "yay уже установлен."
+fi
+
+# 2. Полное обновление системы (Repo + AUR)
+log_info "Полное обновление системы (через yay)..."
+if [ "$DRY_RUN" = true ]; then
+    log_dry "yay -Syu --noconfirm"
+else
+    yay -Syu --noconfirm
 fi
 
 # 3. Установка пакетов из списков
