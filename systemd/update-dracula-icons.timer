@@ -1,0 +1,10 @@
+[Unit]
+Description=Таймер для ежемесячного обновления иконок Dracula
+
+[Timer]
+# Запуск в первый день каждого месяца в 12:00
+OnCalendar=*-*-01 12:00:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,13 @@
+[Unit]
+Description=Ежемесячное обновление иконок Dracula (AUR)
+After=network-online.target
+
+[Service]
+Type=oneshot
+# Используем yay для обновления конкретного пакета, игнорируя настройки IgnorePkg
+ExecStart=/usr/bin/yay -S dracula-icons-git --noconfirm
+User=napalm
+Group=napalm
+
+[Install]
+WantedBy=multi-user.target

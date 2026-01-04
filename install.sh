@@ -156,7 +156,27 @@ for hook in "$DOTFILES_DIR/"*.hook; do
     fi
 done
 
-# 6. Пост-установка
+# 6. Настройка IgnorePkg для dracula-icons-git
+if ! grep -q "IgnorePkg.*dracula-icons-git" /etc/pacman.conf; then
+    log_info "Добавление dracula-icons-git в IgnorePkg (pacman.conf)..."
+    run_cmd sudo sed -i '/^#IgnorePkg/c\IgnorePkg = dracula-icons-git' /etc/pacman.conf
+    # Если IgnorePkg уже раскомментирован, но пакета там нет
+    if ! grep -q "dracula-icons-git" /etc/pacman.conf; then
+        run_cmd sudo sed -i '/^IgnorePkg/ s/$/ dracula-icons-git/' /etc/pacman.conf
+    fi
+fi
+
+# 7. Установка ежемесячного таймера обновления
+log_info "Настройка таймера обновления иконок..."
+SYSTEMD_DIR="/etc/systemd/system"
+if [ -d "$DOTFILES_DIR/systemd" ]; then
+    run_cmd sudo cp "$DOTFILES_DIR/systemd/"* "$SYSTEMD_DIR/"
+    run_cmd sudo systemctl daemon-reload
+    run_cmd sudo systemctl enable --now update-dracula-icons.timer
+    log_success "Таймер обновления иконок активирован."
+fi
+
+# 8. Пост-установка
 log_info "Настройка прав доступа для скриптов..."
 run_cmd chmod +x "$DOTFILES_DIR/waybar/launch.sh"
 run_cmd chmod +x "$DOTFILES_DIR/scripts/"*.sh
