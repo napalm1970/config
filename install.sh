@@ -46,92 +46,7 @@ run_cmd() {
     fi
 }
 
-# Функция создания пользователя
-create_user_interactive() {
-    echo -e "${BLUE}--- Настройка пользователя ---${NC}"
-    echo -n "Введите имя пользователя для создания (оставьте пустым для пропуска): "
-    read NEW_USER
-
-    if [ -n "$NEW_USER" ]; then
-        if id "$NEW_USER" &>/dev/null; then
-            log_info "Пользователь $NEW_USER уже существует."
-        else
-            log_info "Создание пользователя $NEW_USER..."
-            run_cmd sudo useradd -m -G wheel -s /bin/bash "$NEW_USER"
-            
-            if [ "$DRY_RUN" = false ]; then
-                log_info "Установите пароль для $NEW_USER:"
-                sudo passwd "$NEW_USER"
-            else
-                log_dry "Запрос пароля для $NEW_USER"
-            fi
-            
-            log_info "Настройка прав доступа к домашней директории..."
-            run_cmd sudo chmod 700 "/home/$NEW_USER"
-            log_success "Пользователь $NEW_USER создан и добавлен в группу wheel."
-        fi
-    else
-        log_info "Создание пользователя пропущено."
-    fi
-}
-
-# Запуск создания пользователя
-create_user_interactive
-
-# --- Настройка пользователя ---
-DEFAULT_USER=$(stat -c '%U' "$DOTFILES_DIR")
-echo -e "${BLUE}--- Настройка пользователя ---${NC}"
-read -p "Введите имя пользователя для настройки/создания (по умолчанию $DEFAULT_USER): " TARGET_USER
-TARGET_USER=${TARGET_USER:-$DEFAULT_USER}
-
-# Функция для настройки пользователя
-setup_user() {
-    local username="$1"
-    
-    if id "$username" &>/dev/null; then
-        echo -e "${YELLOW}Пользователь '$username' уже существует.${NC}"
-        if [ "$DRY_RUN" = false ]; then
-            read -p "Настроить параметры этого пользователя (группы, шелл)? [y/N] " response
-            if [[ "$response" != "y" ]]; then
-                log_info "Пропуск настройки пользователя $username."
-                return
-            fi
-        else
-            log_dry "Задал бы вопрос: Настроить параметры пользователя $username? [y/N]"
-        fi
-    else
-        echo -e "${YELLOW}Пользователь '$username' не найден.${NC}"
-        if [ "$DRY_RUN" = false ]; then
-            read -p "Создать нового пользователя '$username'? [y/N] " response
-            if [[ "$response" != "y" ]]; then
-                log_error "Пользователь не создан. Скрипт может работать некорректно."
-                return
-            fi
-        else
-            log_dry "Задал бы вопрос: Создать нового пользователя '$username'? [y/N]"
-        fi
-    fi
-
-    log_info "Применение параметров для пользователя $username..."
-    
-    # Группы: wheel (sudo), video (яркость), audio (звук), storage (диски), input (устройства ввода)
-    local groups="wheel,video,audio,storage,input,uucp"
-    
-    if id "$username" &>/dev/null; then
-        run_cmd sudo usermod -aG "$groups" "$username"
-        log_success "Группы для $username обновлены."
-    else
-        run_cmd sudo useradd -m -G "$groups" -s /usr/bin/fish "$username"
-        if [ "$DRY_RUN" = false ]; then
-            log_info "Установите пароль для $username:"
-            sudo passwd "$username"
-        fi
-        log_success "Пользователь $username создан."
-    fi
-}
-
-setup_user "$TARGET_USER"
-
+# --- Подготовка ---
 # 1. Подготовка и установка yay
 run_cmd sudo pacman -Sy --noconfirm archlinux-keyring
 
@@ -150,15 +65,11 @@ if ! command -v yay &> /dev/null; then
     log_info "yay не найден. Установка yay..."
     run_cmd rm -rf /tmp/yay
     run_cmd git clone https://aur.archlinux.org/yay.git /tmp/yay
-    run_cmd chown -R "$TARGET_USER" /tmp/yay
+    OWNER=$(stat -c '%U' "$DOTFILES_DIR")
+    run_cmd chown -R "$OWNER" /tmp/yay
     if [ "$DRY_RUN" = false ]; then
         cd /tmp/yay
-        if [ "$EUID" -eq 0 ]; then
-             # Если скрипт запущен от root, запускаем makepkg от имени пользователя
-             sudo -u "$TARGET_USER" makepkg -si --noconfirm
-        else
-             makepkg -si --noconfirm
-        fi
+        as_user makepkg -si --noconfirm
         cd "$DOTFILES_DIR"
         rm -rf /tmp/yay
     else
