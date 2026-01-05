@@ -169,12 +169,21 @@ for hook in "$DOTFILES_DIR/"*.hook; do
 done
 
 # 6. Настройка IgnorePkg для dracula-icons-git
-if ! grep -q "IgnorePkg.*dracula-icons-git" /etc/pacman.conf; then
-    log_info "Добавление dracula-icons-git в IgnorePkg (pacman.conf)..."
-    run_cmd sudo sed -i '/^#IgnorePkg/c\IgnorePkg = dracula-icons-git' /etc/pacman.conf
-    # Если IgnorePkg уже раскомментирован, но пакета там нет
-    if ! grep -q "dracula-icons-git" /etc/pacman.conf; then
+if ! grep -q "^IgnorePkg.*dracula-icons-git" /etc/pacman.conf; then
+    log_info "Настройка игнорирования dracula-icons-git в pacman.conf..."
+    
+    # 1. Если есть активная строка IgnorePkg, добавляем к ней
+    if grep -q "^IgnorePkg" /etc/pacman.conf; then
         run_cmd sudo sed -i '/^IgnorePkg/ s/$/ dracula-icons-git/' /etc/pacman.conf
+    
+    # 2. Если есть закомментированная #IgnorePkg =, раскомментируем и добавляем
+    elif grep -q "^#IgnorePkg" /etc/pacman.conf; then
+        run_cmd sudo sed -i 's/^#IgnorePkg\s*=/IgnorePkg = dracula-icons-git/' /etc/pacman.conf
+    
+    # 3. Если ничего нет, добавляем в конец секции [options] (упрощенно - просто в конец файла, если не найдено иное)
+    else
+        # Это крайний случай, обычно в Arch всегда есть #IgnorePkg
+        log_info "Секция IgnorePkg не найдена, пропускаем автоматическую правку во избежание ошибок."
     fi
 fi
 

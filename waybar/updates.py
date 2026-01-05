@@ -2,6 +2,24 @@
 import subprocess
 import json
 import sys
+import os
+
+def get_ignored_packages():
+    """Reads IgnorePkg from /etc/pacman.conf"""
+    ignored = set()
+    try:
+        with open("/etc/pacman.conf", "r") as f:
+            for line in f:
+                line = line.strip()
+                if line.startswith("IgnorePkg"):
+                    # Handle "IgnorePkg = pkg1 pkg2"
+                    parts = line.split("=")
+                    if len(parts) > 1:
+                        pkgs = parts[1].strip().split()
+                        ignored.update(pkgs)
+    except FileNotFoundError:
+        pass
+    return ignored
 
 def get_native_updates():
     try:
@@ -20,8 +38,14 @@ def get_aur_updates():
         return []
 
 def main():
-    native = get_native_updates()
-    aur = get_aur_updates()
+    ignored = get_ignored_packages()
+    
+    # Filter out ignored packages
+    native_raw = get_native_updates()
+    native = [line for line in native_raw if line.split()[0] not in ignored]
+    
+    aur_raw = get_aur_updates()
+    aur = [line for line in aur_raw if line.split()[0] not in ignored]
     
     total_count = len(native) + len(aur)
     
@@ -45,27 +69,6 @@ def main():
     if total_count > 20:
         css_class = "updates-critical"
         
-    # Save count to tmp file for external widgets
-    try:
-        with open("/tmp/pending_updates", "w") as f:
-            f.write(str(total_count))
-    except Exception:
-        pass
-
-    # Send notification if updates are available
-    if total_count > 0:
-        urgency = "normal"
-        if total_count > 20:
-            urgency = "critical"
-        
-        try:
-            # Check if we should notify (simple check to avoid spam if script runs frequently)
-            # Since waybar runs this every hour, immediate notification is fine.
-            msg = f"Available: {total_count}\nNative: {len(native)}\nAUR: {len(aur)}"
-            subprocess.Popen(["notify-send", "-u", urgency, "-i", "software-update-available", "System Updates", msg])
-        except Exception:
-            pass
-
     output = {
         "text": f"📦 {total_count}",
         "tooltip": "\n".join(tooltip),
