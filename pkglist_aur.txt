@@ -6,6 +6,7 @@ esplorer
 gdrive
 google-chrome
 keymapper
+keymapper-debug
 paru-debug
 platformio-git
 portproton
