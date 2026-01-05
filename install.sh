@@ -255,7 +255,18 @@ else
     log_success "Gemini CLI уже установлен."
 fi
 
-# 9. Применение настроек GTK
+# 9. Настройка локали и шрифта консоли (TTY)
+if command -v localectl &> /dev/null; then
+    log_info "Настройка локалей (en_US и ru_RU)..."
+    run_cmd sudo sed -i '/^#en_US.UTF-8 UTF-8/s/^#//' /etc/locale.gen
+    run_cmd sudo sed -i '/^#ru_RU.UTF-8 UTF-8/s/^#//' /etc/locale.gen
+    run_cmd sudo locale-gen
+    
+    log_info "Настройка шрифта консоли (cyr-sun16)..."
+    run_cmd sudo localectl set-vc-font cyr-sun16
+fi
+
+# 10. Применение настроек GTK
 if command -v gsettings &> /dev/null; then
     log_info "Применение темы GTK (Dracula) и иконок..."
     # Нужно выполнять в сессии пользователя (dbus), но в скрипте установки это сложно.
