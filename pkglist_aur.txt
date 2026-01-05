@@ -4,6 +4,7 @@ dracula-cursors-git
 dracula-icons-git
 esplorer
 gdrive
+google-chrome
 keymapper
 paru-debug
 platformio-git
@@ -15,8 +16,8 @@ simavr
 simulide
 toru-bin
 usbasp-udev
+viber
+virtualbox-ext-oracle
 wvkbd
 yay
 yay-debug
-dracula-gtk-theme
-virtualbox-ext-oracle
