@@ -46,6 +46,38 @@ run_cmd() {
     fi
 }
 
+# Функция создания пользователя
+create_user_interactive() {
+    echo -e "${BLUE}--- Настройка пользователя ---${NC}"
+    echo -n "Введите имя пользователя для создания (оставьте пустым для пропуска): "
+    read NEW_USER
+
+    if [ -n "$NEW_USER" ]; then
+        if id "$NEW_USER" &>/dev/null; then
+            log_info "Пользователь $NEW_USER уже существует."
+        else
+            log_info "Создание пользователя $NEW_USER..."
+            run_cmd sudo useradd -m -G wheel -s /bin/bash "$NEW_USER"
+            
+            if [ "$DRY_RUN" = false ]; then
+                log_info "Установите пароль для $NEW_USER:"
+                sudo passwd "$NEW_USER"
+            else
+                log_dry "Запрос пароля для $NEW_USER"
+            fi
+            
+            log_info "Настройка прав доступа к домашней директории..."
+            run_cmd sudo chmod 700 "/home/$NEW_USER"
+            log_success "Пользователь $NEW_USER создан и добавлен в группу wheel."
+        fi
+    else
+        log_info "Создание пользователя пропущено."
+    fi
+}
+
+# Запуск создания пользователя
+create_user_interactive
+
 # 1. Подготовка и установка yay
 log_info "Синхронизация баз данных pacman..."
 run_cmd sudo pacman -Sy
