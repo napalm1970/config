@@ -17,6 +17,7 @@ chafa
 chrono-date
 clamav
 clang
+cmake
 cpio
 cyme
 ddcutil
