@@ -19,3 +19,4 @@ wvkbd
 yay
 yay-debug
 dracula-gtk-theme
+virtualbox-ext-oracle

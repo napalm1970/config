@@ -205,3 +205,5 @@ zoxide
 zram-generator
 nodejs
 npm
+virtualbox
+virtualbox-host-modules-arch

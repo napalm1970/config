@@ -1,6 +1,6 @@
 #!/bin/bash
 # Путь к папке конфигов
-CONFIG_DIR="$HOME/Documents/config"
+CONFIG_DIR="/home/napalm/Documents/config"
 
 # Определяем владельца папки, чтобы git не ругался на права
 OWNER=$(stat -c '%U' "$CONFIG_DIR")
