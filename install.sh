@@ -133,7 +133,7 @@ setup_user() {
 setup_user "$TARGET_USER"
 
 # 1. Подготовка и установка yay
-run_cmd sudo pacman -Sy
+run_cmd sudo pacman -Sy --noconfirm archlinux-keyring
 
 # Проверка и установка зависимостей для сборки (git, base-devel)
 PACKAGES_TO_INSTALL=""
@@ -148,10 +148,17 @@ fi
 # Проверка и установка yay
 if ! command -v yay &> /dev/null; then
     log_info "yay не найден. Установка yay..."
+    run_cmd rm -rf /tmp/yay
     run_cmd git clone https://aur.archlinux.org/yay.git /tmp/yay
+    run_cmd chown -R "$TARGET_USER" /tmp/yay
     if [ "$DRY_RUN" = false ]; then
         cd /tmp/yay
-        makepkg -si --noconfirm
+        if [ "$EUID" -eq 0 ]; then
+             # Если скрипт запущен от root, запускаем makepkg от имени пользователя
+             sudo -u "$TARGET_USER" makepkg -si --noconfirm
+        else
+             makepkg -si --noconfirm
+        fi
         cd "$DOTFILES_DIR"
         rm -rf /tmp/yay
     else
