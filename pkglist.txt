@@ -123,7 +123,6 @@ ntfs-3g
 nwg-displays
 nwg-look
 obsidian
-ollama
 onboard
 orca
 otf-font-awesome
@@ -142,7 +141,6 @@ putty
 python-pip
 python-pipenv
 python-pipx
-python-pytorch-opt-rocm
 python-shellingham
 qbittorrent
 qt5-wayland
@@ -152,8 +150,6 @@ radeontop
 rclone
 resvg
 rkhunter
-rocm-hip-sdk
-rocm-opencl-sdk
 rygel
 screen
 sddm
@@ -179,6 +175,8 @@ unrar
 unzip
 uwsm
 vim
+virtualbox
+virtualbox-host-modules-arch
 vulkan-radeon
 waybar
 wget
@@ -203,7 +201,3 @@ yelp
 zip
 zoxide
 zram-generator
-nodejs
-npm
-virtualbox
-virtualbox-host-modules-arch
