@@ -237,15 +237,36 @@ if [ ! -L "$THEMES_TARGET" ] || [ "$(readlink -f "$THEMES_TARGET")" != "$DOTFILE
 fi
 
 # 5. Установка системных хуков pacman
-log_info "Установка хуков pacman в систему..."
+log_info "Установка и настройка хуков pacman..."
 HOOKS_DIR="/etc/pacman.d/hooks"
 run_cmd sudo mkdir -p "$HOOKS_DIR"
 
 for hook in "$DOTFILES_DIR/"*.hook; do
     if [ -f "$hook" ]; then
         hook_name=$(basename "$hook")
-        run_cmd sudo ln -sf "$hook" "$HOOKS_DIR/$hook_name"
-        log_success "Хук установлен: $hook_name"
+        target_file="$HOOKS_DIR/$hook_name"
+        
+        # Читаем шаблон и подставляем реальный путь
+        # Экранируем слеши в пути для sed
+        ESCAPED_PATH=$(echo "$DOTFILES_DIR" | sed 's/\//\\\//g')
+        
+        # Создаем временный файл с правильным путем
+        sed "s/INSERT_PATH_HERE/$ESCAPED_PATH/g" "$hook" > "/tmp/$hook_name"
+        
+        if [ "$DRY_RUN" = true ]; then
+            log_dry "Сгенерировал бы $target_file с путем $DOTFILES_DIR"
+            log_dry "Контент:"
+            if [ -f "/tmp/$hook_name" ]; then
+                cat "/tmp/$hook_name" | while read line; do log_dry "  $line"; done
+            fi
+        else
+            run_cmd sudo mv "/tmp/$hook_name" "$target_file"
+            # Удаляем старый симлинк если он был, чтобы файл записался поверх
+            if [ -L "$target_file" ]; then run_cmd sudo rm "$target_file"; fi
+            run_cmd sudo chown root:root "$target_file"
+            log_success "Хук сгенерирован и установлен: $hook_name"
+        fi
+        rm -f "/tmp/$hook_name"
     fi
 done
 
@@ -300,13 +321,34 @@ fi
 if [ -d "$DOTFILES_DIR/scripts" ]; then run_cmd chmod +x "$DOTFILES_DIR/scripts/"*.sh; fi
 
 # Настройка Fish
-# Более надежная проверка текущего шелла
-if [[ "$SHELL" != *"/fish" ]]; then
-    if grep -q "fish" /etc/shells; then
-        log_info "Смена шелла по умолчанию на fish..."
-        run_cmd chsh -s "$(command -v fish)"
+FISH_PATH=$(which fish)
+if [ -z "$FISH_PATH" ]; then
+    log_error "Fish не найден. Смена оболочки невозможна."
+else
+    # Получаем текущий шелл пользователя из /etc/passwd
+    # Если getent недоступен (редко), используем $SHELL как фоллбек
+    USER_SHELL=$(getent passwd "$USER" | cut -d: -f7)
+    
+    if [ "$USER_SHELL" != "$FISH_PATH" ]; then
+        log_info "Текущий шелл ($USER_SHELL) отличается от fish ($FISH_PATH)."
+        if grep -q "$FISH_PATH" /etc/shells; then
+            log_info "Смена оболочки по умолчанию на fish..."
+            # chsh требует ввода пароля
+            if [ "$DRY_RUN" = true ]; then
+                log_dry "chsh -s $FISH_PATH"
+            else
+                chsh -s "$FISH_PATH"
+            fi
+        else
+            log_error "Fish не прописан в /etc/shells. Добавляю..."
+            run_cmd sudo sh -c "echo $FISH_PATH >> /etc/shells"
+            run_cmd chsh -s "$FISH_PATH"
+        fi
+    else
+        log_success "Fish уже установлен как шелл по умолчанию."
     fi
 fi
+
 
 if command -v fish &> /dev/null; then
     log_info "Добавление сокращений в Fish..."

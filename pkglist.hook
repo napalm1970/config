@@ -5,6 +5,6 @@ Type = Package
 Target = *
 
 [Action]
-Description = Обновление списка пакетов в ~/Documents/config...
+Description = Обновление списка пакетов...
 When = PostTransaction
-Exec = /usr/bin/bash -c "HOME=/home/$(logname) /usr/bin/bash $HOME/Documents/config/scripts/update-pkglist.sh"
+Exec = /usr/bin/bash "INSERT_PATH_HERE/scripts/update-pkglist.sh"
