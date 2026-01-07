@@ -150,6 +150,8 @@ radeontop
 rclone
 resvg
 rkhunter
+rsync
+ruby
 rygel
 screen
 sddm
