@@ -252,6 +252,26 @@ fi
 # 8. Пост-установка
 log_info "Настройка прав доступа для скриптов..."
 if [ -f "$DOTFILES_DIR/waybar/launch.sh" ]; then run_cmd chmod +x "$DOTFILES_DIR/waybar/launch.sh"; fi
+
+# Создание wait-for-net.sh если его нет
+if [ ! -f "$DOTFILES_DIR/scripts/wait-for-net.sh" ]; then
+    log_info "Создание scripts/wait-for-net.sh..."
+    run_cmd mkdir -p "$DOTFILES_DIR/scripts"
+    if [ "$DRY_RUN" = false ]; then
+        cat <<EOF > "$DOTFILES_DIR/scripts/wait-for-net.sh"
+#!/bin/bash
+REMOTE_HOST="8.8.8.8"
+MAX_RETRIES=20
+COUNT=0
+while ! ping -c 1 -W 1 \$REMOTE_HOST &>/dev/null; do
+    if [ \$COUNT -ge \$MAX_RETRIES ]; then exit 1; fi
+    sleep 1
+    ((COUNT++))
+done
+exit 0
+EOF
+    fi
+fi
 if [ -d "$DOTFILES_DIR/scripts" ]; then run_cmd chmod +x "$DOTFILES_DIR/scripts/"*.sh; fi
 
 # Настройка Fish
@@ -269,7 +289,12 @@ if command -v fish &> /dev/null; then
     run_cmd fish -c "abbr -a conf 'cd $CONFIG_DIR'"
     run_cmd fish -c "abbr -a gs 'git status'"
     run_cmd fish -c "abbr -a gp 'git push origin main'"
-    log_success "Сокращения Fish добавлены."
+    
+    # Линковка gemini.fish
+    if [ -f "$DOTFILES_DIR/fish/gemini.fish" ]; then
+        run_cmd ln -sf "$DOTFILES_DIR/fish/gemini.fish" "$CONFIG_DIR/fish/conf.d/gemini.fish"
+    fi
+    log_success "Настройки Fish применены."
 fi
 
 # 9. Установка плагинов Fish (Fisher)
