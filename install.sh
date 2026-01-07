@@ -102,6 +102,15 @@ fi
 log_info "Обновление ключей Arch Linux..."
 run_cmd sudo pacman -Sy --noconfirm archlinux-keyring
 
+# Проверка и включение репозитория multilib (нужен для lib32-* пакетов, Steam, Wine)
+if grep -q "^#[multilib]" /etc/pacman.conf; then
+    log_info "Включение репозитория multilib..."
+    run_cmd sudo sed -i "/\[multilib\]/,/Include/"'s/^#//' /etc/pacman.conf
+    run_cmd sudo pacman -Sy --noconfirm
+else
+    log_success "Репозиторий multilib уже включен."
+fi
+
 # Проверка и установка зависимостей для сборки (git, base-devel)
 PACKAGES_TO_INSTALL=""
 if ! command -v git &> /dev/null; then PACKAGES_TO_INSTALL="$PACKAGES_TO_INSTALL git"; fi
