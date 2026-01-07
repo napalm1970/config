@@ -85,6 +85,19 @@ check_checksum() {
 
 # --- Начало установки ---
 
+# 0. Проверка интернет-соединения и DNS
+log_info "Проверка сетевого соединения..."
+if ! ping -c 1 8.8.8.8 &>/dev/null; then
+    log_error "Нет соединения с интернетом (ping 8.8.8.8 не прошел)."
+    exit 1
+fi
+
+if ! host proxy.golang.org &>/dev/null && ! nslookup proxy.golang.org &>/dev/null; then
+    log_info "Проблема с разрешением имен (DNS). Пробую временный фикс..."
+    # Временный резолвер Google если системный не работает
+    run_cmd sudo sh -c 'echo "nameserver 8.8.8.8" > /etc/resolv.conf'
+fi
+
 # 1. Подготовка и установка yay
 log_info "Обновление ключей Arch Linux..."
 run_cmd sudo pacman -Sy --noconfirm archlinux-keyring
@@ -109,6 +122,9 @@ if ! command -v yay &> /dev/null; then
         run_cmd git clone https://aur.archlinux.org/yay.git "$TEMP_DIR/yay"
         
         pushd "$TEMP_DIR/yay" > /dev/null
+        # Устанавливаем переменные для обхода проблем с DNS/Прокси в Go
+        export GOPROXY=direct
+        export GODEBUG=netdns=cgo
         run_cmd makepkg -si --noconfirm
         popd > /dev/null
     else
