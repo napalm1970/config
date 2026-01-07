@@ -2,8 +2,8 @@
 # vi: set ft=ruby :
 
 Vagrant.configure("2") do |config|
-  # Используем официальный образ Arch Linux
-  config.vm.box = "archlinux/archlinux"
+  # Используем образ generic/arch (поддерживает VirtualBox)
+  config.vm.box = "generic/arch"
 
   # Настройки VirtualBox
   config.vm.provider "virtualbox" do |vb|
