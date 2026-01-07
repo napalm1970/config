@@ -1,20 +1,18 @@
 #!/bin/bash
+# Скрипт ожидания доступности сети
+REMOTE_HOST="8.8.8.8"
+MAX_RETRIES=20
+COUNT=0
 
-# Максимальное время ожидания (в секундах)
-TIMEOUT=60
-COUNTER=0
-
-# Ждем доступности Google DNS или Cloudflare
-# -c 1: один пакет
-# -W 1: таймаут 1 сек
-while ! ping -c 1 -W 1 8.8.8.8 &> /dev/null && ! ping -c 1 -W 1 1.1.1.1 &> /dev/null; do
-    if [ $COUNTER -gt $TIMEOUT ]; then
-        notify-send -u critical "Network Wait" "Таймаут ожидания сети для $1"
+while ! ping -c 1 -W 1 $REMOTE_HOST &>/dev/null; do
+    if [ $COUNT -ge $MAX_RETRIES ]; then
+        echo "Network timeout reached."
         exit 1
     fi
-    sleep 2
-    ((COUNTER+=2))
+    echo "Waiting for network... ($COUNT/$MAX_RETRIES)"
+    sleep 1
+    ((COUNT++))
 done
 
-# Как только интернет появился, запускаем команду
-exec "$@"
+echo "Network is up!"
+exit 0
