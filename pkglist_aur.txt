@@ -16,6 +16,8 @@ simavr
 simulide
 toru-bin
 usbasp-udev
+vagrant
+vagrant-debug
 viber
 virtualbox-ext-oracle
 wvkbd
