@@ -36,7 +36,17 @@ log_success() { echo -e "${GREEN}[OK]${NC} $1"; }
 log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
 log_dry() { echo -e "${YELLOW}[DRY-RUN]${NC} $1"; }
 
-# Функция для безопасного выполнения команд
+# 0. Проверка прав sudo
+log_info "Проверка прав sudo для пользователя $USER..."
+if ! sudo -l -U "$USER" &> /dev/null; then
+    log_error "Пользователь $USER не имеет прав sudo или не прописан в /etc/sudoers."
+    log_info "Попробуйте добавить пользователя в группу wheel: usermod -aG wheel $USER"
+    log_info "И раскомментировать строку '%wheel ALL=(ALL:ALL) ALL' в /etc/sudoers"
+    exit 1
+fi
+log_success "Права sudo подтверждены."
+
+# Функция для выполнения команд от имени владельца
 run_cmd() {
     if [ "$DRY_RUN" = true ]; then
         log_dry "Выполнил бы: $*"
