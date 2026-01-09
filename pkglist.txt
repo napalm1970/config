@@ -9,6 +9,7 @@ base-devel
 bat
 bear
 bind
+bridge-utils
 btop
 btrfs-progs
 catfish
@@ -22,9 +23,11 @@ cyme
 ddcutil
 decibels
 dmidecode
+dnsmasq
 docker
 dolphin
 dunst
+edk2-ovmf
 efibootmgr
 epiphany
 evince
@@ -88,6 +91,7 @@ hyprland-protocols
 hyprpaper
 imagemagick
 intel-ucode
+iptables-nft
 iwd
 jq
 keepassxc
@@ -99,6 +103,7 @@ libgsf
 libopenraw
 libpulse
 libva-utils
+libvirt-storage-iscsi-direct
 linux
 linux-firmware
 loupe
@@ -143,6 +148,7 @@ python-pipenv
 python-pipx
 python-shellingham
 qbittorrent
+qemu-desktop
 qt5-wayland
 qt5ct
 qt6-wayland
@@ -159,6 +165,7 @@ slurp
 smartmontools
 snapshot
 sushi
+swtpm
 swww
 tecla
 telegram-desktop
@@ -175,7 +182,10 @@ unrar
 unzip
 uv
 uwsm
+vde2
 vim
+virt-manager
+virt-viewer
 virtualbox
 virtualbox-host-modules-arch
 vulkan-radeon
