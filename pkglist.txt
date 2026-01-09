@@ -149,6 +149,7 @@ python-pipx
 python-shellingham
 qbittorrent
 qemu-desktop
+qemu-full
 qt5-wayland
 qt5ct
 qt6-wayland
