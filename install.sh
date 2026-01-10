@@ -182,5 +182,24 @@ main() {
     fi
 }
 
+setup_python_env() {
+    log_info "Настройка Python Virtual Environment (~/.python_venv)..."
+    VENV_DIR="$HOME/.python_venv"
+    
+    if [ ! -d "$VENV_DIR" ]; then
+        run_cmd python3 -m venv "$VENV_DIR"
+        log_success "Виртуальное окружение создано."
+    else
+        log_info "Виртуальное окружение уже существует."
+    fi
+
+    # Обновление pip и базовых инструментов внутри venv
+    if [ -f "$VENV_DIR/bin/pip" ]; then
+        log_info "Обновление pip, setuptools и wheel..."
+        run_cmd "$VENV_DIR/bin/pip" install --upgrade pip setuptools wheel
+    fi
+}
+
 trap 'echo -e "\n${RED}Скрипт прерван.${NC}"; exit 1' INT
 main
+setup_python_env
