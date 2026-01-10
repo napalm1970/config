@@ -1,0 +1,35 @@
+window {
+    background-color: rgba(30, 30, 46, 0.95); /* Catppuccin Base */
+    border: 2px solid #cba6f7; /* Catppuccin Mauve */
+    border-radius: 12px;
+}
+
+.main-box {
+    padding: 10px 20px;
+}
+
+.item-box {
+    padding: 5px 10px;
+    margin: 0 5px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+}
+
+.label {
+    font-family: "JetBrains Mono Nerd Font";
+    font-size: 16px;
+    font-weight: bold;
+    color: #cdd6f4; /* Catppuccin Text */
+}
+
+.icon {
+    font-family: "JetBrains Mono Nerd Font";
+    font-size: 18px;
+    margin-right: 8px;
+    color: #89b4fa; /* Catppuccin Blue */
+}
+
+.layout-icon { color: #f9e2af; } /* Yellow */
+.battery-icon { color: #a6e3a1; } /* Green */
+.time-icon { color: #fab387; } /* Peach */
+.update-icon { color: #f38ba8; } /* Red */

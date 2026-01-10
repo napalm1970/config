@@ -1,19 +1,23 @@
+/* Общие стили для всех элементов */
 * {
-    /* `otf-font-awesome` is required to be installed for icons */
+    /* Требуется установка `otf-font-awesome` для отображения иконок */
     font-family: FontAwesome, Roboto, Helvetica, Arial, sans-serif;
     font-size: 15px;
+    color: #8be9fd; /* Цвет текста по умолчанию */
 }
 
+/* Стили для окна Waybar */
 window#waybar {
-    background-color: rgba(43, 48, 59, 0.0);
-    border-bottom: 3px solid rgba(100, 114, 125, 0.0);
-    color: #ffffff;
-    transition-property: background-color;
-    transition-duration: .5s;
+    background-color: rgba(43, 48, 59, 0.0); /* Прозрачный фон */
+    border-bottom: 3px solid rgba(100, 114, 125, 0.0); /* Прозрачная нижняя граница */
+    color: #8be9fd; /* Цвет текста */
+    transition-property: background-color; /* Свойство для анимированного перехода */
+    transition-duration: .5s; /* Длительность перехода */
 }
 
+/* Стили для скрытого окна Waybar */
 window#waybar.hidden {
-    opacity: 0.2;
+    opacity: 0.5; /* Полупрозрачность */
 }
 
 /*
@@ -25,58 +29,67 @@ window#waybar.solo {
 }
 */
 
+/* Стили для Waybar в режиме Termite */
 window#waybar.termite {
     background-color: #3F3F3F;
 }
 
+/* Стили для Waybar в режиме Chromium */
 window#waybar.chromium {
     background-color: #000000;
     border: none;
 }
 
+/* Стили для кнопок */
 button {
-    /* Use box-shadow instead of border so the text isn't offset */
+    /* Используем box-shadow вместо border, чтобы текст не смещался */
     box-shadow: inset 0 -3px transparent;
-    /* Avoid rounded borders under each button name */
+    /* Избегаем скругленных границ под каждым именем кнопки */
     border: none;
     border-radius: 0;
 }
 
-/* https://github.com/Alexays/Waybar/wiki/FAQ#the-workspace-buttons-have-a-strange-hover-effect */
+/* Стили при наведении на кнопки */
 button:hover {
     background: inherit;
-    box-shadow: inset 0 -3px #ffffff;
+    box-shadow: inset 0 -3px #8be9fd;
 }
 
 /* you can set a style on hover for any module like this */
+/* Пример стилизации при наведении на конкретный модуль */
 #pulseaudio:hover {
     background-color: #a37800;
 }
 
+/* Стили для кнопок рабочих пространств */
 #workspaces button {
     padding: 0 5px;
     background-color: transparent;
-    color: #ffffff;
+    color: #8be9fd;
 }
 
+/* Стили кнопок рабочих пространств при наведении */
 #workspaces button:hover {
     background: rgba(0, 0, 0, 0.2);
 }
 
+/* Стили для активного (фокусированного) рабочего пространства */
 #workspaces button.focused {
     background-color: #64727D;
-    box-shadow: inset 0 -3px #ffffff;
+    box-shadow: inset 0 -3px #8be9fd;
 }
 
+/* Стили для рабочего пространства с "срочным" событием */
 #workspaces button.urgent {
     background-color: #eb4d4b;
 }
 
+/* Стили для модуля режима (например, режима Sway) */
 #mode {
     background-color: #64727D;
     box-shadow: inset 0 -3px #ffffff;
 }
-
+/* Общие стили для всех модулей */
 #clock,
 #battery,
 #cpu,
@@ -94,257 +107,315 @@ button:hover {
 #scratchpad,
 #power-profiles-daemon,
 #mpd {
-    padding: 0 10px;
-    color: #ffffff;
+    padding: 0 10px; /* Внутренние отступы */
+    color: #8be9fd; /* Цвет текста */
 }
 
+/* Стили для окна и рабочих пространств (общие) */
 #window,
 #workspaces {
-    margin: 0 4px;
+    margin: 0 4px; /* Внешние отступы */
 }
 
-/* If workspaces is the leftmost module, omit left margin */
+/* Если модули рабочих пространств находятся слева, убираем левый отступ */
 .modules-left>widget:first-child>#workspaces {
     margin-left: 0;
 }
 
-/* If workspaces is the rightmost module, omit right margin */
+/* Если модули рабочих пространств находятся справа, убираем правый отступ */
 .modules-right>widget:last-child>#workspaces {
     margin-right: 0;
 }
 
+/* Стили для модуля часов */
 #clock {
-    background-color: #24273A;
-    border-radius: 30px;
+    background-color: transparent; /* Прозрачный фон */
+    border-radius: 30px; /* Скругленные углы */
     padding-top: 4px;
     padding-left: 15px;
     padding-right: 15px;
 }
 
+/* Стили для модуля батареи */
 #battery {
-    /* background-color: #ffffff; */
-    color: #ffffff;
+    color: #8be9fd; /* Цвет текста */
 }
 
+/* Стили для модуля батареи при зарядке или подключении к питанию */
 #battery.charging,
 #battery.plugged {
-    color: #ffffff;
-    background-color: #26A65B;
+    color: #8be9fd; /* Цвет текста */
+    background-color: #26A65B; /* Зеленый фон */
 }
 
+/* Определение анимации мигания */
 @keyframes blink {
     to {
-        background-color: #ffffff;
-        color: #000000;
+        background-color: #ffffff; /* Цвет фона */
+        color: #000000; /* Цвет текста */
     }
 }
-
-/* Using steps() instead of linear as a timing function to limit cpu usage */
+/* Стили для критического уровня заряда батареи, когда не заряжается */
 #battery.critical:not(.charging) {
-    background-color: #f53c3c;
-    color: #ffffff;
-    animation-name: blink;
-    animation-duration: 0.5s;
-    animation-timing-function: steps(12);
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
+    background-color: #f53c3c; /* Красный фон */
+    color: #8be9fd; /* Цвет текста */
+    animation-name: blink; /* Применение анимации мигания */
+    animation-duration: 0.5s; /* Длительность анимации */
+    animation-timing-function: steps(12); /* Шаговая функция времени для снижения нагрузки на CPU */
+    animation-iteration-count: infinite; /* Бесконечное повторение */
+    animation-direction: alternate; /* Смена направления анимации */
 }
 
+/* Стили для модуля управления профилями энергопотребления */
 #power-profiles-daemon {
-    padding-right: 15px;
+    padding-right: 15px; /* Правый внутренний отступ */
 }
 
+/* Стили для профиля "производительность" */
 #power-profiles-daemon.performance {
-    background-color: #f53c3c;
-    color: #ffffff;
+    background-color: #f53c3c; /* Красный фон */
+    color: #8be9fd; /* Цвет текста */
 }
 
+/* Стили для профиля "сбалансированный" */
 #power-profiles-daemon.balanced {
-    background-color: #2980b9;
-    color: #ffffff;
+    background-color: #2980b9; /* Синий фон */
+    color: #8be9fd; /* Цвет текста */
 }
 
+/* Стили для профиля "энергосбережение" */
 #power-profiles-daemon.power-saver {
-    background-color: #2ecc71;
-    color: #000000;
+    background-color: #2ecc71; /* Зеленый фон */
+    color: #8be9fd; /* Цвет текста */
 }
-
+/* Стили для сфокусированных меток */
 label:focus {
     background-color: #000000;
 }
 
+/* Стили для модуля CPU */
 #cpu {
-    background: transparent;
-    background-color: #24273A;
-    border-radius: 30px;
-    /* background-color: #2ecc71; */
-    color: #ffffff;
+    background: transparent; /* Прозрачный фон */
+    background-color: transparent; /* Прозрачный фон */
+    border-radius: 30px; /* Скругленные углы */
+    color: #8be9fd; /* Цвет текста */
 }
 
+/* Стили для модуля памяти */
 #memory {
-    background: transparent;
-    background-color: #24273A;
-    border-radius: 30px;
-    /* background-color: #9b59b6; */
-    color: #ffffff;
+    background: transparent; /* Прозрачный фон */
+    background-color: transparent; /* Прозрачный фон */
+    border-radius: 30px; /* Скругленные углы */
+    color: #8be9fd; /* Цвет текста */
 }
 
+/* Стили для модуля диска */
 #disk {
-    background-color: #964B00;
+    background-color: #964B00; /* Цвет фона */
 }
-
+/* Стили для модуля подсветки */
 #backlight {
-    background: transparent;
-    background-color: #24273A;
-    border-radius: 30px;
-    color: #ffffff;
+    background: transparent; /* Прозрачный фон */
+    background-color: transparent; /* Прозрачный фон */
+    border-radius: 30px; /* Скругленные углы */
+    color: #8be9fd; /* Цвет текста */
 }
 
+/* Стили для модуля сети */
 #network {
-    background-color: #2980b9;
+    background-color: #2980b9; /* Цвет фона */
 }
 
+/* Стили для модуля сети в отключенном состоянии */
 #network.disconnected {
-    background-color: #f53c3c;
+    background-color: #f53c3c; /* Красный фон */
 }
 
+/* Стили для модуля pulseaudio */
 #pulseaudio {
-    background: transparent;
-    background-color: #24273A;
-    border-radius: 30px;
-
-    color: #ffffff;
+    background: transparent; /* Прозрачный фон */
+    background-color: transparent; /* Прозрачный фон */
+    border-radius: 30px; /* Скругленные углы */
+    color: #8be9fd; /* Цвет текста */
 }
-
+/* Стили для модуля pulseaudio в режиме "без звука" */
 #pulseaudio.muted {
-    background-color: #90b1b1;
-    color: #2a5c45;
+    background-color: #90b1b1; /* Цвет фона */
+    color: #8be9fd; /* Цвет текста */
 }
 
+/* Стили для модуля wireplumber */
 #wireplumber {
-    background-color: #fff0f5;
-    color: #000000;
+    background-color: #fff0f5; /* Цвет фона */
+    color: #000000; /* Цвет текста */
 }
 
+/* Стили для модуля wireplumber в режиме "без звука" */
 #wireplumber.muted {
-    background-color: #f53c3c;
+    background-color: #f53c3c; /* Красный фон */
 }
 
+/* Стили для пользовательского медиа-модуля */
 #custom-media {
-    background-color: #66cc99;
-    color: #2a5c45;
-    min-width: 100px;
+    background-color: #66cc99; /* Цвет фона */
+    color: #2a5c45; /* Цвет текста */
+    min-width: 100px; /* Минимальная ширина */
 }
 
+/* Стили для пользовательского медиа-модуля (Spotify) */
 #custom-media.custom-spotify {
-    background-color: #66cc99;
+    background-color: #66cc99; /* Цвет фона */
 }
 
+/* Стили для пользовательского медиа-модуля (VLC) */
 #custom-media.custom-vlc {
-    background-color: #ffa000;
+    background-color: #ffa000; /* Цвет фона */
 }
 
+/* Стили для модуля температуры */
 #temperature {
-    background-color: #f0932b;
+    background-color: #f0932b; /* Цвет фона */
 }
-
+/* Стили для модуля температуры в критическом состоянии */
 #temperature.critical {
-    background-color: #eb4d4b;
+    background-color: #eb4d4b; /* Красный фон */
 }
 
+/* Стили для системного трея */
 #tray {
-    background: transparent;
-    background-color: #24273A;
-    border-radius: 30px;
-    color: #ffffff;
+    background: transparent; /* Прозрачный фон */
+    background-color: transparent; /* Прозрачный фон */
+    border-radius: 30px; /* Скругленные углы */
+    color: #8be9fd; /* Цвет текста */
 }
 
+/* Стили для пассивных элементов в трее */
 #tray>.passive {
     -gtk-icon-effect: dim;
 }
 
+/* Стили для элементов в трее, требующих внимания */
 #tray>.needs-attention {
     -gtk-icon-effect: highlight;
-    background-color: #eb4d4b;
+    background-color: #eb4d4b; /* Красный фон */
 }
 
+/* Стили для модуля "idle_inhibitor" */
 #idle_inhibitor {
-    background-color: #2d3436;
+    background-color: #2d3436; /* Цвет фона */
 }
 
+/* Стили для активированного модуля "idle_inhibitor" */
 #idle_inhibitor.activated {
-    background-color: #ecf0f1;
-    color: #2d3436;
+    background-color: #ecf0f1; /* Цвет фона */
+    color: #2d3436; /* Цвет текста */
 }
 
+/* Стили для модуля MPD */
 #mpd {
-    background-color: #66cc99;
-    color: #2a5c45;
+    background-color: #66cc99; /* Цвет фона */
+    color: #2a5c45; /* Цвет текста */
 }
 
+/* Стили для модуля MPD в отключенном состоянии */
 #mpd.disconnected {
-    background-color: #f53c3c;
+    background-color: #f53c3c; /* Красный фон */
 }
 
+/* Стили для модуля MPD в остановленном состоянии */
 #mpd.stopped {
-    background-color: #90b1b1;
+    background-color: #90b1b1; /* Цвет фона */
 }
 
+/* Стили для модуля MPD в состоянии паузы */
 #mpd.paused {
-    background-color: #51a37a;
+    background-color: #51a37a; /* Цвет фона */
 }
 
+/* Стили для модуля языка */
 #language {
-    background: transparent;
-    background-color: #24273A;
-    color: white;
-    padding: 0 5px;
-    margin: 0 5px;
-    min-width: 16px;
-    border-radius: 30px;
+    background: transparent; /* Прозрачный фон */
+    background-color: transparent; /* Прозрачный фон */
+    color: #8be9fd; /* Цвет текста */
+    padding: 0 5px; /* Внутренние отступы */
+    margin: 0 5px; /* Внешние отступы */
+    min-width: 16px; /* Минимальная ширина */
+    border-radius: 30px; /* Скругленные углы */
 }
 
+/* Стили для модуля состояния клавиатуры */
 #keyboard-state {
-    background: #97e1ad;
-    color: #000000;
-    padding: 0 0px;
-    margin: 0 5px;
-    min-width: 16px;
+    background: #97e1ad; /* Цвет фона */
+    color: #000000; /* Цвет текста */
+    padding: 0 0px; /* Внутренние отступы */
+    margin: 0 5px; /* Внешние отступы */
+    min-width: 16px; /* Минимальная ширина */
 }
 
 #keyboard-state>label {
-    padding: 0 5px;
+    padding: 0 5px; /* Внутренние отступы для метки */
 }
 
+/* Стили для заблокированной метки состояния клавиатуры */
 #keyboard-state>label.locked {
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.2); /* Полупрозрачный фон */
 }
 
+/* Стили для модуля scratchpad */
 #scratchpad {
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.2); /* Полупрозрачный фон */
 }
 
+/* Стили для пустого scratchpad */
 #scratchpad.empty {
-    background-color: transparent;
+    background-color: transparent; /* Прозрачный фон */
 }
 
+/* Стили для модуля приватности */
 #privacy {
-    padding: 0;
+    padding: 0; /* Внутренний отступ */
 }
 
+/* Стили для элементов приватности */
 #privacy-item {
-    padding: 0 5px;
-    color: white;
+    padding: 0 5px; /* Внутренние отступы */
+    color: white; /* Цвет текста */
 }
 
+/* Стили для элемента приватности "screenshare" */
 #privacy-item.screenshare {
-    background-color: #cf5700;
+    background-color: #cf5700; /* Цвет фона */
 }
 
+/* Стили для элемента приватности "audio-in" */
 #privacy-item.audio-in {
-    background-color: #1ca000;
+    background-color: #1ca000; /* Цвет фона */
 }
 
+/* Стили для элемента приватности "audio-out" */
 #privacy-item.audio-out {
-    background-color: #0069d4;
+    background-color: #0069d4; /* Цвет фона */
+}
+
+#custom-weather {
+       color: #88c0d0; /* Голубой цвет в стиле Nord */
+        padding: 0 10px;
+    }
+    
+#custom-weather.error {
+    color: #bf616a; /* Красный, если ошибка */
+}
+
+#custom-updates {
+    color: #ebcb8b; /* Yellow/Orange for updates */
+    padding: 0 10px;
+}
+
+#custom-updates.updates-critical {
+    color: #bf616a; /* Red for many updates */
+    animation-name: blink;
+    animation-duration: 0.5s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
 }
