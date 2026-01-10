@@ -42,30 +42,12 @@ set -Ux EDITOR nvim
 set fzf_history_time_format %d-%m-%y
 set -g fish_user_paths $HOME/.local/bin
 set -Ux FZF_DEFAULT_OPTS "--color=fg:#f8f8f2,bg:#282a36,hl:#bd93f9 --color=fg+:#f8f8f2,bg+:#44475a,hl+:#bd93f9 --color=info:#ffb86c,prompt:#50fa7b,pointer:#ff79c6 --color=marker:#ff79c6,spinner:#ffb86c,header:#6272a4"
-# set -x IDF_PATH $HOME/esp/esp-idf/
-<<<<<<< HEAD
-fish_add_path $HOME/.local/bin
-fish_add_path $HOME/esp/ESP8266_RTOS_SDK/components/esptool_py/esptool/
-fish_add_path $HOME/esp/ESP8266_RTOS_SDK/components/partition_table/
-fish_add_path $HOME/.espressif/tools/xtensa-lx106-elf/esp-2020r3-49-gd5524c1-8.4.0/xtensa-lx106-elf/bin
-fish_add_path $HOME/.espressif/python_env/rtos3.4_py3.13_env/bin
-fish_add_path $HOME/esp/ESP8266_RTOS_SDK/tools
 
+# ESP-IDF / ESP8266 SDK Paths
+fish_add_path $HOME/.local/bin
 set -x IDF_PATH $HOME/esp/ESP8266_RTOS_SDK/
 fish_add_path $HOME/esp/ESP8266_RTOS_SDK/tools/
-
-# fish_add_path $HOME/esp/xtensa-lx106-elf/bin
+fish_add_path $HOME/esp/ESP8266_RTOS_SDK/components/esptool_py/esptool/
+fish_add_path $HOME/esp/ESP8266_RTOS_SDK/components/partition_table/
 fish_add_path $HOME/.espressif/tools/xtensa-lx106-elf/esp-2020r3-49-gd5524c1-8.4.0/xtensa-lx106-elf/bin/
 fish_add_path $HOME/.espressif/python_env/rtos3.4_py3.13_env/bin/
-=======
-set -x IDF_PATH $HOME/esp/esp-idf/
-fish_add_path $HOME/.local/bin
-# fish_add_path /home/napalm/esp/ESP8266_RTOS_SDK/components/esptool_py/esptool/
-# fish_add_path /home/napalm/esp/ESP8266_RTOS_SDK/components/partition_table/
-# fish_add_path /home/napalm/esp/ESP8266_RTOS_SDK/tools/
-fish_add_path /home/napalm/esp/esp-idf/components/esptool_py/esptool/
-fish_add_path /home/napalm/esp/esp-idf/components/partition_table/
-fish_add_path /home/napalm/esp/esp-idf/tools/
-fish_add_path /home/napalm/.espressif/tools/xtensa-lx106-elf/esp-2020r3-49-gd5524c1-8.4.0/xtensa-lx106-elf/bin/
-fish_add_path /home/napalm/.espressif/python_env/rtos3.4_py3.13_env/bin/
->>>>>>> f8f4b2361778e94ae4fc9961a87f3bafcaef493b
