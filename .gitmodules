@@ -1,0 +1,3 @@
+[submodule "gemini-extensions/gemini-cli-prompt-library"]
+	path = gemini-extensions/gemini-cli-prompt-library
+	url = https://github.com/harish-garg/gemini-cli-prompt-library.git
