@@ -7,9 +7,7 @@
   "modules-center": [
     "clock",
     "hyprland/language",
-    "keyboard-state"
-
-    // "custom/keyboard-layout"
+    "custom/weather"
   ],
   "modules-right": [
     "pulseaudio",
@@ -17,7 +15,8 @@
     "memory",
     "backlight",
     "battery",
-    "tray",
+    "custom/updates",
+    "tray"
   ],
   "hyprland/workspaces": {
     "disable-scroll": true,
@@ -40,65 +39,15 @@
     "format-en": "us",
     "format-ru": "ru"
   },
-  "custom/keyboard-layout": {
-    "return-type": "json",
-    "exec": "hypr-kbd-layout",
-    "format": "{}"
-  },
-  "persistent_workspaces": {
-    "1": [],
-    "2": [],
-    "3": [],
-    "4": [],
-    "5": []
-  },
   "keyboard-state": {
     "capslock": true,
-    "format": "{name} {icon}",
+    "format": "{icon}",
     "format-icons": {
       "locked": "",
       "unlocked": ""
     }
   },
-  "sway/mode": {
-    "format": "<span style=\"italic\">{}</span>"
-  },
-  "sway/scratchpad": {
-    "format": "{icon} {count}",
-    "show-empty": false,
-    "format-icons": [
-      "",
-      ""
-    ],
-    "tooltip": true,
-    "tooltip-format": "{app}: {title}"
-  },
-  "mpd": {
-    "format": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} - {album} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) ⸨{songPosition}|{queueLength}⸩ {volume}% ",
-    "format-disconnected": "Disconnected ",
-    "format-stopped": "{consumeIcon}{randomIcon}{repeatIcon}{singleIcon}Stopped ",
-    "unknown-tag": "N/A",
-    "interval": 5,
-    "consume-icons": {
-      "on": " "
-    },
-    "random-icons": {
-      "off": "<span color=\"#f53c3c\"></span> ",
-      "on": " "
-    },
-    "repeat-icons": {
-      "on": " "
-    },
-    "single-icons": {
-      "on": "1 "
-    },
-    "state-icons": {
-      "paused": "",
-      "playing": ""
-    },
-    "tooltip-format": "MPD (connected)",
-    "tooltip-format-disconnected": "MPD (disconnected)"
-  },
+
   "tray": {
     "icon-size": 21,
     "spacing": 10
@@ -122,8 +71,6 @@
     },
     "actions": {
       "on-click-right": "mode",
-      "on-scroll-up": "tz_up",
-      "on-scroll-down": "tz_down",
       "on-scroll-up": "shift_up",
       "on-scroll-down": "shift_down"
     }
@@ -176,20 +123,7 @@
       ""
     ]
   },
-  "battery#bat2": {
-    "bat": "BAT2"
-  },
-  "power-profiles-daemon": {
-    "format": "{icon}",
-    "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
-    "tooltip": true,
-    "format-icons": {
-      "default": "",
-      "performance": "",
-      "balanced": "",
-      "power-saver": ""
-    }
-  },
+
   "network": {
     "format-wifi": "{essid} ({signalStrength}%) ",
     "format-ethernet": "{ipaddr}/{cidr} ",
@@ -220,27 +154,20 @@
     },
     "on-click": "pavucontrol"
   },
-  "custom/media": {
-    "format": "{icon} {text}",
+  "custom/weather": {
+    "format": "{}",
+    "tooltip": true,
+    "interval": 1800,
     "return-type": "json",
-    "max-length": 40,
-    "format-icons": {
-      "spotify": "",
-      "default": "🎜"
-    },
-    "escape": true,
-    "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null"
+    "exec": "python3 $HOME/Documents/config/waybar/weather.py",
+    "on-click": "xdg-open https://wttr.in/Sompa,Kohtla-Jarve"
   },
-  "custom/power": {
-    "format": "⏻ ",
-    "tooltip": false,
-    "menu": "on-click",
-    "menu-file": "$HOME/.config/waybar/power_menu.xml",
-    "menu-actions": {
-      "shutdown": "shutdown",
-      "reboot": "reboot",
-      "suspend": "systemctl suspend",
-      "hibernate": "systemctl hibernate"
-    }
+  "custom/updates": {
+    "format": "{}",
+    "tooltip": true,
+    "interval": 3600,
+    "return-type": "json",
+    "exec": "python3 $HOME/Documents/config/waybar/updates.py",
+    "on-click": "kitty -e sh -c 'yay; echo Done - Press enter to exit; read'"
   }
 }
