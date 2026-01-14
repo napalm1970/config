@@ -175,6 +175,7 @@ texlive-bin
 thunar
 thunar-archive-plugin
 thunar-media-tags-plugin
+tldr
 tmux
 tree
 ttf-jetbrains-mono
