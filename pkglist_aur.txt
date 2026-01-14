@@ -8,7 +8,6 @@ google-chrome
 keymapper
 paru-debug
 platformio-git
-portproton
 python-click-completion
 qt6ct-kde
 regex-tui
