@@ -10,6 +10,7 @@ qt6-wayland
 
 # --- Терминал и оболочка ---
 kitty
+alacritty
 fish
 starship
 zoxide
