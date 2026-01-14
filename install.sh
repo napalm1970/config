@@ -22,7 +22,7 @@ SYSTEM_SDDM_DIR="/etc/sddm.conf.d"
 PKG_LIST="$SCRIPT_DIR/packages.txt"
 
 # Список директорий для линковки в ~/.config/
-DIRS_TO_LINK=("fish" "hypr" "kitty" "wofi" "yazi" "waybar")
+DIRS_TO_LINK=("fish" "hypr" "kitty" "wofi" "yazi" "waybar" "alacritty")
 
 # Флаг тестового прогона
 DRY_RUN=false
