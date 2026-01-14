@@ -28,6 +28,7 @@ dnsmasq
 docker
 dolphin
 dunst
+dust
 edk2-ovmf
 efibootmgr
 epiphany
