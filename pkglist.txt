@@ -38,6 +38,7 @@ fd
 file-roller
 firefox
 fish
+foot
 fzf
 gdm
 git
