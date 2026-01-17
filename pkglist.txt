@@ -16,6 +16,7 @@ btrfs-progs
 catfish
 cdrtools
 chafa
+chromium
 chrono-date
 clamav
 clang
