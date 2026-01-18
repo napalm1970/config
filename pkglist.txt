@@ -101,6 +101,7 @@ jq
 keepassxc
 kitty
 lazygit
+libc++
 libgepub
 libgphoto2
 libgsf
@@ -110,6 +111,7 @@ libva-utils
 libvirt-storage-iscsi-direct
 linux
 linux-firmware
+lldb
 loupe
 lshw
 luarocks
