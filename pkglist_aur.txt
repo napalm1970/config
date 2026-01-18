@@ -1,4 +1,6 @@
 checkupdates-systemd-git
+codelldb
+codelldb-debug
 coolterm-bin
 dracula-cursors-git
 dracula-icons-git
