@@ -112,6 +112,7 @@ linux
 linux-firmware
 loupe
 lshw
+luarocks
 lynis
 malcontent
 man-db
