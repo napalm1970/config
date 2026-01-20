@@ -22,18 +22,18 @@ SYSTEM_SDDM_DIR="/etc/sddm.conf.d"
 PKG_LIST="$SCRIPT_DIR/packages.txt"
 
 # Список директорий для линковки в ~/.config/
-DIRS_TO_LINK=("fish" "hypr" "kitty" "wofi" "yazi" "waybar" "alacritty")
+DIRS_TO_LINK=("fish" "hypr" "kitty" "wofi" "yazi" "waybar" "nvim")
 
 # Флаг тестового прогона
 DRY_RUN=false
 
 # Проверка аргумента --dry-run
 if [[ "$1" == "--dry-run" ]]; then
-    DRY_RUN=true
-    echo -e "${YELLOW}================================================${NC}"
-    echo -e "${YELLOW}!!! ЗАПУЩЕН РЕЖИМ DRY-RUN (ТЕСТОВЫЙ ПРОГОН)  !!!${NC}"
-    echo -e "${YELLOW}Никакие изменения не будут внесены в систему.  ${NC}"
-    echo -e "${YELLOW}================================================${NC}\n"
+  DRY_RUN=true
+  echo -e "${YELLOW}================================================${NC}"
+  echo -e "${YELLOW}!!! ЗАПУЩЕН РЕЖИМ DRY-RUN (ТЕСТОВЫЙ ПРОГОН)  !!!${NC}"
+  echo -e "${YELLOW}Никакие изменения не будут внесены в систему.  ${NC}"
+  echo -e "${YELLOW}================================================${NC}\n"
 fi
 
 # --- Вспомогательные функции ---
@@ -45,161 +45,162 @@ log_warn() { echo -e "${YELLOW}[WARN]${NC} $1"; }
 log_dry() { echo -e "${YELLOW}[DRY-RUN]${NC} $1"; }
 
 run_cmd() {
-    if [ "$DRY_RUN" = true ]; then
-        log_dry "Выполнил бы: $*"
-    else
-        "$@"
-    fi
+  if [ "$DRY_RUN" = true ]; then
+    log_dry "Выполнил бы: $*"
+  else
+    "$@"
+  fi
 }
 
 check_not_root() {
-    if [ "$EUID" -eq 0 ]; then
-        log_error "Пожалуйста, не запускайте этот скрипт от имени root."
-        exit 1
-    fi
+  if [ "$EUID" -eq 0 ]; then
+    log_error "Пожалуйста, не запускайте этот скрипт от имени root."
+    exit 1
+  fi
 }
 
 create_symlink() {
-    local src="$1"
-    local dest="$2"
-    local name="$3"
+  local src="$1"
+  local dest="$2"
+  local name="$3"
 
-    if [ ! -e "$src" ]; then
-        log_error "Исходный файл/папка не найден: $src"
-        return 1
-    fi
+  if [ ! -e "$src" ]; then
+    log_error "Исходный файл/папка не найден: $src"
+    return 1
+  fi
 
-    if [ -e "$dest" ] || [ -L "$dest" ]; then
-        if [ -L "$dest" ] && [ "$(readlink -f "$dest")" == "$src" ]; then
-            log_info "$name уже настроен корректно."
-            return 0
-        fi
-        log_warn "Обнаружен конфликт для $name. Планируется бэкап."
-        run_cmd mkdir -p "$BACKUP_DIR"
-        run_cmd mv "$dest" "$BACKUP_DIR/"
+  if [ -e "$dest" ] || [ -L "$dest" ]; then
+    if [ -L "$dest" ] && [ "$(readlink -f "$dest")" == "$src" ]; then
+      log_info "$name уже настроен корректно."
+      return 0
     fi
+    log_warn "Обнаружен конфликт для $name. Планируется бэкап."
+    run_cmd mkdir -p "$BACKUP_DIR"
+    run_cmd mv "$dest" "$BACKUP_DIR/"
+  fi
 
-    run_cmd ln -sf "$src" "$dest"
-    if [ "$DRY_RUN" = true ]; then
-        log_dry "Создал бы ссылку: $dest -> $src"
-    else
-        log_success "Создана ссылка для $name"
-    fi
+  run_cmd ln -sf "$src" "$dest"
+  if [ "$DRY_RUN" = true ]; then
+    log_dry "Создал бы ссылку: $dest -> $src"
+  else
+    log_success "Создана ссылка для $name"
+  fi
 }
 
 # --- Основная логика ---
 
 main() {
-    check_not_root
+  check_not_root
 
-    # 1. Установка yay
-    log_info "Проверка AUR-хелпера yay..."
-    if ! command -v yay &> /dev/null; then
-        log_info "yay не найден. Установка..."
-        run_cmd sudo pacman -S --needed --noconfirm git base-devel
-        
-        if [ "$DRY_RUN" = true ]; then
-            log_dry "Сборка yay..."
-        else
-            TEMP_DIR=$(mktemp -d)
-            git clone https://aur.archlinux.org/yay.git "$TEMP_DIR/yay"
-            cd "$TEMP_DIR/yay"
-            makepkg -si --noconfirm
-            cd "$SCRIPT_DIR"
-            rm -rf "$TEMP_DIR"
-        fi
-    else
-        log_success "yay уже установлен."
-    fi
+  # 1. Установка yay
+  log_info "Проверка AUR-хелпера yay..."
+  if ! command -v yay &>/dev/null; then
+    log_info "yay не найден. Установка..."
+    run_cmd sudo pacman -S --needed --noconfirm git base-devel
 
-    # 2. Установка программ из списка
-    if [ -f "$PKG_LIST" ]; then
-        log_info "Установка программ из $PKG_LIST..."
-        # Читаем пакеты, убирая комментарии и пустые строки
-        packages=$(grep -vE "^\s*#" "$PKG_LIST" | tr '\n' ' ')
-        
-        if [ -n "$packages" ]; then
-            run_cmd yay -S --needed --noconfirm $packages
-        else
-            log_warn "Список пакетов пуст."
-        fi
-    else
-        log_error "Файл $PKG_LIST не найден!"
-        exit 1
-    fi
-
-    # 3. Полное обновление системы
-    log_info "Обновление системы..."
-    run_cmd yay -Syu --noconfirm
-
-    # 4. Смена оболочки на fish
-    log_info "Настройка fish как оболочки по умолчанию..."
-    if [ "$SHELL" != "/usr/bin/fish" ]; then
-        run_cmd sudo chsh -s /usr/bin/fish "$USER"
-    else
-        log_info "fish уже является оболочкой по умолчанию."
-    fi
-
-    # 5. Установка Gemini CLI через NPM
-    log_info "Установка @google/gemini-cli..."
-    run_cmd sudo npm install -g @google/gemini-cli
-
-    # 6. Настройка конфигураций пользователя
-    log_info "Настройка симлинков..."
-    run_cmd mkdir -p "$CONFIG_DIR"
-
-    for folder in "${DIRS_TO_LINK[@]}"; do
-        create_symlink "$SCRIPT_DIR/$folder" "$CONFIG_DIR/$folder" "$folder"
-    done
-
-    # 7. Настройка Starship
-    create_symlink "$SCRIPT_DIR/starship.toml" "$CONFIG_DIR/starship.toml" "starship.toml"
-
-    # 8. Системные настройки (SDDM)
-    log_info "Настройка SDDM..."
-    run_cmd sudo mkdir -p "$SYSTEM_SDDM_DIR"
-
-    for file in "autologin.conf" "hidpi.conf"; do
-        src_file="$SCRIPT_DIR/$file"
-        dest_file="$SYSTEM_SDDM_DIR/$file"
-        if [ -f "$src_file" ]; then
-            run_cmd sudo ln -sf "$src_file" "$dest_file"
-        else
-            log_warn "Файл $file не найден, пропускаем."
-        fi
-    done
-
-    # 9. Включение службы
-    log_info "Включение SDDM..."
-    run_cmd sudo systemctl enable sddm
-
-    echo ""
     if [ "$DRY_RUN" = true ]; then
-        log_success "Тестовый прогон завершен."
+      log_dry "Сборка yay..."
     else
-        log_success "Установка и настройка завершены!"
-        [ -d "$BACKUP_DIR" ] && echo -e "${BLUE}Бэкапы в:${NC} $BACKUP_DIR"
+      TEMP_DIR=$(mktemp -d)
+      git clone https://aur.archlinux.org/yay.git "$TEMP_DIR/yay"
+      cd "$TEMP_DIR/yay"
+      makepkg -si --noconfirm
+      cd "$SCRIPT_DIR"
+      rm -rf "$TEMP_DIR"
     fi
+  else
+    log_success "yay уже установлен."
+  fi
+
+  # 2. Установка программ из списка
+  if [ -f "$PKG_LIST" ]; then
+    log_info "Установка программ из $PKG_LIST..."
+    # Читаем пакеты, убирая комментарии и пустые строки
+    packages=$(grep -vE "^\s*#" "$PKG_LIST" | tr '\n' ' ')
+
+    if [ -n "$packages" ]; then
+      run_cmd yay -S --needed --noconfirm $packages
+    else
+      log_warn "Список пакетов пуст."
+    fi
+  else
+    log_error "Файл $PKG_LIST не найден!"
+    exit 1
+  fi
+
+  # 3. Полное обновление системы
+  log_info "Обновление системы..."
+  run_cmd yay -Syu --noconfirm
+
+  # 4. Смена оболочки на fish
+  log_info "Настройка fish как оболочки по умолчанию..."
+  if [ "$SHELL" != "/usr/bin/fish" ]; then
+    run_cmd sudo chsh -s /usr/bin/fish "$USER"
+  else
+    log_info "fish уже является оболочкой по умолчанию."
+  fi
+
+  # 5. Установка Gemini CLI через NPM
+  log_info "Установка @google/gemini-cli..."
+  run_cmd sudo npm install -g @google/gemini-cli
+
+  # 6. Настройка конфигураций пользователя
+  log_info "Настройка симлинков..."
+  run_cmd mkdir -p "$CONFIG_DIR"
+
+  for folder in "${DIRS_TO_LINK[@]}"; do
+    create_symlink "$SCRIPT_DIR/$folder" "$CONFIG_DIR/$folder" "$folder"
+  done
+
+  # 7. Настройка Starship
+  create_symlink "$SCRIPT_DIR/starship.toml" "$CONFIG_DIR/starship.toml" "starship.toml"
+
+  # 8. Системные настройки (SDDM)
+  log_info "Настройка SDDM..."
+  run_cmd sudo mkdir -p "$SYSTEM_SDDM_DIR"
+
+  for file in "autologin.conf" "hidpi.conf"; do
+    src_file="$SCRIPT_DIR/$file"
+    dest_file="$SYSTEM_SDDM_DIR/$file"
+    if [ -f "$src_file" ]; then
+      run_cmd sudo ln -sf "$src_file" "$dest_file"
+    else
+      log_warn "Файл $file не найден, пропускаем."
+    fi
+  done
+
+  # 9. Включение службы
+  log_info "Включение SDDM..."
+  run_cmd sudo systemctl enable sddm
+
+  echo ""
+  if [ "$DRY_RUN" = true ]; then
+    log_success "Тестовый прогон завершен."
+  else
+    log_success "Установка и настройка завершены!"
+    [ -d "$BACKUP_DIR" ] && echo -e "${BLUE}Бэкапы в:${NC} $BACKUP_DIR"
+  fi
 }
 
 setup_python_env() {
-    log_info "Настройка Python Virtual Environment (~/.python_venv)..."
-    VENV_DIR="$HOME/.python_venv"
-    
-    if [ ! -d "$VENV_DIR" ]; then
-        run_cmd python3 -m venv "$VENV_DIR"
-        log_success "Виртуальное окружение создано."
-    else
-        log_info "Виртуальное окружение уже существует."
-    fi
+  log_info "Настройка Python Virtual Environment (~/.python_venv)..."
+  VENV_DIR="$HOME/.python_venv"
 
-    # Обновление pip и базовых инструментов внутри venv
-    if [ -f "$VENV_DIR/bin/pip" ]; then
-        log_info "Обновление pip, setuptools и wheel..."
-        run_cmd "$VENV_DIR/bin/pip" install --upgrade pip setuptools wheel
-    fi
+  if [ ! -d "$VENV_DIR" ]; then
+    run_cmd python3 -m venv "$VENV_DIR"
+    log_success "Виртуальное окружение создано."
+  else
+    log_info "Виртуальное окружение уже существует."
+  fi
+
+  # Обновление pip и базовых инструментов внутри venv
+  if [ -f "$VENV_DIR/bin/pip" ]; then
+    log_info "Обновление pip, setuptools и wheel..."
+    run_cmd "$VENV_DIR/bin/pip" install --upgrade pip setuptools wheel
+  fi
 }
 
 trap 'echo -e "\n${RED}Скрипт прерван.${NC}"; exit 1' INT
 main
 setup_python_env
+
