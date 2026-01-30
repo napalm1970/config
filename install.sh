@@ -152,6 +152,14 @@ main() {
     create_symlink "$SCRIPT_DIR/$folder" "$CONFIG_DIR/$folder" "$folder"
   done
 
+  # 6.1 Исправление прав для aerc (требует 600)
+  if [ -L "$CONFIG_DIR/aerc/accounts.conf" ]; then
+      log_info "Настройка прав доступа для aerc/accounts.conf..."
+      # Важно: меняем права у целевого файла ссылки, если это возможно,
+      # но так как это симлинк на репозиторий, меняем права файла ВНУТРИ репозитория через симлинк.
+      run_cmd chmod 600 "$CONFIG_DIR/aerc/accounts.conf"
+  fi
+
   # 7. Настройка Starship
   create_symlink "$SCRIPT_DIR/starship.toml" "$CONFIG_DIR/starship.toml" "starship.toml"
 
