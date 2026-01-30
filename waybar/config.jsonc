@@ -177,6 +177,6 @@
     "interval": 60,
     "return-type": "json",
     "exec": "$HOME/Documents/config/waybar/mail-rs/mail-rs",
-    "on-click": "kitty -e aerc"
+    "on-click": "kitty -e /home/napalm/Documents/config/scripts/launch-aerc.sh"
   }
 }
