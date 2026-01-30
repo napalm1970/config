@@ -1,3 +1,6 @@
 fish_variables
 skeys.fish
 .vagrant/
+target/
+waybar/mail-rs/mail-rs
+waybar/weather-rs/weather-rs
