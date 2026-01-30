@@ -39,12 +39,12 @@
 
 ```conf
 # Правила для виджета раскладки и времени
-windowrulev2 = float, title:^(hyprland-status-widget)$
-windowrulev2 = move 90% 2%, title:^(hyprland-status-widget)$
-windowrulev2 = size 8% 4%, title:^(hyprland-status-widget)$
-windowrulev2 = nofocus, title:^(hyprland-status-widget)$
-windowrulev2 = noinitialfocus, title:^(hyprland-status-widget)$
-windowrulev2 = pin, title:^(hyprland-status-widget)$
+windowrule = float 1, match:title = ^(hyprland-status-widget)$
+windowrule = move 90% 2%, match:title = ^(hyprland-status-widget)$
+windowrule = size 8% 4%, match:title = ^(hyprland-status-widget)$
+windowrule = no_focus 1, match:title = ^(hyprland-status-widget)$
+windowrule = no_initial_focus 1, match:title = ^(hyprland-status-widget)$
+windowrule = pin 1, match:title = ^(hyprland-status-widget)$
 ```
 
 ### Объяснение правил:
