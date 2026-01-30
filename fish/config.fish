@@ -32,6 +32,26 @@ alias doc="evince &"
 alias c="clear"
 alias b="btop"
 
+function p
+    set -l selection (find ~/.password-store -type f -name "*.gpg" | sed "s|$HOME/.password-store/||; s|\.gpg\$||" | fzf --height 40% --reverse --header="Search Passwords")
+    if test -n "$selection"
+        pass -c "$selection"
+    end
+end
+
+function gemini
+    if not set -q GEMINI_API_KEY
+        set -l key (pass gemini/GEMINI_API_KEY)
+        if test -n "$key"
+            set -gx GEMINI_API_KEY $key
+        else
+            echo "Error: GEMINI_API_KEY could not be retrieved from pass."
+            return 1
+        end
+    end
+    command gemini $argv
+end
+
 set -Ux EDITOR nvim
 set fzf_history_time_format %d-%m-%y
 set -g fish_user_paths $HOME/.local/bin
