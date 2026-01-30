@@ -173,6 +173,16 @@ main() {
   log_info "Включение SDDM..."
   run_cmd sudo systemctl enable sddm
 
+  # 10. Клонирование базы паролей (pass)
+  log_info "Настройка хранилища паролей (pass)..."
+  PASS_DIR="$HOME/.password-store"
+  if [ ! -d "$PASS_DIR" ]; then
+    log_info "Клонирование базы паролей из GitHub..."
+    run_cmd git clone git@github.com:napalm1970/pass.git "$PASS_DIR"
+  else
+    log_info "Хранилище паролей уже существует в $PASS_DIR."
+  fi
+
   echo ""
   if [ "$DRY_RUN" = true ]; then
     log_success "Тестовый прогон завершен."
