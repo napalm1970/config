@@ -75,9 +75,14 @@ button:hover {
 #mpd,
 #custom-weather,
 #custom-updates,
+#custom-mail,
 #language {
     padding: 0 10px;
     color: #8be9fd;
+}
+
+#custom-mail.unread {
+    color: #50fa7b; 
 }
 
 #window,
