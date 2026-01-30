@@ -16,6 +16,7 @@
     "backlight",
     "battery",
     "custom/updates",
+    "custom/mail",
     "tray"
   ],
   "hyprland/workspaces": {
@@ -169,5 +170,13 @@
     "return-type": "json",
     "exec": "python3 $HOME/Documents/config/waybar/updates.py",
     "on-click": "kitty -e sh -c 'yay; echo Done - Press enter to exit; read'"
+  },
+  "custom/mail": {
+    "format": "{}",
+    "tooltip": true,
+    "interval": 60,
+    "return-type": "json",
+    "exec": "$HOME/Documents/config/waybar/mail-rs/target/release/mail-rs",
+    "on-click": "kitty -e aerc"
   }
 }

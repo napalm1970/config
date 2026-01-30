@@ -57,3 +57,5 @@ noto-fonts-emoji
 firefox
 chrome
 
+aerc
+w3m
