@@ -3,7 +3,9 @@
 if status is-interactive
     # Commands to run in interactive sessions can go here
     set fish_greeting
-
+    if not set -q BW_SESSION
+        set -gx BW_SESSION (bw unlock --raw)
+    end
 end
 
 set -gx MANPAGER 'nvim +Man!'
