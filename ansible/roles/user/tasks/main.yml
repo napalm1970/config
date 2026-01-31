@@ -37,10 +37,21 @@
     mode: '0600'
   ignore_errors: yes
 
-- name: Клонирование репозитория pass
-  git:
-    repo: git@github.com:napalm1970/pass.git
-    dest: "{{ ansible_facts['user_dir'] }}/.password-store"
-    accept_hostkey: yes
+- name: Добавление GitHub в known_hosts
+  shell: "ssh-keyscan -H github.com >> {{ ansible_facts['user_dir'] }}/.ssh/known_hosts"
+  args:
+    creates: "{{ ansible_facts['user_dir'] }}/.ssh/known_hosts_github_check" 
+  # Лайфхак: чтобы не дублировать, можно проверять grep, но проще разрешить ssh-keyscan работать.
+  # Или просто игнорировать ошибки.
+  ignore_errors: yes
+
+- name: Клонирование репозитория pass (через shell с форсированным SSH)
+  shell: |
+    export GIT_SSH_COMMAND='ssh -i {{ ansible_facts['user_dir'] }}/.ssh/id_ed25519 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
+    if [ ! -d "{{ ansible_facts['user_dir'] }}/.password-store" ]; then
+      git clone git@github.com:napalm1970/pass.git "{{ ansible_facts['user_dir'] }}/.password-store"
+    else
+      cd "{{ ansible_facts['user_dir'] }}/.password-store" && git pull
+    fi
   ignore_errors: yes
  # Может не сработать, если нет SSH ключей

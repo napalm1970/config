@@ -158,10 +158,10 @@
   "custom/weather": {
     "format": "{}",
     "tooltip": true,
-    "interval": 1800,
+    "interval": 5,
     "return-type": "json",
-    "exec": "python3 $HOME/Documents/config/waybar/weather.py",
-    "on-click": "xdg-open https://wttr.in/Sompa,Kohtla-Jarve"
+    "exec": "cat /tmp/weather.json 2>/dev/null || echo '{\"text\": \"Loading...\"}'",
+    "on-click": "xdg-open https://wttr.in/Sompa,Kohtla-Jarve; systemctl --user start check-weather.service"
   },
   "custom/updates": {
     "format": "{} ",
