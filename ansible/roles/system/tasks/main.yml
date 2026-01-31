@@ -47,6 +47,8 @@
   loop:
     - check-updates.service
     - check-updates.timer
+    - check-weather.service
+    - check-weather.timer
     - update-dracula-icons.service
     - update-dracula-icons.timer
 
@@ -59,4 +61,5 @@
     scope: user
   loop:
     - check-updates.timer
+    - check-weather.timer
     # - update-dracula-icons.timer # Пока не включаем, чтобы не спамить

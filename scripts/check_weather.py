@@ -3,14 +3,15 @@ import json
 import urllib.request
 import urllib.error
 import time
-import sys
 import socket
+import os
 
 # Configuration
 CITY = "Sompa,Kohtla-Jarve"
 URL = f"https://wttr.in/{CITY}?format=j1"
 MAX_RETRIES = 10
 RETRY_DELAY = 5
+OUTPUT_FILE = "/tmp/weather.json"
 
 weather_icons = {
     "113": "☀️",  # Sunny
@@ -63,10 +64,13 @@ weather_icons = {
     "395": "❄️",  # HeavySnowShowers
 }
 
+def save_output(data):
+    with open(OUTPUT_FILE, "w") as f:
+        json.dump(data, f)
+
 def get_weather():
     for attempt in range(MAX_RETRIES):
         try:
-            # Set a timeout for the request
             with urllib.request.urlopen(URL, timeout=5) as response:
                 data = json.loads(response.read().decode())
                 
@@ -83,19 +87,16 @@ def get_weather():
                 text = f"{icon} {temp_C}°C".strip()
                 tooltip = f"<b>{weather_desc}</b>\nОщущается как: {feels_like}°C\nВлажность: {humidity}%\nВетер: {wind_speed} km/h"
                 
-                print(json.dumps({"text": text, "tooltip": tooltip, "class": "weather"}))
+                save_output({"text": text, "tooltip": tooltip, "class": "weather"})
                 return
 
         except (urllib.error.URLError, socket.timeout):
-            # Network error, wait and retry
             time.sleep(RETRY_DELAY)
         except Exception as e:
-            # Other errors (e.g. JSON parse), fail immediately
-            print(json.dumps({"text": "Error", "tooltip": str(e)}))
+            save_output({"text": "Error", "tooltip": str(e)})
             return
 
-    # If we exhausted all retries
-    print(json.dumps({"text": "🚫", "tooltip": "No Internet Connection"}))
+    save_output({"text": "🚫", "tooltip": "No Internet Connection"})
 
 if __name__ == "__main__":
     get_weather()
