@@ -23,6 +23,13 @@
     name: sddm
     enabled: yes
 
+- name: Включение таймера очистки кэша пакетов (paccache)
+  become: true
+  systemd:
+    name: paccache.timer
+    enabled: yes
+    state: started
+
 - name: Установка глобальных NPM пакетов
   become: true
   npm:
@@ -62,4 +69,5 @@
   loop:
     - check-updates.timer
     - check-weather.timer
+    - gammastep.service
     # - update-dracula-icons.timer # Пока не включаем, чтобы не спамить

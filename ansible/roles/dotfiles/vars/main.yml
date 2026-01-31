@@ -10,4 +10,5 @@ dotfiles_links:
   - { src: "yazi", dest: ".config/yazi" }
   - { src: "wofi", dest: ".config/wofi" }
   - { src: "aerc", dest: ".config/aerc" }
+  - { src: "gammastep", dest: ".config/gammastep" }
   - { src: "starship.toml", dest: ".config/starship.toml" }

@@ -30,6 +30,7 @@ system_packages:
   - nwg-displays
   - qt5-wayland
   - qt6-wayland
+  - gammastep
   - xdg-desktop-portal-hyprland
   - xdg-desktop-portal-gnome
   
