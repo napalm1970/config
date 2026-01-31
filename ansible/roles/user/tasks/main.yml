@@ -1,0 +1,22 @@
+---
+- name: Смена оболочки пользователя на fish
+  user:
+    name: "{{ ansible_facts['user_id'] }}"
+    shell: /usr/bin/fish
+
+- name: Создание Python виртуального окружения
+  pip:
+    name:
+      - pip
+      - setuptools
+      - wheel
+    virtualenv: "{{ ansible_facts['env']['HOME'] }}/.python_venv"
+    virtualenv_command: python3 -m venv
+
+- name: Клонирование репозитория pass
+  git:
+    repo: git@github.com:napalm1970/pass.git
+    dest: "{{ ansible_facts['env']['HOME'] }}/.password-store"
+    accept_hostkey: yes
+  ignore_errors: yes
+ # Может не сработать, если нет SSH ключей

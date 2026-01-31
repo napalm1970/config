@@ -1,0 +1,13 @@
+---
+dotfiles_repo_path: "{{ playbook_dir }}/../.."
+
+dotfiles_links:
+  - { src: "hypr", dest: ".config/hypr" }
+  - { src: "waybar", dest: ".config/waybar" }
+  - { src: "fish", dest: ".config/fish" }
+  - { src: "kitty", dest: ".config/kitty" }
+  - { src: "nvim", dest: ".config/nvim" }
+  - { src: "yazi", dest: ".config/yazi" }
+  - { src: "wofi", dest: ".config/wofi" }
+  - { src: "aerc", dest: ".config/aerc" }
+  - { src: "starship.toml", dest: ".config/starship.toml" }

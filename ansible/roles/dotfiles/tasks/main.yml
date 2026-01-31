@@ -1,0 +1,21 @@
+---
+- name: Создание директории ~/.config
+  file:
+    path: "{{ ansible_facts['env']['HOME'] }}/.config"
+    state: directory
+    mode: '0755'
+
+- name: Создание симлинков для dotfiles
+  file:
+    src: "{{ dotfiles_repo_path }}/{{ item.src }}"
+    dest: "{{ ansible_facts['env']['HOME'] }}/{{ item.dest }}"
+    state: link
+    force: yes
+  loop: "{{ dotfiles_links }}"
+  become: false
+
+- name: Исправление прав доступа для aerc/accounts.conf
+  file:
+    path: "{{ dotfiles_repo_path }}/aerc/accounts.conf"
+    mode: '0600'
+  become: false

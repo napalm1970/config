@@ -1,0 +1,58 @@
+---
+- name: Создание директории для конфигурации SDDM
+  file:
+    path: /etc/sddm.conf.d
+    state: directory
+    mode: '0755'
+
+- name: Настройка SDDM (autologin, hidpi)
+  file:
+    src: "{{ playbook_dir }}/../../{{ item }}"
+    dest: "/etc/sddm.conf.d/{{ item }}"
+    state: link
+    force: yes
+  loop:
+    - autologin.conf
+    - hidpi.conf
+
+- name: Включение службы SDDM
+  systemd:
+    name: sddm
+    enabled: yes
+
+- name: Установка глобальных NPM пакетов
+  npm:
+    name: "@google/gemini-cli"
+    global: yes
+    state: present
+
+- name: Создание директории systemd user
+  become: false
+  file:
+    path: "{{ ansible_facts['env']['HOME'] }}/.config/systemd/user"
+    state: directory
+    mode: '0755'
+
+- name: Линковка пользовательских systemd сервисов
+  become: false
+  file:
+    src: "{{ playbook_dir }}/../../systemd/{{ item }}"
+    dest: "{{ ansible_facts['env']['HOME'] }}/.config/systemd/user/{{ item }}"
+    state: link
+    force: yes
+  loop:
+    - check-updates.service
+    - check-updates.timer
+    - update-dracula-icons.service
+    - update-dracula-icons.timer
+
+- name: Активация systemd таймеров
+  become: false
+  systemd:
+    name: "{{ item }}"
+    enabled: yes
+    state: started
+    scope: user
+  loop:
+    - check-updates.timer
+    # - update-dracula-icons.timer # Пока не включаем, чтобы не спамить
