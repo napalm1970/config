@@ -80,6 +80,7 @@ system_packages:
   
   # Apps
   - firefox
+  - chromium
   - obsidian
   - telegram-desktop
   - qbittorrent
@@ -98,9 +99,4 @@ system_packages:
 aur_packages:
   - yay
   - checkupdates-systemd-git
-  - dracula-icons-git
-  - dracula-cursors-git
-  - google-chrome
-  - portproton
-  - viber
   - aerc

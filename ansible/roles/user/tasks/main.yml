@@ -1,5 +1,6 @@
 ---
 - name: Смена оболочки пользователя на fish
+  become: true
   user:
     name: "{{ ansible_facts['user_id'] }}"
     shell: /usr/bin/fish
@@ -10,13 +11,36 @@
       - pip
       - setuptools
       - wheel
-    virtualenv: "{{ ansible_facts['env']['HOME'] }}/.python_venv"
+    virtualenv: "{{ ansible_facts['user_dir'] }}/.python_venv"
     virtualenv_command: python3 -m venv
+
+- name: Настройка директории .ssh
+  file:
+    path: "{{ ansible_facts['user_dir'] }}/.ssh"
+    state: directory
+    mode: '0700'
+
+- name: Проверка наличия SSH ключа
+  stat:
+    path: "{{ ansible_facts['user_dir'] }}/.ssh/id_ed25519"
+  register: ssh_key_file
+
+- name: Восстановление SSH ключа из Bitwarden
+  shell: "bw get notes 'id_ed25519' > '{{ ansible_facts['user_dir'] }}/.ssh/id_ed25519'"
+  when: not ssh_key_file.stat.exists
+  ignore_errors: yes
+  no_log: true
+
+- name: Настройка прав приватного SSH ключа
+  file:
+    path: "{{ ansible_facts['user_dir'] }}/.ssh/id_ed25519"
+    mode: '0600'
+  ignore_errors: yes
 
 - name: Клонирование репозитория pass
   git:
     repo: git@github.com:napalm1970/pass.git
-    dest: "{{ ansible_facts['env']['HOME'] }}/.password-store"
+    dest: "{{ ansible_facts['user_dir'] }}/.password-store"
     accept_hostkey: yes
   ignore_errors: yes
  # Может не сработать, если нет SSH ключей

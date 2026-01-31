@@ -1,11 +1,13 @@
 ---
 - name: Создание директории для конфигурации SDDM
+  become: true
   file:
     path: /etc/sddm.conf.d
     state: directory
     mode: '0755'
 
 - name: Настройка SDDM (autologin, hidpi)
+  become: true
   file:
     src: "{{ playbook_dir }}/../../{{ item }}"
     dest: "/etc/sddm.conf.d/{{ item }}"
@@ -16,11 +18,13 @@
     - hidpi.conf
 
 - name: Включение службы SDDM
+  become: true
   systemd:
     name: sddm
     enabled: yes
 
 - name: Установка глобальных NPM пакетов
+  become: true
   npm:
     name: "@google/gemini-cli"
     global: yes
@@ -29,7 +33,7 @@
 - name: Создание директории systemd user
   become: false
   file:
-    path: "{{ ansible_facts['env']['HOME'] }}/.config/systemd/user"
+    path: "{{ ansible_facts['user_dir'] }}/.config/systemd/user"
     state: directory
     mode: '0755'
 
@@ -37,7 +41,7 @@
   become: false
   file:
     src: "{{ playbook_dir }}/../../systemd/{{ item }}"
-    dest: "{{ ansible_facts['env']['HOME'] }}/.config/systemd/user/{{ item }}"
+    dest: "{{ ansible_facts['user_dir'] }}/.config/systemd/user/{{ item }}"
     state: link
     force: yes
   loop:
