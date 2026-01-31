@@ -5,9 +5,11 @@
     "hyprland/workspaces"
   ],
   "modules-center": [
+    "custom/updates",
+    "custom/mail",
     "clock",
     "hyprland/language",
-    "custom/weather"
+    "custom/weather",
   ],
   "modules-right": [
     "pulseaudio",
@@ -15,8 +17,6 @@
     "memory",
     "backlight",
     "battery",
-    "custom/updates",
-    "custom/mail",
     "tray"
   ],
   "hyprland/workspaces": {
@@ -164,12 +164,12 @@
     "on-click": "xdg-open https://wttr.in/Sompa,Kohtla-Jarve"
   },
   "custom/updates": {
-    "format": "{}",
+    "format": "{} ",
     "tooltip": true,
-    "interval": 3600,
+    "interval": 5,
     "return-type": "json",
-    "exec": "python3 $HOME/Documents/config/waybar/updates.py",
-    "on-click": "kitty -e sh -c 'yay; echo Done - Press enter to exit; read'"
+    "exec": "cat /tmp/updates.json 2>/dev/null || echo '{\"text\": \"\"}'",
+    "on-click": "kitty -e sh -c 'yay; echo Done - Press enter to exit; read'; systemctl --user start check-updates.service"
   },
   "custom/mail": {
     "format": "{}",

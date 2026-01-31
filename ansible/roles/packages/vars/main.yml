@@ -1,0 +1,106 @@
+---
+system_packages:
+  # Base & System
+  - base
+  - base-devel
+  - linux
+  - linux-firmware
+  - intel-ucode
+  - networkmanager
+  - iwd
+  - bluez
+  - bluez-utils
+  - pacman-contrib
+  - git
+  - wget
+  - curl
+  - zip
+  - unzip
+  - p7zip
+  - unrar
+  
+  # UI & Window Manager
+  - hyprland
+  - hyprpaper
+  - waybar
+  - dunst
+  - wofi
+  - swww
+  - nwg-look
+  - nwg-displays
+  - qt5-wayland
+  - qt6-wayland
+  - xdg-desktop-portal-hyprland
+  - xdg-desktop-portal-gnome
+  
+  # Terminal & Shell
+  - kitty
+  - alacritty
+  - fish
+  - starship
+  - zoxide
+  - fzf
+  - eza
+  - bat
+  - tmux
+  - screen
+  
+  # Editors & Dev
+  - neovim
+  - vim
+  - nano
+  - go
+  - npm
+  - python-pip
+  - python-pipenv
+  - python-pipx
+  - uv
+  - cmake
+  - meson
+  - clang
+  - gperf
+  - direnv
+  
+  # Tools
+  - yazi
+  - jq
+  - fd
+  - ripgrep
+  - btop
+  - htop
+  - dust
+  - duf
+  - tldr
+  - tree
+  - chafa
+  - wl-clipboard
+  - brightnessctl
+  - pavucontrol
+  - libpulse
+  
+  # Apps
+  - firefox
+  - obsidian
+  - telegram-desktop
+  - qbittorrent
+  - bitwarden
+  
+  # Security
+  - bitwarden-cli
+  - pass
+  - gnupg
+  
+  # Fonts
+  - ttf-jetbrains-mono-nerd
+  - otf-font-awesome
+  - noto-fonts-emoji
+
+aur_packages:
+  - yay
+  - checkupdates-systemd-git
+  - dracula-icons-git
+  - dracula-cursors-git
+  - google-chrome
+  - portproton
+  - viber
+  - aerc

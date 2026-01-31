@@ -1,0 +1,10 @@
+---
+- name: Полная настройка системы Arch Linux
+  hosts: localhost
+  become: true
+  
+  roles:
+    - packages  # Установка софта
+    - system    # Системные конфиги (SDDM, NPM)
+    - user      # Пользовательские настройки (Shell, Venv, Pass)
+    - dotfiles  # Симлинки конфигов

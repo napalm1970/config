@@ -1,0 +1,19 @@
+---
+- name: Установка системных пакетов (pacman)
+  pacman:
+    name: "{{ system_packages }}"
+    state: present
+    update_cache: yes
+
+- name: Проверка наличия yay для AUR
+  command: which yay
+  register: yay_check
+  ignore_errors: true
+  changed_when: false
+
+- name: Установка AUR пакетов (yay)
+  become: false
+  shell: "yay -S --noconfirm --needed {{ aur_packages | join(' ') }}"
+  when: yay_check.rc == 0
+  register: aur_install
+  changed_when: "'Installing' in aur_install.stdout or 'Upgrading' in aur_install.stdout"
