@@ -1,7 +1,6 @@
 ---
 - name: Полная настройка системы Arch Linux
   hosts: localhost
-  become: true
   
   roles:
     - packages  # Установка софта
