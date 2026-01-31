@@ -181,14 +181,88 @@ main() {
   log_info "Включение SDDM..."
   run_cmd sudo systemctl enable sddm
 
-  # 10. Клонирование базы паролей (pass)
+  # 10. Клонирование базы паролей (pass) и импорт ключей
   log_info "Настройка хранилища паролей (pass)..."
   PASS_DIR="$HOME/.password-store"
+
+  # 10.1 Клонирование
   if [ ! -d "$PASS_DIR" ]; then
     log_info "Клонирование базы паролей из GitHub..."
     run_cmd git clone git@github.com:napalm1970/pass.git "$PASS_DIR"
   else
     log_info "Хранилище паролей уже существует в $PASS_DIR."
+  fi
+
+  # 10.2 Попытка импорта GPG ключей из хранилища
+  log_info "Попытка импорта GPG ключей из pass..."
+  
+  if command -v pass &>/dev/null; then
+    # Импорт публичного ключа
+    if [ -f "$PASS_DIR/gpg/public-key.gpg" ] || pass show gpg/public-key &>/dev/null; then
+         log_info "Импорт публичного ключа..."
+         run_cmd bash -c "pass show gpg/public-key | gpg --import" || log_warn "Не удалось импортировать публичный ключ."
+    else
+         log_warn "Запись gpg/public-key не найдена в pass."
+    fi
+
+    # Импорт приватного ключа
+    if [ -f "$PASS_DIR/gpg/private-key.gpg" ] || pass show gpg/private-key &>/dev/null; then
+         log_info "Импорт приватного ключа..."
+         log_warn "Внимание: импорт приватного ключа изнутри pass возможен только если хранилище уже расшифровано."
+         if run_cmd bash -c "pass show gpg/private-key | gpg --import"; then
+            log_success "Приватный ключ успешно импортирован из pass."
+         else
+            log_warn "Не удалось импортировать приватный ключ из pass (зашифровано)."
+            
+            # --- Логика Bitwarden Fallback ---
+            echo -e "${YELLOW}Хотите попытаться восстановить GPG ключ из Bitwarden? (y/N)${NC}"
+            read -r use_bw
+            if [[ "$use_bw" =~ ^[Yy]$ ]]; then
+                if command -v bw &>/dev/null; then
+                    log_info "Запуск Bitwarden CLI..."
+                    # Проверка статуса входа
+                    if ! bw login --check &>/dev/null; then
+                         echo "Пожалуйста, войдите в Bitwarden:"
+                         run_cmd bw login
+                    fi
+                    
+                    # Разблокировка хранилища, если нужно
+                    if [ -z "$BW_SESSION" ]; then
+                         echo "Разблокировка хранилища (введите мастер-пароль):"
+                         export BW_SESSION=$(bw unlock --raw)
+                    fi
+
+                    log_info "Поиск элемента 'GPG PRIVATE KEY'..."
+                    # Получение заметки и импорт (требуется jq)
+                    if command -v jq &>/dev/null; then
+                        if bw get item "GPG PRIVATE KEY" | jq -r '.notes' | gpg --import; then
+                            log_success "GPG ключ успешно восстановлен из Bitwarden!"
+                            # Повторная попытка инициализации pass
+                            log_info "Повторная инициализация pass..."
+                            pass git pull
+                        else
+                            log_error "Не удалось получить или импортировать ключ из Bitwarden (ошибка при получении item или импорте)."
+                        fi
+                    else
+                         log_error "Утилита 'jq' не найдена. Установите jq для работы с Bitwarden JSON."
+                         run_cmd sudo pacman -S --needed --noconfirm jq
+                         # Повторная попытка после установки
+                         if bw get item "GPG PRIVATE KEY" | jq -r '.notes' | gpg --import; then
+                            log_success "GPG ключ успешно восстановлен из Bitwarden!"
+                            pass git pull
+                         fi
+                    fi
+                else
+                    log_error "Bitwarden CLI (bw) не установлен."
+                fi
+            fi
+            # ---------------------------------
+         fi
+    else
+         log_warn "Запись gpg/private-key не найдена в pass."
+    fi
+  else
+    log_error "Команда 'pass' не найдена. Убедитесь, что пакет установлен."
   fi
 
   echo ""

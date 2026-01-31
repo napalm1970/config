@@ -46,7 +46,9 @@ neovim
 npm
 
 # --- Безопасность ---
-keepassxc
+bitwarden-cli
+bitwarden
+pass
 
 # --- Шрифты ---
 ttf-jetbrains-mono-nerd
