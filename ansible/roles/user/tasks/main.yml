@@ -52,4 +52,12 @@
   args:
     creates: "{{ ansible_facts['user_dir'] }}/.password-store"
   ignore_errors: yes
+
+- name: Установка pre-commit хуков
+  shell: "pre-commit install"
+  args:
+    chdir: "{{ playbook_dir }}/../.."
+  become: false
+  ignore_errors: yes
+
  # Может не сработать, если нет SSH ключей
