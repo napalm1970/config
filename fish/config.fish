@@ -61,12 +61,6 @@ set -Ux FZF_DEFAULT_OPTS "--color=fg:#f8f8f2,bg:#282a36,hl:#bd93f9 --color=fg+:#
 
 # ESP-IDF / ESP8266 SDK Paths
 fish_add_path $HOME/.local/bin
-set -x IDF_PATH $HOME/esp/ESP8266_RTOS_SDK/
-fish_add_path $HOME/esp/ESP8266_RTOS_SDK/tools/
-fish_add_path $HOME/esp/ESP8266_RTOS_SDK/components/esptool_py/esptool/
-fish_add_path $HOME/esp/ESP8266_RTOS_SDK/components/partition_table/
-fish_add_path $HOME/.espressif/tools/xtensa-lx106-elf/esp-2020r3-49-gd5524c1-8.4.0/xtensa-lx106-elf/bin/
-fish_add_path $HOME/.espressif/python_env/rtos3.4_py3.13_env/bin/
 
 # Auto-activate System Python Virtual Environment
 if test -f $HOME/.python_venv/bin/activate.fish
