@@ -87,3 +87,17 @@ MIT License.
 *   Сообществу [Hyprland](https://hyprland.org/) за отличный композитный менеджер.
 *   Проектам [Catppuccin](https://github.com/catppuccin/catppuccin) и [Dracula](https://draculatheme.com/) за цветовые схемы.
 *   **Gemini CLI** за помощь в автоматизации процессов, рефакторинге кода и написании документации.
+
+### ⌨️ Hotkeys
+| Key | Action |
+|-----|--------|
+| $mainMod + Return | $terminal |
+| $mainMod + b | $BROWSER |
+| $mainMod + t | tor |
+| $mainMod + SPACE | hyprctl switchxkblayout telink-wireless-receiver next |
+| $mainMod SHIFT + P | pypr toggle term |
+| $mainMod SHIFT + V | pypr toggle volume |
+| $mainMod SHIFT + C | pypr toggle calc |
+| $mainMod SHIFT + T | $runprog |
+
+**Packages:** --, base, base-devel, linux, linux-firmware, intel-ucode, networkmanager, iwd, bluez, bluez-utils, pacman-contrib, git, wget, curl, zip...

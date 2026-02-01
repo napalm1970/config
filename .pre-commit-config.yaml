@@ -1,0 +1,23 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-json
+      - id: check-added-large-files
+
+  - repo: https://github.com/koalaman/shellcheck-precommit
+    rev: v0.9.0
+    hooks:
+      - id: shellcheck
+
+  - repo: local
+    hooks:
+      - id: generate-docs
+        name: Generate Documentation
+        entry: python3 scripts/generate_docs.py
+        language: system
+        files: ^(hypr/.*\.conf|ansible/roles/packages/vars/main\.yml)$
+        pass_filenames: false
