@@ -14,7 +14,14 @@
       "args": [
         "-y",
         "@modelcontextprotocol/server-filesystem",
-        "/home/napalm/Documents/config/nvim"
+        "/home/napalm"
+      ],
+      "command": "npx"
+    },
+    "git": {
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-git"
       ],
       "command": "npx"
     },
