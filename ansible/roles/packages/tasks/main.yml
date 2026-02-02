@@ -6,18 +6,34 @@
     state: present
     update_cache: yes
 
-- name: Проверка наличия yay для AUR
+- name: Проверка наличия yay
   command: which yay
   register: yay_check
   ignore_errors: true
   changed_when: false
 
-#- name: Установка AUR пакетов (yay)
-#  become: false
-#  shell: "yay -S --noconfirm --needed {{ aur_packages | join(' ') }}"
-#  when: yay_check.rc == 0
-#  register: aur_install
-#  changed_when: "'Installing' in aur_install.stdout or 'Upgrading' in aur_install.stdout"
-#  failed_when:
-#    - aur_install.rc != 0
-#    - "'nothing to do' not in aur_install.stderr"
+- name: Клонирование репозитория yay-bin
+  git:
+    repo: https://aur.archlinux.org/yay-bin.git
+    dest: /tmp/yay-bin
+  when: yay_check.rc != 0
+
+- name: Установка yay-bin
+  shell: cd /tmp/yay-bin && makepkg -si --noconfirm
+  when: yay_check.rc != 0
+  changed_when: true
+
+- name: Удаление временной папки yay-bin
+  file:
+    path: /tmp/yay-bin
+    state: absent
+  when: yay_check.rc != 0
+
+- name: Установка AUR пакетов (yay)
+  shell: "yay -S --noconfirm --needed {{ aur_packages | join(' ') }}"
+  register: aur_install
+  changed_when: "'Installing' in aur_install.stdout or 'Upgrading' in aur_install.stdout"
+  when: aur_packages | length > 0
+  failed_when:
+    - aur_install.rc != 0
+    - "'nothing to do' not in aur_install.stderr"

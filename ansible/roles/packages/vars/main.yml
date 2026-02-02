@@ -12,6 +12,7 @@ system_packages:
   - bluez-utils
   - pacman-contrib
   - git
+  - which
   - wget
   - curl
   - zip
