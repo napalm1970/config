@@ -18,10 +18,16 @@
     dest: /tmp/yay-bin
   when: yay_check.rc != 0
 
-- name: Установка yay-bin
-  shell: cd /tmp/yay-bin && makepkg -si --noconfirm
+- name: Сборка yay-bin
+  command: makepkg -s --noconfirm
+  args:
+    chdir: /tmp/yay-bin
   when: yay_check.rc != 0
-  changed_when: true
+
+- name: Установка yay-bin
+  become: true
+  shell: pacman -U --noconfirm /tmp/yay-bin/yay-bin-*.pkg.tar.zst
+  when: yay_check.rc != 0
 
 - name: Удаление временной папки yay-bin
   file:
