@@ -17,7 +17,7 @@ system_packages:
   - curl
   - zip
   - unzip
-  - p7zip
+  - 7zip
   - unrar
 
   # UI & Window Manager
@@ -94,14 +94,16 @@ system_packages:
   # Security
   - pass
   - gnupg
+  - bitwarden-cli
 
   # Fonts
   - ttf-jetbrains-mono-nerd
   - otf-font-awesome
   - noto-fonts-emoji
 
-aur_packages:
-  - yay
-  - checkupdates-systemd-git
+  # Extra UI
   - swww
-  - bitwarden-cli
+
+aur_packages:
+  - checkupdates-systemd-git
+
