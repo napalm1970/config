@@ -46,7 +46,7 @@
 - name: Добавление GitHub в known_hosts
   shell: "ssh-keyscan -H github.com >> {{ ansible_facts['user_dir'] }}/.ssh/known_hosts"
   args:
-    creates: "{{ ansible_facts['user_dir'] }}/.ssh/known_hosts_github_check" 
+    creates: "{{ ansible_facts['user_dir'] }}/.ssh/known_hosts_github_check"
   # Лайфхак: чтобы не дублировать, можно проверять grep, но проще разрешить ssh-keyscan работать.
   # Или просто игнорировать ошибки.
   ignore_errors: yes

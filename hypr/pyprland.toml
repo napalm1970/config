@@ -25,5 +25,3 @@ class = "org.gnome.Calculator"
 size = "40% 90%"
 unfocus = "hide"
 lazy = true
-
-

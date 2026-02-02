@@ -73,7 +73,7 @@ def get_weather():
         try:
             with urllib.request.urlopen(URL, timeout=5) as response:
                 data = json.loads(response.read().decode())
-                
+
                 current_condition = data['current_condition'][0]
                 temp_C = current_condition['temp_C']
                 weather_code = current_condition['weatherCode']
@@ -81,12 +81,12 @@ def get_weather():
                 feels_like = current_condition['FeelsLikeC']
                 humidity = current_condition['humidity']
                 wind_speed = current_condition['windspeedKmph']
-                
+
                 icon = weather_icons.get(weather_code, "")
-                
+
                 text = f"{icon} {temp_C}°C".strip()
                 tooltip = f"<b>{weather_desc}</b>\nОщущается как: {feels_like}°C\nВлажность: {humidity}%\nВетер: {wind_speed} km/h"
-                
+
                 save_output({"text": text, "tooltip": tooltip, "class": "weather"})
                 return
 

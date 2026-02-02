@@ -6,12 +6,14 @@ echo "$(date): Attempting to start aerc" > "$LOGfile"
 # Проверка, есть ли aerc
 if ! command -v aerc &> /dev/null; then
     echo "Error: aerc not found in PATH" | tee -a "$LOGfile"
-    read -p "Press Enter to exit..."
+    read -rp "Press Enter to exit..."
     exit 1
 fi
 
-echo "Path: $PATH" >> "$LOGfile"
-echo "Running aerc..." >> "$LOGfile"
+{
+    echo "Path: $PATH"
+    echo "Running aerc..."
+} >> "$LOGfile"
 
 # Запуск aerc с захватом ошибок
 /usr/bin/aerc 2>> "$LOGfile"
@@ -26,5 +28,5 @@ if [ $EXIT_CODE -ne 0 ]; then
     echo "Last 5 lines of log:"
     tail -n 5 "$LOGfile"
     echo "---------------------------------------------------"
-    read -p "Press Enter to close terminal..."
+    read -rp "Press Enter to close terminal..."
 fi

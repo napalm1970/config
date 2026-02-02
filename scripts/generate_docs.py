@@ -7,7 +7,7 @@ def get_hypr_keys():
     config_path = "hypr/hyprland.conf"
     if not os.path.exists(config_path):
         return ""
-    
+
     with open(config_path, "r") as f:
         content = f.read()
         # Ищем bind = MOD, KEY, exec, CMD
@@ -16,21 +16,21 @@ def get_hypr_keys():
             mod, key, action, cmd = [x.strip() for x in m]
             if action == "exec":
                 keys.append(f"| {mod} + {key} | {cmd} |")
-    
+
     return "\n".join(keys)
 
 def get_packages():
     pkg_vars = "ansible/roles/packages/vars/main.yml"
     if not os.path.exists(pkg_vars):
         return "Not found"
-    
+
     pkgs = []
     with open(pkg_vars, "r") as f:
         for line in f:
             match = re.search(r'^\s*-\s*([a-zA-Z0-9\-_]+)', line)
             if match:
                 pkgs.append(match.group(1))
-    
+
     return ", ".join(pkgs[:15]) + "..."
 
 def update_readme():

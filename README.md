@@ -95,6 +95,7 @@ MIT License.
 | $mainMod + b | $BROWSER |
 | $mainMod + t | tor |
 | $mainMod + SPACE | hyprctl switchxkblayout telink-wireless-receiver next |
+| $mainMod + G | [float;center;size 80% 80%] kitty --class gemini-floating -e gemini |
 | $mainMod SHIFT + P | pypr toggle term |
 | $mainMod SHIFT + V | pypr toggle volume |
 | $mainMod SHIFT + C | pypr toggle calc |

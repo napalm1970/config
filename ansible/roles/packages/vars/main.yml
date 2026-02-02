@@ -18,7 +18,7 @@ system_packages:
   - unzip
   - p7zip
   - unrar
-  
+
   # UI & Window Manager
   - hyprland
   - hyprpaper
@@ -27,7 +27,6 @@ system_packages:
   - waybar
   - dunst
   - wofi
-  - swww
   - nwg-look
   - nwg-displays
   - qt5-wayland
@@ -35,7 +34,7 @@ system_packages:
   - gammastep
   - xdg-desktop-portal-hyprland
   - xdg-desktop-portal-gnome
-  
+
   # Terminal & Shell
   - kitty
   - alacritty
@@ -47,7 +46,8 @@ system_packages:
   - bat
   - tmux
   - screen
-  
+  - aerc
+
   # Editors & Dev
   - neovim
   - vim
@@ -64,7 +64,7 @@ system_packages:
   - gperf
   - direnv
   - pre-commit
-  
+
   # Tools
   - yazi
   - jq
@@ -81,7 +81,7 @@ system_packages:
   - brightnessctl
   - pavucontrol
   - libpulse
-  
+
   # Apps
   - firefox
   - chromium
@@ -89,12 +89,11 @@ system_packages:
   - telegram-desktop
   - qbittorrent
   - bitwarden
-  
+
   # Security
-  - bitwarden-cli
   - pass
   - gnupg
-  
+
   # Fonts
   - ttf-jetbrains-mono-nerd
   - otf-font-awesome
@@ -103,4 +102,5 @@ system_packages:
 aur_packages:
   - yay
   - checkupdates-systemd-git
-  - aerc
+  - swww
+  - bitwarden-cli

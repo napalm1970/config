@@ -10,7 +10,7 @@ def get_dependencies(pkg_name):
     """Получает список прямых зависимостей пакета через pacman -Si"""
     try:
         result = subprocess.run(['pacman', '-Si', pkg_name], capture_output=True, text=True)
-        
+
         if result.returncode != 0:
             return None # AUR или ошибка
 
@@ -34,19 +34,19 @@ def main():
         return
 
     print("Генерация графа зависимостей для Obsidian...")
-    
+
     with open(PKGLIST, 'r') as f:
         packages = [line.strip() for line in f if line.strip() and not line.startswith('#')]
 
     with open(OUTPUT_FILE, 'w') as f:
         f.write("# Package Dependencies Graph\n\n")
         f.write("Этот файл сгенерирован для просмотра связей в Obsidian.\n\n")
-        
+
         for pkg in sorted(packages):
             deps = get_dependencies(pkg)
-            
+
             f.write(f"## {pkg}\n") # Заголовок пакета
-            
+
             if deps is None:
                 f.write("*AUR Package or Not Found*\n")
             elif not deps:
@@ -55,9 +55,9 @@ def main():
                 for d in deps:
                     # Создаем ссылку [[dependency]]
                     f.write(f"- [[{d}]]\n")
-            
+
             f.write("\n---\n\n") # Разделитель
-                
+
     print(f"Готово! Файл {OUTPUT_FILE} создан.")
 
 if __name__ == "__main__":
