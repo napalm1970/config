@@ -5,7 +5,7 @@ return {
     event = "VeryLazy",
     opts = {
       enabled = true,
-      prefix = "", 
+      prefix = "",
       highlight = "Comment",
     },
   },

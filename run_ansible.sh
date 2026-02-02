@@ -6,5 +6,5 @@ if ! command -v ansible-playbook &>/dev/null; then
     sudo pacman -S --needed --noconfirm ansible
 fi
 
-cd "$(dirname "$0")/ansible"
+cd "$(dirname "$0")/ansible" || exit
 ansible-playbook playbooks/main.yml --ask-become-pass "$@"

@@ -48,7 +48,6 @@
       "unlocked": ""
     }
   },
-
   "tray": {
     "icon-size": 21,
     "spacing": 10
@@ -124,7 +123,6 @@
       ""
     ]
   },
-
   "network": {
     "format-wifi": "{essid} ({signalStrength}%) ",
     "format-ethernet": "{ipaddr}/{cidr} ",
@@ -176,7 +174,7 @@
     "tooltip": true,
     "interval": 60,
     "return-type": "json",
-    "exec": "$HOME/Documents/config/waybar/mail-rs/mail-rs",
+    "exec": "$HOME/Documents/config/waybar/mail-rs/target/debug/mail-rs",
     "on-click": "kitty -e /home/napalm/Documents/config/scripts/launch-aerc.sh"
   }
 }

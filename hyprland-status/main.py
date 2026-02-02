@@ -23,7 +23,7 @@ def get_battery_info():
             capacity = int(f.read().strip())
         with open(os.path.join(battery_dir, 'status'), 'r') as f:
             status = f.read().strip()
-        
+
         icon = ''
         if status == 'Charging':
             icon = ''
@@ -61,19 +61,19 @@ class StatusItem(Gtk.Box):
     def __init__(self, icon_class, icon_char):
         super().__init__(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
         self.set_css_classes(["item-box"])
-        
+
         self.icon_label = Gtk.Label(label=icon_char)
         self.icon_label.set_css_classes(["icon", icon_class])
-        
+
         self.text_label = Gtk.Label(label="...")
         self.text_label.set_css_classes(["label"])
-        
+
         self.append(self.icon_label)
         self.append(self.text_label)
 
     def set_text(self, text):
         self.text_label.set_text(text)
-    
+
     def set_icon(self, icon):
         self.icon_label.set_text(icon)
 
@@ -92,7 +92,7 @@ class MainWindow(Gtk.ApplicationWindow):
         self.bat_item = StatusItem("battery-icon", "")
         self.time_item = StatusItem("time-icon", "")
         self.update_item = StatusItem("update-icon", "📦")
-        
+
         box.append(self.kbd_item)
         box.append(self.bat_item)
         box.append(self.time_item)
@@ -124,7 +124,7 @@ class MainWindow(Gtk.ApplicationWindow):
         else:
             if self.update_item.get_parent() is not None:
                 self.box.remove(self.update_item)
-        
+
         return True
 
 class MyApp(Adw.Application):
@@ -150,6 +150,6 @@ if __name__ == "__main__":
             css_provider,
             Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
         )
-    
+
     app = MyApp()
     app.run(None)

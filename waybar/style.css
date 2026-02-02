@@ -2,7 +2,7 @@
 * {
     font-family: FontAwesome, Roboto, Helvetica, Arial, sans-serif;
     font-size: 14px;
-    color: #8be9fd; 
+    color: #8be9fd;
 }
 
 /* Стили для окна Waybar */
@@ -82,7 +82,7 @@ button:hover {
 }
 
 #custom-mail.unread {
-    color: #50fa7b; 
+    color: #50fa7b;
 }
 
 #window,

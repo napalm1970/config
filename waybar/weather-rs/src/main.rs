@@ -107,7 +107,7 @@ fn main() {
                             if let Some(condition) = data.current_condition.first() {
                                 let icon = get_icon(&condition.weather_code);
                                 let desc = condition.weather_desc.first().map(|d| d.value.as_str()).unwrap_or("");
-                                
+
                                 let text = format!("{} {}°C", icon, condition.temp_c);
                                 let tooltip = format!(
                                     "<b>{}</b>\nОщущается как: {}°C\nВлажность: {}%\nВетер: {} km/h",
@@ -144,7 +144,7 @@ fn main() {
 
     // Если все попытки исчерпаны
     let output = json!({
-        "text": "🚫", 
+        "text": "🚫",
         "tooltip": "No Internet Connection"
     });
     println!("{}", output);

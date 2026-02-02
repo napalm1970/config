@@ -16,17 +16,17 @@ with open(csv_file, mode='r', encoding='utf-8') as f:
 
         # Construct path: Group/Title
         pass_path = os.path.join(group, title)
-        
+
         # Prepare content
         content = f"{password}\nUsername: {username}\nURL: {url}\nNotes: {notes}"
-        
+
         print(f"Importing: {pass_path}")
-        
+
         # Call pass insert
         # --multiline or just pipe
-        process = subprocess.Popen(['pass', 'insert', '-m', pass_path], 
-                                   stdin=subprocess.PIPE, 
-                                   stdout=subprocess.PIPE, 
+        process = subprocess.Popen(['pass', 'insert', '-m', pass_path],
+                                   stdin=subprocess.PIPE,
+                                   stdout=subprocess.PIPE,
                                    stderr=subprocess.PIPE,
                                    text=True)
         stdout, stderr = process.communicate(input=content)

@@ -1,6 +1,6 @@
 function fish_command_not_found
     set -l cmd $argv[1]
-    
+
     # Проверяем, установлен ли pkgfile
     if not type -q pkgfile
         __fish_default_command_not_found_handler $cmd

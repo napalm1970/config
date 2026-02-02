@@ -33,6 +33,7 @@ alias upd="yay -Syu"
 alias doc="evince &"
 alias c="clear"
 alias b="btop"
+alias sr="portproton /home/napalm/Sklad/Games/stalker2/Stalker2.exe"
 
 function p
     set -l selection (find ~/.password-store -type f -name "*.gpg" | sed "s|$HOME/.password-store/||; s|\.gpg\$||" | fzf --height 40% --reverse --header="Search Passwords")

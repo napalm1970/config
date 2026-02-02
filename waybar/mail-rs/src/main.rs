@@ -131,7 +131,7 @@ fn main() {
             if count > 0 {
                 tooltip_lines.push(format!("{}: <b>{}</b> new", res.name, count));
             } else {
-               // tooltip_lines.push(format!("{}: 0", res.name)); 
+               // tooltip_lines.push(format!("{}: 0", res.name));
             }
         }
     }
@@ -142,7 +142,7 @@ fn main() {
 
     let icon = if total_unread > 0 { "" } else { "" };
     let class = if total_unread > 0 { "unread" } else { "empty" };
-    
+
     // Если была ошибка, добавляем индикатор в класс или текст, по желанию
     // let text = if has_error { format!("{} {}!", icon, total_unread) } else { format!("{} {}", icon, total_unread) };
 

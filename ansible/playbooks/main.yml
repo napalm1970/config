@@ -1,7 +1,7 @@
 ---
 - name: Полная настройка системы Arch Linux
   hosts: localhost
-  
+
   roles:
     - packages  # Установка софта
     - system    # Системные конфиги (SDDM, NPM)
