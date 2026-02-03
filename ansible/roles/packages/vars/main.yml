@@ -51,7 +51,7 @@ system_packages:
 
   # Editors & Dev
   - neovim
-  - vim
+  - vimi
   - nano
   - go
   - npm
@@ -101,9 +101,6 @@ system_packages:
   - otf-font-awesome
   - noto-fonts-emoji
 
-  # Extra UI
-  - swww
-
 aur_packages:
   - checkupdates-systemd-git
-
+  - swww

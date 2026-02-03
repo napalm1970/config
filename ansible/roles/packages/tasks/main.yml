@@ -19,14 +19,22 @@
   when: yay_check.rc != 0
 
 - name: Сборка yay-bin
-  command: makepkg -s --noconfirm
-  args:
-    chdir: /tmp/yay-bin
+  shell: cd /tmp/yay-bin && makepkg -s --noconfirm
+  become: false
+  when: yay_check.rc != 0
+
+- name: Поиск собранного пакета yay
+  find:
+    paths: /tmp/yay-bin
+    patterns: "yay-bin-*.pkg.tar.zst"
+  register: yay_package_file
   when: yay_check.rc != 0
 
 - name: Установка yay-bin
+  pacman:
+    name: "{{ yay_package_file.files[0].path }}"
+    state: present
   become: true
-  shell: pacman -U --noconfirm /tmp/yay-bin/yay-bin-*.pkg.tar.zst
   when: yay_check.rc != 0
 
 - name: Удаление временной папки yay-bin
