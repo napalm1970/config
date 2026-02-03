@@ -51,7 +51,7 @@ system_packages:
 
   # Editors & Dev
   - neovim
-  - vimi
+  - vim
   - nano
   - go
   - npm
