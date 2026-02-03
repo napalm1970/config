@@ -1,4 +1,17 @@
 ---
+- name: Проверка, что мы не под root
+  fail:
+    msg: "Не запускайте этот playbook под пользователем root! Используйте обычного пользователя с sudo."
+  when: ansible_user_id == 'root'
+
+- name: Разрешить группе wheel использовать pacman без пароля (для yay)
+  become: true
+  copy:
+    content: "%wheel ALL=(ALL) NOPASSWD: /usr/bin/pacman"
+    dest: /etc/sudoers.d/10-pacman
+    mode: '0440'
+    validate: /usr/sbin/visudo -cf %s
+
 - name: Установка системных пакетов (pacman)
   become: true
   pacman:
@@ -12,42 +25,44 @@
   ignore_errors: true
   changed_when: false
 
-- name: Клонирование репозитория yay-bin
-  git:
-    repo: https://aur.archlinux.org/yay-bin.git
-    dest: /tmp/yay-bin
+- name: Установка yay-bin (AUR helper)
+  block:
+    - name: Удаление временной папки yay-bin
+      file:
+        path: /tmp/yay-bin
+        state: absent
+
+    - name: Клонирование репозитория yay-bin
+      git:
+        repo: https://aur.archlinux.org/yay-bin.git
+        dest: /tmp/yay-bin
+      become: false
+
+    - name: Сборка yay-bin
+      shell: makepkg -s --noconfirm
+      args:
+        chdir: /tmp/yay-bin
+      become: false
+
+    - name: Установка yay-bin через pacman
+      shell: pacman -U --noconfirm yay-bin-*.pkg.tar.zst
+      args:
+        chdir: /tmp/yay-bin
+      become: true
+
+    - name: Удаление временной папки yay-bin после установки
+      file:
+        path: /tmp/yay-bin
+        state: absent
   when: yay_check.rc != 0
 
-- name: Сборка yay-bin
-  shell: cd /tmp/yay-bin && makepkg -s --noconfirm
-  become: false
-  when: yay_check.rc != 0
-
-- name: Поиск собранного пакета yay
-  find:
-    paths: /tmp/yay-bin
-    patterns: "yay-bin-*.pkg.tar.zst"
-  register: yay_package_file
-  when: yay_check.rc != 0
-
-- name: Установка yay-bin
-  pacman:
-    name: "{{ yay_package_file.files[0].path }}"
-    state: present
-  become: true
-  when: yay_check.rc != 0
-
-- name: Удаление временной папки yay-bin
-  file:
-    path: /tmp/yay-bin
-    state: absent
-  when: yay_check.rc != 0
-
-- name: Установка AUR пакетов (yay)
+- name: Установка AUR пакетов
   shell: "yay -S --noconfirm --needed {{ aur_packages | join(' ') }}"
   register: aur_install
-  changed_when: "'Installing' in aur_install.stdout or 'Upgrading' in aur_install.stdout"
+  become: false
+  changed_when: "'Installing' in aur_install.stdout or 'Upgrading' in aur_install.stdout or 'Установка' in aur_install.stdout"
   when: aur_packages | length > 0
   failed_when:
     - aur_install.rc != 0
     - "'nothing to do' not in aur_install.stderr"
+    - "'ничего не нужно делать' not in aur_install.stdout"
