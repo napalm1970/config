@@ -19,6 +19,12 @@
     state: present
     update_cache: yes
 
+- name: Удаление старой версии starship из /usr/local/bin (если есть)
+  become: true
+  file:
+    path: /usr/local/bin/starship
+    state: absent
+
 - name: Проверка наличия yay
   command: which yay
   register: yay_check
