@@ -94,7 +94,6 @@ MIT License.
 | $mainMod + Return | $terminal |
 | $mainMod + b | $BROWSER |
 | $mainMod + t | tor |
-| $mainMod + SPACE | hyprctl switchxkblayout compx-2.4g-wireless-receiver next |
 | $mainMod + G | [float;center;size 80% 80%] kitty --class gemini-floating -e gemini |
 | $mainMod SHIFT + P | pypr toggle term |
 | $mainMod SHIFT + V | pypr toggle volume |
