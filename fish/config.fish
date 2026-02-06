@@ -38,4 +38,7 @@ if status is-interactive
     alias u "yay -Syu"
     alias fc "nvim $HOME/Documents/config/fish/config.fish"
     alias hc "nvim $HOME/Documents/config/hypr/hyprland.conf"
+    alias sr "portproton $HOME/Sklad/Games/stalker2/Stalker2.exe"
+    alias hh "shutdown -h now"
+    alias y yazi
 end

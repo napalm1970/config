@@ -5,6 +5,17 @@
     state: directory
     mode: '0755'
 
+- name: Проверка состояния ~/.config/hypr
+  stat:
+    path: "{{ ansible_facts['user_dir'] }}/.config/hypr"
+  register: hypr_stat
+
+- name: Удаление ~/.config/hypr, если это директория, а не симлинк
+  file:
+    path: "{{ ansible_facts['user_dir'] }}/.config/hypr"
+    state: absent
+  when: hypr_stat.stat.exists and not hypr_stat.stat.islnk
+
 - name: Создание симлинков для dotfiles
   file:
     src: "{{ dotfiles_repo_path }}/{{ item.src }}"
