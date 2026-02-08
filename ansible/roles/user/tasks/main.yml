@@ -44,6 +44,7 @@
   ignore_errors: yes
 
 - name: Добавление GitHub в known_hosts
+<<<<<<< HEAD
   shell: "ssh-keyscan -H github.com >> {{ ansible_facts['user_dir'] }}/.ssh/known_hosts"
   when: github_check.rc != 0
   vars:
@@ -60,6 +61,14 @@
     - name: Добавление GitHub в known_hosts
       shell: "ssh-keyscan -H github.com >> {{ ansible_facts['user_dir'] }}/.ssh/known_hosts"
       when: github_grep.rc != 0
+=======
+  known_hosts:
+    name: github.com
+    key: "{{ lookup('pipe', 'ssh-keyscan -t ed25519 github.com') }}"
+    path: "{{ ansible_facts['user_dir'] }}/.ssh/known_hosts"
+    state: present
+  ignore_errors: yes
+>>>>>>> b6d7b073862fcca2c81e69684ce0f3edfe8fdec4
 
 - name: Клонирование репозитория pass (только если отсутствует)
   shell: |
