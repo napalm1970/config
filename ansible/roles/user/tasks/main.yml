@@ -2,7 +2,7 @@
 - name: Смена оболочки пользователя на fish
   become: true
   user:
-    name: "{{ ansible_facts['user_id'] }}"
+    name: "{{ ansible_user_id }}"
     shell: /usr/bin/fish
 
 - name: Создание Python виртуального окружения
@@ -18,13 +18,13 @@
   file:
     path: "{{ ansible_facts['user_dir'] }}/.gemini/memory"
     state: directory
-    mode: '0700'
+    mode: "0700"
 
 - name: Настройка директории .ssh
   file:
     path: "{{ ansible_facts['user_dir'] }}/.ssh"
     state: directory
-    mode: '0700'
+    mode: "0700"
 
 - name: Проверка наличия SSH ключа
   stat:
@@ -40,16 +40,26 @@
 - name: Настройка прав приватного SSH ключа
   file:
     path: "{{ ansible_facts['user_dir'] }}/.ssh/id_ed25519"
-    mode: '0600'
+    mode: "0600"
   ignore_errors: yes
 
 - name: Добавление GitHub в known_hosts
   shell: "ssh-keyscan -H github.com >> {{ ansible_facts['user_dir'] }}/.ssh/known_hosts"
-  args:
-    creates: "{{ ansible_facts['user_dir'] }}/.ssh/known_hosts_github_check"
-  # Лайфхак: чтобы не дублировать, можно проверять grep, но проще разрешить ssh-keyscan работать.
-  # Или просто игнорировать ошибки.
-  ignore_errors: yes
+  when: github_check.rc != 0
+  vars:
+    github_check:
+      rc: 1 # Default if file doesn't exist
+  block:
+    - name: Проверка, есть ли уже GitHub в known_hosts
+      shell: "grep -q github.com {{ ansible_facts['user_dir'] }}/.ssh/known_hosts"
+      register: github_grep
+      ignore_errors: yes
+      changed_when: false
+      check_mode: false
+
+    - name: Добавление GitHub в known_hosts
+      shell: "ssh-keyscan -H github.com >> {{ ansible_facts['user_dir'] }}/.ssh/known_hosts"
+      when: github_grep.rc != 0
 
 - name: Клонирование репозитория pass (только если отсутствует)
   shell: |
@@ -65,5 +75,4 @@
     chdir: "{{ playbook_dir }}/../.."
   become: false
   ignore_errors: yes
-
- # Может не сработать, если нет SSH ключей
+# Может не сработать, если нет SSH ключей

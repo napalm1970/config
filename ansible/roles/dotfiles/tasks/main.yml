@@ -5,16 +5,22 @@
     state: directory
     mode: '0755'
 
-- name: Проверка состояния ~/.config/hypr
+- name: Получение информации о существующих путях dotfiles
   stat:
-    path: "{{ ansible_facts['user_dir'] }}/.config/hypr"
-  register: hypr_stat
+    path: "{{ ansible_facts['user_dir'] }}/{{ item.dest }}"
+  loop: "{{ dotfiles_links }}"
+  register: dotfiles_stats
 
-- name: Удаление ~/.config/hypr, если это директория, а не симлинк
+- name: Удаление существующих директорий перед созданием симлинков
   file:
-    path: "{{ ansible_facts['user_dir'] }}/.config/hypr"
+    path: "{{ item.stat.path }}"
     state: absent
-  when: hypr_stat.stat.exists and not hypr_stat.stat.islnk
+  loop: "{{ dotfiles_stats.results }}"
+  when: 
+    - item.stat.exists
+    - item.stat.isdir
+    - not item.stat.islnk
+  # Удаляем только если это реальная директория, а не симлинк
 
 - name: Создание симлинков для dotfiles
   file:

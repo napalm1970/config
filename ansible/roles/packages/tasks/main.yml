@@ -70,5 +70,5 @@
   when: aur_packages | length > 0
   failed_when:
     - aur_install.rc != 0
-    - "'nothing to do' not in aur_install.stderr"
-    - "'ничего не нужно делать' not in aur_install.stdout"
+    - "'nothing to do' not in aur_install.stdout and 'nothing to do' not in aur_install.stderr"
+    - "'ничего не нужно делать' not in aur_install.stdout and 'ничего не нужно делать' not in aur_install.stderr"
