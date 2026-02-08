@@ -1,12 +1,12 @@
 ---
 - name: Смена оболочки пользователя на fish
   become: true
-  user:
+  ansible.builtin.user:
     name: "{{ ansible_user_id }}"
     shell: /usr/bin/fish
 
 - name: Создание Python виртуального окружения
-  pip:
+  ansible.builtin.pip:
     name:
       - pip
       - setuptools
@@ -15,21 +15,21 @@
     virtualenv_command: python3 -m venv
 
 - name: Создание директории памяти Gemini
-  file:
+  ansible.builtin.file:
     path: "{{ ansible_facts['user_dir'] }}/.gemini/memory"
     state: directory
     mode: "0700"
 
 - name: Настройка директории .ssh
-  file:
+  ansible.builtin.file:
     path: "{{ ansible_facts['user_dir'] }}/.ssh"
     state: directory
     mode: "0700"
 
 - name: Установка pre-commit хуков
-  shell: "pre-commit install"
+  ansible.builtin.command: "pre-commit install"
   args:
     chdir: "{{ playbook_dir }}/../.."
   become: false
-  ignore_errors: yes
-# Может не сработать, если нет SSH ключей
+  register: pre_commit_result
+  changed_when: "'pre-commit installed' in pre_commit_result.stdout"

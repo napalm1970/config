@@ -1,29 +1,28 @@
 ---
 - name: Создание директории ~/.config
-  file:
+  ansible.builtin.file:
     path: "{{ ansible_facts['user_dir'] }}/.config"
     state: directory
     mode: '0755'
 
 - name: Получение информации о существующих путях dotfiles
-  stat:
+  ansible.builtin.stat:
     path: "{{ ansible_facts['user_dir'] }}/{{ item.dest }}"
   loop: "{{ dotfiles_links }}"
   register: dotfiles_stats
 
-- name: Удаление существующих директорий перед созданием симлинков
-  file:
-    path: "{{ item.stat.path }}"
-    state: absent
+- name: Резервное копирование существующих директорий (добавление .bak)
+  ansible.builtin.command: "mv {{ item.stat.path }} {{ item.stat.path }}.bak"
   loop: "{{ dotfiles_stats.results }}"
-  when: 
+  when:
     - item.stat.exists
     - item.stat.isdir
     - not item.stat.islnk
-  # Удаляем только если это реальная директория, а не симлинк
+  args:
+    removes: "{{ item.stat.path }}"
 
 - name: Создание симлинков для dotfiles
-  file:
+  ansible.builtin.file:
     src: "{{ dotfiles_repo_path }}/{{ item.src }}"
     dest: "{{ ansible_facts['user_dir'] }}/{{ item.dest }}"
     state: link
@@ -32,7 +31,7 @@
   become: false
 
 - name: Исправление прав доступа для aerc/accounts.conf
-  file:
+  ansible.builtin.file:
     path: "{{ dotfiles_repo_path }}/aerc/accounts.conf"
     mode: '0600'
   become: false

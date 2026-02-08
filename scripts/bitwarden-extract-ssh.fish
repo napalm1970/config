@@ -44,7 +44,12 @@ end
 
 # Шаг 2: Разблокировка хранилища и получение session token
 echo "Разблокировка хранилища..."
-set -gx BW_SESSION (bw unlock --raw)
+if set -q BW_PASSWORD; and test -n "$BW_PASSWORD"
+    set -gx BW_SESSION (echo "$BW_PASSWORD" | bw unlock --raw)
+else
+    set -gx BW_SESSION (bw unlock --raw)
+end
+
 if test $status -ne 0
     echo -e "$RED✗ Ошибка при разблокировке хранилища$NC"
     exit 1
@@ -152,11 +157,11 @@ end
 if test -d "$PASS_DIR"
     echo "Установка прав 700 на $PASS_DIR..."
     chmod 700 "$PASS_DIR"
-    
+
     # Инициализация git в pass (если еще не инициализирован)
     echo "Инициализация git в pass..."
     pass git init
-    
+
     # Проверка и добавление origin (если клонирование не удалось или папка была создана вручную)
     echo "Настройка git remote..."
     if not git -C "$PASS_DIR" remote | grep -q "origin"
@@ -195,7 +200,7 @@ else
     # Шаг 7: Извлечение GPG ключа из Bitwarden
     echo "Извлечение GPG ключа '$GPG_ITEM_NAME' из Bitwarden..."
     bw get item "$GPG_ITEM_NAME" | jq -r '.notes' > "$GPG_TEMP_FILE"
-    
+
     if test $status -ne 0
         echo -e "$RED✗ Ошибка при извлечении GPG ключа из Bitwarden$NC"
         # Файл удалится автоматически
@@ -203,7 +208,7 @@ else
         # Шаг 8: Проверка корректности содержимого GPG ключа
         echo "Проверка корректности содержимого GPG ключа..."
         set -l gpg_content (cat "$GPG_TEMP_FILE")
-        
+
         # Проверка наличия заголовка GPG приватного ключа
         if not string match -q "*BEGIN PGP PRIVATE KEY BLOCK*" -- $gpg_content
             echo -e "$RED✗ Ошибка: файл не содержит корректный заголовок GPG приватного ключа$NC"
@@ -215,43 +220,43 @@ else
             # Файл удалится автоматически
         else
             echo "✓ Содержимое GPG ключа прошло валидацию"
-            
+
             # Шаг 9: Импорт GPG ключа в keyring
             echo "Импорт GPG ключа в keyring..."
             gpg --import "$GPG_TEMP_FILE" 2>&1
-            
+
             if test $status -eq 0
                 echo "✓ GPG ключ успешно импортирован"
-                
+
                 # Шаг 10: Извлечение Key ID из импортированного ключа
                 echo "Извлечение Key ID..."
                 set -l GPG_KEY_ID (gpg --list-secret-keys --keyid-format LONG | grep -A 1 "sec" | grep -oP "(?<=sec   )[A-Z0-9]+/\K[A-F0-9]+" | head -n 1)
-                
+
                 if test -n "$GPG_KEY_ID"
                     echo "✓ Key ID найден: $GPG_KEY_ID"
-                    
+
                     # Шаг 11: Установка максимального доверия к ключу
                     echo "Установка максимального доверия к ключу..."
                     echo -e "5\ny\n" | gpg --command-fd 0 --expert --edit-key "$GPG_KEY_ID" trust quit 2>&1
-                    
+
                     if test $status -eq 0
                         echo "✓ Доверие к ключу установлено"
                     else
                         echo "⚠ Предупреждение: не удалось автоматически установить доверие"
                         echo "  Выполните вручную: gpg --edit-key $GPG_KEY_ID"
                     end
-                    
+
                     # Вывод информации о ключе
                     echo ""
                     echo "Информация об импортированном ключе:"
                     gpg --list-secret-keys "$GPG_KEY_ID"
-                    
+
                     # Шаг 12: Инициализация pass с GPG ключом
                     if command -v pass &> /dev/null
                         echo ""
                         echo "Инициализация pass с GPG ключом..."
                         pass init "$GPG_KEY_ID"
-                        
+
                         if test $status -eq 0
                             echo "✓ pass успешно инициализирован с ключом $GPG_KEY_ID"
                         else
@@ -268,7 +273,7 @@ else
             else
                 echo -e "$RED✗ Ошибка при импорте GPG ключа$NC"
             end
-            
+
             # Временный файл будет удален автоматически функцией cleanup
         end
     end

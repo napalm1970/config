@@ -10,8 +10,8 @@
 
   tasks:
     - name: Извлечение секретов из Bitwarden (SSH, GPG, Pass)
-      script: ../../scripts/bitwarden-extract-ssh.fish
+      ansible.builtin.script: ../../scripts/bitwarden-extract-ssh.fish
       args:
         executable: fish
-      ignore_errors: yes
-
+      environment:
+        BW_PASSWORD: "{{ bitwarden_password | default('') }}"

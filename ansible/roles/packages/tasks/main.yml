@@ -1,12 +1,12 @@
 ---
 - name: Проверка, что мы не под root
-  fail:
+  ansible.builtin.fail:
     msg: "Не запускайте этот playbook под пользователем root! Используйте обычного пользователя с sudo."
   when: ansible_user_id == 'root'
 
 - name: Разрешить группе wheel использовать pacman без пароля (для yay)
   become: true
-  copy:
+  ansible.builtin.copy:
     content: "%wheel ALL=(ALL) NOPASSWD: /usr/bin/pacman"
     dest: /etc/sudoers.d/10-pacman
     mode: '0440'
@@ -14,56 +14,58 @@
 
 - name: Установка системных пакетов (pacman)
   become: true
-  pacman:
+  community.general.pacman:
     name: "{{ system_packages }}"
     state: present
     update_cache: yes
 
 - name: Удаление старой версии starship из /usr/local/bin (если есть)
   become: true
-  file:
+  ansible.builtin.file:
     path: /usr/local/bin/starship
     state: absent
 
 - name: Проверка наличия yay
-  command: which yay
+  ansible.builtin.command: which yay
   register: yay_check
-  ignore_errors: true
+  failed_when: false
   changed_when: false
 
 - name: Установка yay-bin (AUR helper)
   block:
     - name: Удаление временной папки yay-bin
-      file:
+      ansible.builtin.file:
         path: /tmp/yay-bin
         state: absent
 
     - name: Клонирование репозитория yay-bin
-      git:
+      ansible.builtin.git:
         repo: https://aur.archlinux.org/yay-bin.git
         dest: /tmp/yay-bin
       become: false
 
     - name: Сборка yay-bin
-      shell: makepkg -s --noconfirm
+      ansible.builtin.command: makepkg -s --noconfirm
       args:
         chdir: /tmp/yay-bin
       become: false
+      changed_when: true
 
     - name: Установка yay-bin через pacman
-      shell: pacman -U --noconfirm yay-bin-*.pkg.tar.zst
+      ansible.builtin.shell: pacman -U --noconfirm yay-bin-*.pkg.tar.zst
       args:
         chdir: /tmp/yay-bin
       become: true
+      changed_when: true
 
     - name: Удаление временной папки yay-bin после установки
-      file:
+      ansible.builtin.file:
         path: /tmp/yay-bin
         state: absent
   when: yay_check.rc != 0
 
 - name: Установка AUR пакетов
-  shell: "yay -S --noconfirm --needed {{ aur_packages | join(' ') }}"
+  ansible.builtin.command: "yay -S --noconfirm --needed {{ aur_packages | join(' ') }}"
   register: aur_install
   become: false
   changed_when: "'Installing' in aur_install.stdout or 'Upgrading' in aur_install.stdout or 'Установка' in aur_install.stdout"
