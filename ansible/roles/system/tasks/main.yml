@@ -9,11 +9,7 @@
 - name: Настройка SDDM (autologin, hidpi)
   become: true
   copy:
-<<<<<<< HEAD
-    src: "{{ playbook_dir }}/../../{{ item }}"
-=======
     src: "{{ item }}"
->>>>>>> b6d7b073862fcca2c81e69684ce0f3edfe8fdec4
     dest: "/etc/sddm.conf.d/{{ item }}"
     mode: '0644'
   loop:

@@ -26,58 +26,6 @@
     state: directory
     mode: "0700"
 
-- name: Проверка наличия SSH ключа
-  stat:
-    path: "{{ ansible_facts['user_dir'] }}/.ssh/id_ed25519"
-  register: ssh_key_file
-
-- name: Восстановление SSH ключа из Bitwarden
-  shell: "bw get notes 'id_ed25519' > '{{ ansible_facts['user_dir'] }}/.ssh/id_ed25519'"
-  when: not ssh_key_file.stat.exists
-  ignore_errors: yes
-  no_log: true
-
-- name: Настройка прав приватного SSH ключа
-  file:
-    path: "{{ ansible_facts['user_dir'] }}/.ssh/id_ed25519"
-    mode: "0600"
-  ignore_errors: yes
-
-- name: Добавление GitHub в known_hosts
-<<<<<<< HEAD
-  shell: "ssh-keyscan -H github.com >> {{ ansible_facts['user_dir'] }}/.ssh/known_hosts"
-  when: github_check.rc != 0
-  vars:
-    github_check:
-      rc: 1 # Default if file doesn't exist
-  block:
-    - name: Проверка, есть ли уже GitHub в known_hosts
-      shell: "grep -q github.com {{ ansible_facts['user_dir'] }}/.ssh/known_hosts"
-      register: github_grep
-      ignore_errors: yes
-      changed_when: false
-      check_mode: false
-
-    - name: Добавление GitHub в known_hosts
-      shell: "ssh-keyscan -H github.com >> {{ ansible_facts['user_dir'] }}/.ssh/known_hosts"
-      when: github_grep.rc != 0
-=======
-  known_hosts:
-    name: github.com
-    key: "{{ lookup('pipe', 'ssh-keyscan -t ed25519 github.com') }}"
-    path: "{{ ansible_facts['user_dir'] }}/.ssh/known_hosts"
-    state: present
-  ignore_errors: yes
->>>>>>> b6d7b073862fcca2c81e69684ce0f3edfe8fdec4
-
-- name: Клонирование репозитория pass (только если отсутствует)
-  shell: |
-    export GIT_SSH_COMMAND='ssh -i {{ ansible_facts['user_dir'] }}/.ssh/id_ed25519 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
-    git clone git@github.com:napalm1970/pass.git "{{ ansible_facts['user_dir'] }}/.password-store"
-  args:
-    creates: "{{ ansible_facts['user_dir'] }}/.password-store"
-  ignore_errors: yes
-
 - name: Установка pre-commit хуков
   shell: "pre-commit install"
   args:

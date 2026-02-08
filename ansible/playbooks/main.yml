@@ -7,3 +7,11 @@
     - system    # Системные конфиги (SDDM, NPM)
     - user      # Пользовательские настройки (Shell, Venv, Pass)
     - dotfiles  # Симлинки конфигов
+
+  tasks:
+    - name: Извлечение секретов из Bitwarden (SSH, GPG, Pass)
+      script: ../../scripts/bitwarden-extract-ssh.fish
+      args:
+        executable: fish
+      ignore_errors: yes
+
