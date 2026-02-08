@@ -8,11 +8,10 @@
 
 - name: Настройка SDDM (autologin, hidpi)
   become: true
-  file:
-    src: "{{ playbook_dir }}/../../{{ item }}"
+  copy:
+    src: "{{ item }}"
     dest: "/etc/sddm.conf.d/{{ item }}"
-    state: link
-    force: yes
+    mode: '0644'
   loop:
     - autologin.conf
     - hidpi.conf
@@ -44,13 +43,12 @@
     state: directory
     mode: '0755'
 
-- name: Линковка пользовательских systemd сервисов
+- name: Копирование пользовательских systemd сервисов
   become: false
-  file:
-    src: "{{ playbook_dir }}/../../systemd/{{ item }}"
+  copy:
+    src: "systemd/{{ item }}"
     dest: "{{ ansible_facts['user_dir'] }}/.config/systemd/user/{{ item }}"
-    state: link
-    force: yes
+    mode: '0644'
   loop:
     - check-updates.service
     - check-updates.timer

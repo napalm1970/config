@@ -1,0 +1,7 @@
+[Unit]
+Description=Check weather from wttr.in
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=%h/Documents/config/scripts/check_weather.py

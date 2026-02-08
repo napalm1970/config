@@ -1,0 +1,7 @@
+[Unit]
+Description=Check for system updates
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=%h/Documents/config/scripts/check_updates.sh

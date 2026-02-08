@@ -44,11 +44,11 @@
   ignore_errors: yes
 
 - name: Добавление GitHub в known_hosts
-  shell: "ssh-keyscan -H github.com >> {{ ansible_facts['user_dir'] }}/.ssh/known_hosts"
-  args:
-    creates: "{{ ansible_facts['user_dir'] }}/.ssh/known_hosts_github_check"
-  # Лайфхак: чтобы не дублировать, можно проверять grep, но проще разрешить ssh-keyscan работать.
-  # Или просто игнорировать ошибки.
+  known_hosts:
+    name: github.com
+    key: "{{ lookup('pipe', 'ssh-keyscan -t ed25519 github.com') }}"
+    path: "{{ ansible_facts['user_dir'] }}/.ssh/known_hosts"
+    state: present
   ignore_errors: yes
 
 - name: Клонирование репозитория pass (только если отсутствует)
