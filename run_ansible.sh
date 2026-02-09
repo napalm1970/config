@@ -7,4 +7,8 @@ if ! command -v ansible-playbook &>/dev/null; then
 fi
 
 cd "$(dirname "$0")/ansible" || exit
+
+echo "Проверка зависимостей (collections)..."
+ansible-galaxy install -r requirements.yml -q
+
 ansible-playbook playbooks/main.yml --ask-become-pass "$@"
