@@ -9,7 +9,7 @@
   community.general.pacman:
     name: "{{ system_packages }}"
     state: present
-    update_cache: yes
+    update_cache: true
 
 - name: Удаление старой версии starship из /usr/local/bin (если есть)
   become: true
