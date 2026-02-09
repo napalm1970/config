@@ -4,14 +4,6 @@
     msg: "Не запускайте этот playbook под пользователем root! Используйте обычного пользователя с sudo."
   when: ansible_user_id == 'root'
 
-- name: Разрешить группе wheel использовать pacman без пароля (для yay)
-  become: true
-  ansible.builtin.copy:
-    content: "%wheel ALL=(ALL) NOPASSWD: /usr/bin/pacman"
-    dest: /etc/sudoers.d/10-pacman
-    mode: '0440'
-    validate: /usr/sbin/visudo -cf %s
-
 - name: Установка системных пакетов (pacman)
   become: true
   community.general.pacman:
@@ -27,11 +19,12 @@
 
 - name: Проверка наличия yay
   ansible.builtin.command: which yay
-  register: yay_check
+  register: packages_yay_check
   failed_when: false
   changed_when: false
 
 - name: Установка yay-bin (AUR helper)
+  when: packages_yay_check.rc != 0
   block:
     - name: Удаление временной папки yay-bin
       ansible.builtin.file:
@@ -42,6 +35,7 @@
       ansible.builtin.git:
         repo: https://aur.archlinux.org/yay-bin.git
         dest: /tmp/yay-bin
+        version: master
       become: false
 
     - name: Сборка yay-bin
@@ -62,15 +56,11 @@
       ansible.builtin.file:
         path: /tmp/yay-bin
         state: absent
-  when: yay_check.rc != 0
 
 - name: Установка AUR пакетов
-  ansible.builtin.command: "yay -S --noconfirm --needed {{ aur_packages | join(' ') }}"
-  register: aur_install
+  kewlfft.aur.aur:
+    name: "{{ aur_packages }}"
+    use: yay
+    state: present
   become: false
-  changed_when: "'Installing' in aur_install.stdout or 'Upgrading' in aur_install.stdout or 'Установка' in aur_install.stdout"
   when: aur_packages | length > 0
-  failed_when:
-    - aur_install.rc != 0
-    - "'nothing to do' not in aur_install.stdout and 'nothing to do' not in aur_install.stderr"
-    - "'ничего не нужно делать' not in aur_install.stdout and 'ничего не нужно делать' not in aur_install.stderr"

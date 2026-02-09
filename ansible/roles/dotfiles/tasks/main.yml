@@ -12,7 +12,7 @@
   register: dotfiles_stats
 
 - name: Резервное копирование существующих директорий (добавление .bak)
-  ansible.builtin.command: "mv {{ item.stat.path }} {{ item.stat.path }}.bak"
+  ansible.builtin.command: "mv {{ item.stat.path }} {{ item.stat.path }}.bak.{{ ansible_date_time.iso8601 }}"
   loop: "{{ dotfiles_stats.results }}"
   when:
     - item.stat.exists

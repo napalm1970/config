@@ -1,5 +1,5 @@
 ---
-dotfiles_repo_path: "{{ playbook_dir }}/../.."
+dotfiles_repo_path: "{{ role_path }}/../../.."
 
 dotfiles_links:
   - { src: "hypr", dest: ".config/hypr" }
