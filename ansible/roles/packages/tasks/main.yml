@@ -40,11 +40,22 @@
         dest: /tmp/yay-bin
         version: master
 
-    - name: Сборка и установка yay-bin
-      ansible.builtin.command: makepkg -si --noconfirm
+    - name: Сборка yay-bin
+      ansible.builtin.command: makepkg -f --noconfirm
       args:
         chdir: /tmp/yay-bin
       changed_when: true
+
+    - name: Поиск собранного пакета yay-bin
+      ansible.builtin.find:
+        paths: /tmp/yay-bin
+        patterns: "yay-bin-*.pkg.tar.zst"
+      register: yay_package_file
+
+    - name: Установка yay-bin (pacman -U)
+      become: true
+      ansible.builtin.command: "pacman -U --noconfirm {{ yay_package_file.files[0].path }}"
+      when: yay_package_file.matched > 0
 
     - name: Очистка временной директории
       ansible.builtin.file:
