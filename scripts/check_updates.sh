@@ -2,7 +2,8 @@
 # Проверка обновлений (pacman + yay) для Waybar
 # Результат пишется в JSON файл
 
-OUTPUT_FILE="/tmp/updates.json"
+OUTPUT_FILE="${XDG_CACHE_HOME:-$HOME/.cache}/updates.json"
+mkdir -p "$(dirname "$OUTPUT_FILE")"
 
 if ! command -v checkupdates &>/dev/null; then
     echo '{"text": "ERR", "tooltip": "pacman-contrib not installed"}' > "$OUTPUT_FILE"

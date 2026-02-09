@@ -26,33 +26,27 @@
 - name: Установка yay-bin (AUR helper)
   when: packages_yay_check.rc != 0
   block:
-    - name: Удаление временной папки yay-bin
-      ansible.builtin.file:
-        path: /tmp/yay-bin
-        state: absent
+    - name: Установка зависимостей для сборки yay
+      become: true
+      community.general.pacman:
+        name:
+          - git
+          - base-devel
+        state: present
 
     - name: Клонирование репозитория yay-bin
       ansible.builtin.git:
         repo: https://aur.archlinux.org/yay-bin.git
         dest: /tmp/yay-bin
         version: master
-      become: false
 
-    - name: Сборка yay-bin
-      ansible.builtin.command: makepkg -s --noconfirm
+    - name: Сборка и установка yay-bin
+      ansible.builtin.command: makepkg -si --noconfirm
       args:
         chdir: /tmp/yay-bin
-      become: false
       changed_when: true
 
-    - name: Установка yay-bin через pacman
-      ansible.builtin.shell: pacman -U --noconfirm yay-bin-*.pkg.tar.zst
-      args:
-        chdir: /tmp/yay-bin
-      become: true
-      changed_when: true
-
-    - name: Удаление временной папки yay-bin после установки
+    - name: Очистка временной директории
       ansible.builtin.file:
         path: /tmp/yay-bin
         state: absent
@@ -63,4 +57,4 @@
     use: yay
     state: present
   become: false
-  when: aur_packages | length > 0
+  when: aur_packages is defined and aur_packages | length > 0
