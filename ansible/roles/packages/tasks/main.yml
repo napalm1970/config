@@ -26,6 +26,12 @@
 - name: Установка yay-bin (AUR helper)
   when: packages_yay_check.rc != 0
   block:
+    - name: Удаление старой директории сборки yay
+      become: true
+      ansible.builtin.file:
+        path: /tmp/yay-bin
+        state: absent
+
     - name: Установка зависимостей для сборки yay
       become: true
       community.general.pacman:
