@@ -83,6 +83,8 @@ system_packages:
   - brightnessctl
   - pavucontrol
   - libpulse
+  - less
+  - w3m
 
   # Apps
   - firefox
