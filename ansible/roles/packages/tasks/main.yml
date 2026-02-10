@@ -74,10 +74,25 @@
 - name: Перезагрузка фактов (чтобы найти yay)
   ansible.builtin.setup:
 
+- name: Отладка - поиск yay и вывод PATH
+  ansible.builtin.shell: |
+    echo "PATH is: $PATH"
+    which yay || echo "yay not found in PATH"
+    ls -l /usr/bin/yay || echo "/usr/bin/yay does not exist"
+  register: debug_yay
+  changed_when: false
+  failed_when: false
+
+- name: Вывод отладочной информации
+  ansible.builtin.debug:
+    var: debug_yay.stdout_lines
+
 - name: Установка AUR пакетов
   kewlfft.aur.aur:
     name: "{{ aur_packages }}"
     use: yay
     state: present
   become: false
+  environment:
+    PATH: "/usr/bin:/usr/local/bin:{{ ansible_env.PATH }}"
   when: aur_packages is defined and aur_packages | length > 0
