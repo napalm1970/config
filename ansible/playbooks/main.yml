@@ -27,6 +27,8 @@
       args:
         executable: /usr/bin/fish
       environment:
+        BW_CLIENTID: "{{ bitwarden_client_id | default('') }}"
+        BW_CLIENTSECRET: "{{ bitwarden_client_secret | default('') }}"
         BW_PASSWORD: "{{ bitwarden_password | default('') }}"
       # Эта задача может быть пропущена, если скрипт требует интерактивности,
       # но он критичен для дальнейшей работы (git clone через SSH).

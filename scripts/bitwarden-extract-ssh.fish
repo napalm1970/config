@@ -32,11 +32,21 @@ echo "Проверка статуса Bitwarden..."
 set -l bw_status (bw status | jq -r '.status')
 
 if test "$bw_status" = "unauthenticated"
-    echo "Вход в Bitwarden..."
-    bw login
-    if test $status -ne 0
-        echo -e "$RED✗ Ошибка при входе в Bitwarden$NC"
-        exit 1
+    if set -q BW_CLIENTID; and set -q BW_CLIENTSECRET
+        echo "Вход в Bitwarden через API (Client ID/Secret)..."
+        # API login исключает необходимость ввода кода из email
+        bw login --apikey
+        if test $status -ne 0
+            echo -e "$RED✗ Ошибка при входе в Bitwarden через API$NC"
+            exit 1
+        end
+    else
+        echo "Вход в Bitwarden (интерактивно)..."
+        bw login
+        if test $status -ne 0
+            echo -e "$RED✗ Ошибка при входе в Bitwarden$NC"
+            exit 1
+        end
     end
 else
     echo "✓ Уже авторизован в Bitwarden (статус: $bw_status)"
