@@ -53,6 +53,8 @@ system_packages:
   - vim
   - nano
   - go
+  - rust
+  - cargo
   - npm
   - python-pip
   - python-pipenv

@@ -174,7 +174,8 @@
     "tooltip": true,
     "interval": 60,
     "return-type": "json",
-    "exec": "$HOME/Documents/config/waybar/mail-rs/target/debug/mail-rs",
-    "on-click": "kitty -e /home/napalm/Documents/config/scripts/launch-aerc.sh"
+    "exec": "$HOME/.local/bin/mail-rs",
+    "on-click": "kitty -e /home/napalm/Documents/config/scripts/launch-aerc.sh",
+    "signal": 1
   }
 }

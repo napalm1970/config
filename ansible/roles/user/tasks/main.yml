@@ -33,3 +33,41 @@
   become: false
   register: pre_commit_result
   changed_when: "'pre-commit installed' in pre_commit_result.stdout"
+
+- name: Сборка и установка mail-rs для Waybar
+  block:
+    - name: Создание временной директории для сборки mail-rs
+      ansible.builtin.file:
+        path: /tmp/mail-rs-build
+        state: directory
+        mode: '0755'
+
+    - name: Копирование исходников mail-rs
+      ansible.builtin.copy:
+        src: "{{ playbook_dir }}/../../waybar/mail-rs/"
+        dest: /tmp/mail-rs-build/
+        mode: 'preserve'
+
+    - name: Сборка mail-rs
+      ansible.builtin.command: cargo build --release
+      args:
+        chdir: /tmp/mail-rs-build
+      changed_when: true
+
+    - name: Создание ~/.local/bin
+      ansible.builtin.file:
+        path: "{{ ansible_facts['user_dir'] }}/.local/bin"
+        state: directory
+        mode: '0755'
+
+    - name: Установка mail-rs
+      ansible.builtin.copy:
+        src: /tmp/mail-rs-build/target/release/mail-rs
+        dest: "{{ ansible_facts['user_dir'] }}/.local/bin/mail-rs"
+        mode: '0755'
+        remote_src: true
+
+    - name: Очистка временной директории mail-rs
+      ansible.builtin.file:
+        path: /tmp/mail-rs-build
+        state: absent
