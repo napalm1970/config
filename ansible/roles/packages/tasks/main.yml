@@ -68,6 +68,12 @@
         path: /tmp/yay-bin
         state: absent
 
+- name: Сброс SSH соединения для обновления переменных окружения
+  ansible.builtin.meta: reset_connection
+
+- name: Перезагрузка фактов (чтобы найти yay)
+  ansible.builtin.setup:
+
 - name: Установка AUR пакетов
   kewlfft.aur.aur:
     name: "{{ aur_packages }}"
