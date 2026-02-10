@@ -82,6 +82,14 @@
 - name: Перезагрузка фактов (чтобы найти yay)
   ansible.builtin.setup:
 
+- name: Разрешить пользователю запускать pacman без пароля (для yay)
+  become: true
+  ansible.builtin.copy:
+    content: "{{ ansible_user_id }} ALL=(ALL) NOPASSWD: /usr/bin/pacman"
+    dest: "/etc/sudoers.d/10-{{ ansible_user_id }}-pacman"
+    mode: '0440'
+    validate: /usr/sbin/visudo -cf %s
+
 - name: Установка AUR пакетов
   kewlfft.aur.aur:
     name: "{{ aur_packages }}"
@@ -91,3 +99,9 @@
   environment:
     PATH: "/usr/bin:/usr/local/bin:{{ ansible_env.PATH }}"
   when: aur_packages is defined and aur_packages | length > 0
+
+- name: Удаление правила sudo для pacman (cleanup)
+  become: true
+  ansible.builtin.file:
+    path: "/etc/sudoers.d/10-{{ ansible_user_id }}-pacman"
+    state: absent
