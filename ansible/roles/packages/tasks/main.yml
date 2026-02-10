@@ -18,7 +18,7 @@
     state: absent
 
 - name: Проверка наличия yay
-  ansible.builtin.command: which yay
+  ansible.builtin.shell: command -v yay
   register: packages_yay_check
   failed_when: false
   changed_when: false
@@ -47,20 +47,23 @@
         version: master
 
     - name: Сборка yay-bin
-      ansible.builtin.command: makepkg -f --noconfirm
+      ansible.builtin.command: makepkg -si --noconfirm
       args:
         chdir: /tmp/yay-bin
       changed_when: true
+      # makepkg -si сам установит пакет через sudo (если настроено) или потребует пароль.
+      # Но в Ansible лучше собрать и установить через pacman -U для контроля.
 
     - name: Поиск собранного пакета yay-bin
       ansible.builtin.find:
         paths: /tmp/yay-bin
-        patterns: "yay-bin-*.pkg.tar.zst"
+        patterns: "yay-bin-*.pkg.tar.*"
       register: yay_package_file
 
     - name: Установка yay-bin (pacman -U)
       become: true
-      ansible.builtin.command: "pacman -U --noconfirm {{ yay_package_file.files[0].path }}"
+      ansible.builtin.command: "pacman -U --noconfirm {{ item.path }}"
+      with_items: "{{ yay_package_file.files }}"
       when: yay_package_file.matched > 0
 
     - name: Очистка временной директории
@@ -68,24 +71,16 @@
         path: /tmp/yay-bin
         state: absent
 
+    - name: Финальная проверка наличия yay
+      ansible.builtin.shell: command -v yay
+      register: final_yay_check
+      failed_when: final_yay_check.rc != 0
+
 - name: Сброс SSH соединения для обновления переменных окружения
   ansible.builtin.meta: reset_connection
 
 - name: Перезагрузка фактов (чтобы найти yay)
   ansible.builtin.setup:
-
-- name: Отладка - поиск yay и вывод PATH
-  ansible.builtin.shell: |
-    echo "PATH is: $PATH"
-    which yay || echo "yay not found in PATH"
-    ls -l /usr/bin/yay || echo "/usr/bin/yay does not exist"
-  register: debug_yay
-  changed_when: false
-  failed_when: false
-
-- name: Вывод отладочной информации
-  ansible.builtin.debug:
-    var: debug_yay.stdout_lines
 
 - name: Установка AUR пакетов
   kewlfft.aur.aur:
