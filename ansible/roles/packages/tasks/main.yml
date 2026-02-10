@@ -47,7 +47,7 @@
         version: master
 
     - name: Сборка yay-bin
-      ansible.builtin.command: makepkg -si --noconfirm
+      ansible.builtin.command: makepkg -s --noconfirm
       args:
         chdir: /tmp/yay-bin
       changed_when: true
