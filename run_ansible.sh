@@ -11,5 +11,5 @@ cd "$(dirname "$0")/ansible" || exit
 echo "Проверка зависимостей (collections)..."
 ansible-galaxy collection install -r requirements.yml --upgrade
 
-export LC_ALL=C
+export LC_ALL=en_US.UTF-8
 ansible-playbook playbooks/main.yml --ask-vault-pass "$@"
