@@ -105,3 +105,6 @@ system_packages:
 aur_packages:
   - checkupdates-systemd-git
   - swww
+  - dracula-gtk-theme
+  - dracula-icons-git
+  - xcursor-obsidian

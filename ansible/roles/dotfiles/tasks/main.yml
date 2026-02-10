@@ -30,6 +30,14 @@
   loop: "{{ dotfiles_links }}"
   become: false
 
+- name: Симлинк для папки Themes (для совместимости)
+  ansible.builtin.file:
+    src: "{{ dotfiles_repo_path }}/Themes"
+    dest: "{{ ansible_facts['user_dir'] }}/Documents/Themes"
+    state: link
+    force: yes
+  become: false
+
 - name: Исправление прав доступа для aerc/accounts.conf
   ansible.builtin.file:
     path: "{{ dotfiles_repo_path }}/aerc/accounts.conf"
