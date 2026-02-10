@@ -17,6 +17,37 @@
     path: /usr/local/bin/starship
     state: absent
 
+- name: Сборка и установка Neovim из исходников
+  block:
+    - name: Удаление старой директории сборки neovim
+      ansible.builtin.file:
+        path: /tmp/neovim
+        state: absent
+
+    - name: Клонирование репозитория Neovim
+      ansible.builtin.git:
+        repo: https://github.com/neovim/neovim.git
+        dest: /tmp/neovim
+        version: stable
+
+    - name: Сборка Neovim
+      ansible.builtin.command: make CMAKE_BUILD_TYPE=Release
+      args:
+        chdir: /tmp/neovim
+      changed_when: true
+
+    - name: Установка Neovim
+      become: true
+      ansible.builtin.command: make install
+      args:
+        chdir: /tmp/neovim
+      changed_when: true
+
+    - name: Очистка директории сборки neovim
+      ansible.builtin.file:
+        path: /tmp/neovim
+        state: absent
+
 - name: Проверка наличия yay
   ansible.builtin.shell: command -v yay
   register: packages_yay_check

@@ -50,7 +50,6 @@ system_packages:
   - aerc
 
   # Editors & Dev
-  - neovim
   - vim
   - nano
   - go
@@ -60,6 +59,8 @@ system_packages:
   - python-pipx
   - uv
   - cmake
+  - ninja
+  - gettext
   - meson
   - clang
   - gperf
