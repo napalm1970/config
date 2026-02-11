@@ -89,6 +89,7 @@ system_packages:
   - libpulse
   - less
   - w3m
+  - translate-shell
 
   # Apps
   - firefox
