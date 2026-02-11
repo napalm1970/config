@@ -90,6 +90,12 @@ system_packages:
   - less
   - w3m
   - translate-shell
+  - python-build
+  - python-installer
+  - python-wheel
+  - python-setuptools
+  - mpv
+  - pyradio
 
   # Apps
   - firefox
