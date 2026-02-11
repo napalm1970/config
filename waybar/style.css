@@ -180,8 +180,7 @@ button:hover {
 #custom-sefon-menu,
 #custom-sefon-play,
 #custom-sefon-pause,
-#custom-sefon-stop,
-#custom-sefon-title {
+#custom-sefon-stop {
     background-color: transparent;
     color: #f8f8f2;
     padding: 0 5px;
@@ -189,8 +188,36 @@ button:hover {
 }
 
 #custom-sefon-title {
+    background-color: transparent;
+    color: #f8f8f2;
+    padding: 0 5px;
+    margin: 0;
+    font-family: "JetBrainsMono Nerd Font", "Cascadia Code", monospace;
     font-size: 13px;
-    min-width: 150px; /* Фиксированная ширина для бегущей строки */
+    min-width: 180px;
+}
+
+#custom-sefon-play.active {
+    color: #50fa7b; /* Зеленый при проигрывании */
+    font-weight: bold;
+}
+
+#custom-sefon-pause.active {
+    color: #ffb86c; /* Оранжевый на паузе */
+    font-weight: bold;
+}
+
+#custom-sefon-stop.active {
+    color: #ff5555; /* Красный при остановке */
+    font-weight: bold;
+}
+
+#custom-sefon-title.playing {
+    color: #50fa7b;
+}
+
+#custom-sefon-title.paused {
+    color: #ffb86c;
 }
 
 /* Эффект наведения на кнопки */

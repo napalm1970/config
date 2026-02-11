@@ -181,18 +181,27 @@
   },
   "custom/sefon-play": {
     "format": "▶",
+    "return-type": "json",
+    "interval": 1,
+    "exec": "if [ \"$(cat /tmp/sefon-state 2>/dev/null)\" = \"playing\" ]; then echo '{\"class\": \"active\"}'; else echo '{\"class\": \"inactive\"}'; fi",
     "tooltip": "Играть (ЛКМ) / Список треков (ПКМ)",
     "on-click": "$HOME/Documents/config/scripts/sefon_control.sh play",
     "on-click-right": "$HOME/Documents/config/scripts/sefon_control.sh"
   },
   "custom/sefon-pause": {
     "format": "⏸",
+    "return-type": "json",
+    "interval": 1,
+    "exec": "if [ \"$(cat /tmp/sefon-state 2>/dev/null)\" = \"paused\" ]; then echo '{\"class\": \"active\"}'; else echo '{\"class\": \"inactive\"}'; fi",
     "tooltip": "Пауза (ЛКМ) / Список треков (ПКМ)",
     "on-click": "$HOME/Documents/config/scripts/sefon_control.sh pause",
     "on-click-right": "$HOME/Documents/config/scripts/sefon_control.sh"
   },
   "custom/sefon-stop": {
     "format": "⏹",
+    "return-type": "json",
+    "interval": 1,
+    "exec": "if [ \"$(cat /tmp/sefon-state 2>/dev/null)\" = \"stopped\" ]; then echo '{\"class\": \"active\"}'; else echo '{\"class\": \"inactive\"}'; fi",
     "tooltip": "Стоп (ЛКМ) / Список треков (ПКМ)",
     "on-click": "$HOME/Documents/config/scripts/sefon_control.sh stop",
     "on-click-right": "$HOME/Documents/config/scripts/sefon_control.sh"

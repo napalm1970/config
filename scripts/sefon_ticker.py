@@ -8,17 +8,14 @@ import re
 
 SOCKET_PATH = "/tmp/mpv-sefon-socket"
 MAX_LEN = 20
-SCROLL_INTERVAL = 0.2  # Интервал обновления анимации (скорость прокрутки)
-MPV_POLL_INTERVAL = 1.0  # Интервал опроса MPV (раз в секунду)
+SCROLL_INTERVAL = 0.5  # Размеренная прокрутка
+MPV_POLL_INTERVAL = 1.0
 
 def get_mpv_prop(sock, prop):
     try:
         cmd = {"command": ["get_property", prop]}
         sock.sendall(json.dumps(cmd).encode() + b'\n')
-        # Читаем ответ. MPV может слать события, нам нужен ответ на request_id
-        # Для простоты читаем буфер и ищем последнюю успешную data или пробуем разобрать
-        # В идеале нужно читать построчно до нужного ответа.
-        sock.settimeout(0.1)
+        sock.settimeout(0.01) # Минимальный таймаут, чтобы не дергалась анимация
         try:
             data = sock.recv(4096).decode()
             for line in reversed(data.split('\n')):
@@ -105,30 +102,35 @@ def main():
 
             # 3. Анимация и вывод (часто)
             if current_title:
-                full_text = f"{icon}{current_title}      "
+                display_icon = "⏸ " if is_paused else "🎵 "
+                # Крутим только название
+                scroll_text = f"{current_title}      "
 
-                if len(full_text) <= MAX_LEN + 3: # +3 запас для пробелов
-                    display_text = full_text.strip()
-                    # Сбрасываем idx, чтобы не крутилось скрыто
+                if len(scroll_text) <= MAX_LEN:
+                    display_text = scroll_text.strip()
                     idx = 0
                 else:
-                    # Прокрутка
-                    display_text = full_text[idx:idx+MAX_LEN]
-                    # Закольцовывание
+                    # Прокрутка только текста
+                    display_text = scroll_text[idx:idx+MAX_LEN]
                     if len(display_text) < MAX_LEN:
-                        display_text += full_text[:MAX_LEN-len(display_text)]
+                        display_text += scroll_text[:MAX_LEN-len(display_text)]
 
-                    if not is_paused:
-                        idx = (idx + 1) % len(full_text)
+                    idx = (idx + 1) % len(scroll_text)
 
                 output = {
-                    "text": display_text,
+                    "text": f"{display_icon}{display_text}",
                     "class": "paused" if is_paused else "playing",
                     "tooltip": current_title
                 }
+                # Сохраняем состояние для кнопок
+                with open("/tmp/sefon-state", "w") as f:
+                    f.write("paused" if is_paused else "playing")
             else:
                 # Если нет соединения или названия
                 output = {"text": "Stopped", "class": "stopped"}
+                if os.path.exists("/tmp/sefon-state"):
+                    with open("/tmp/sefon-state", "w") as f:
+                        f.write("stopped")
 
             print(json.dumps(output), flush=True)
 
