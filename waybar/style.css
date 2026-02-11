@@ -166,3 +166,37 @@ button:hover {
     margin: 0 5px;
     min-width: 16px;
 }
+
+/* Sefon Music Player Styles */
+
+#group-sefon {
+    background-color: #282a36; /* Dracula background */
+    border: 1px solid #6272a4; /* Dracula comment/purple border */
+    border-radius: 12px;
+    padding: 0 4px;
+    margin: 4px 6px;
+}
+
+#custom-sefon-menu,
+#custom-sefon-play,
+#custom-sefon-pause,
+#custom-sefon-stop,
+#custom-sefon-title {
+    background-color: transparent;
+    color: #f8f8f2;
+    padding: 0 5px;
+    margin: 0;
+}
+
+#custom-sefon-title {
+    font-size: 13px;
+    min-width: 150px; /* Фиксированная ширина для бегущей строки */
+}
+
+/* Эффект наведения на кнопки */
+#custom-sefon-menu:hover,
+#custom-sefon-play:hover,
+#custom-sefon-pause:hover,
+#custom-sefon-stop:hover {
+    color: #8be9fd; /* Cyan on hover */
+}

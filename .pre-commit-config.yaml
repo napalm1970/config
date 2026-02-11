@@ -12,6 +12,7 @@ repos:
     rev: v0.9.0
     hooks:
       - id: shellcheck
+        exclude: .*\.fish|scripts/sefon_control\.sh
 
   - repo: local
     hooks:

@@ -1,0 +1,11 @@
+[Unit]
+Description=Update Sefon Nu-Metal Playlist
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/home/napalm/.python_venv/bin/python %h/Documents/config/scripts/update_sefon.py
+WorkingDirectory=%h/Documents/config
+StandardOutput=journal
+StandardError=journal

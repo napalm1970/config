@@ -7,9 +7,10 @@
   "modules-center": [
     "custom/updates",
     "custom/mail",
+    "group/sefon",
     "clock",
     "hyprland/language",
-    "custom/weather",
+    "custom/weather"
   ],
   "modules-right": [
     "pulseaudio",
@@ -177,5 +178,46 @@
     "exec": "$HOME/.local/bin/mail-rs",
     "on-click": "kitty -e /home/napalm/Documents/config/scripts/launch-aerc.sh",
     "signal": 1
+  },
+  "custom/sefon-play": {
+    "format": "▶",
+    "tooltip": "Играть (ЛКМ) / Список треков (ПКМ)",
+    "on-click": "$HOME/Documents/config/scripts/sefon_control.sh play",
+    "on-click-right": "$HOME/Documents/config/scripts/sefon_control.sh"
+  },
+  "custom/sefon-pause": {
+    "format": "⏸",
+    "tooltip": "Пауза (ЛКМ) / Список треков (ПКМ)",
+    "on-click": "$HOME/Documents/config/scripts/sefon_control.sh pause",
+    "on-click-right": "$HOME/Documents/config/scripts/sefon_control.sh"
+  },
+  "custom/sefon-stop": {
+    "format": "⏹",
+    "tooltip": "Стоп (ЛКМ) / Список треков (ПКМ)",
+    "on-click": "$HOME/Documents/config/scripts/sefon_control.sh stop",
+    "on-click-right": "$HOME/Documents/config/scripts/sefon_control.sh"
+  },
+  "custom/sefon-menu": {
+    "format": "☰",
+    "tooltip": "Список треков (ЛКМ) / Обновить ссылки (ПКМ)",
+    "on-click": "$HOME/Documents/config/scripts/sefon_control.sh",
+    "on-click-right": "notify-send 'Sefon' 'Обновление ссылок...' && systemctl --user start sefon-update.service"
+  },
+  "group/sefon": {
+    "orientation": "horizontal",
+    "modules": [
+        "custom/sefon-menu",
+        "custom/sefon-play",
+        "custom/sefon-pause",
+        "custom/sefon-stop",
+        "custom/sefon-title"
+    ]
+  },
+  "custom/sefon-title": {
+    "format": "{}",
+    "return-type": "json",
+    "exec": "/usr/bin/python3 $HOME/Documents/config/scripts/sefon_ticker.py",
+    "on-click": "$HOME/Documents/config/scripts/sefon_control.sh",
+    "on-click-right": "$HOME/Documents/config/scripts/sefon_control.sh"
   }
 }

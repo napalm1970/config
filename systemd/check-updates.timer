@@ -3,7 +3,7 @@ Description=Run check-updates.service every hour
 
 [Timer]
 OnBootSec=5min
-OnUnitActiveSec=1h
+OnUnitActiveSec=30min
 Unit=check-updates.service
 
 [Install]

@@ -1,0 +1,10 @@
+[Unit]
+Description=Timer for Sefon Nu-Metal Playlist Update
+
+[Timer]
+OnCalendar=daily
+Persistent=true
+Unit=sefon-update.service
+
+[Install]
+WantedBy=timers.target
