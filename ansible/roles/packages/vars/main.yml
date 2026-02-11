@@ -64,6 +64,8 @@ system_packages:
   - ninja
   - gettext
   - meson
+  - rust
+  - cargo
   - clang
   - gperf
   - direnv

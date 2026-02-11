@@ -48,6 +48,38 @@
         path: /tmp/neovim
         state: absent
 
+- name: Сборка mail-rs для Waybar
+  block:
+    - name: Копирование исходников mail-rs во временную директорию
+      ansible.builtin.copy:
+        src: "{{ playbook_dir }}/../../waybar/mail-rs"
+        dest: /tmp/
+        mode: '0755'
+
+    - name: Сборка mail-rs через Cargo
+      ansible.builtin.command: cargo build --release
+      args:
+        chdir: /tmp/mail-rs
+      changed_when: true
+
+    - name: Создание ~/.local/bin
+      ansible.builtin.file:
+        path: "{{ ansible_facts['user_dir'] }}/.local/bin"
+        state: directory
+        mode: '0755'
+
+    - name: Установка mail-rs в ~/.local/bin
+      ansible.builtin.copy:
+        src: /tmp/mail-rs/target/release/mail-rs
+        dest: "{{ ansible_facts['user_dir'] }}/.local/bin/mail-rs"
+        mode: '0755'
+        remote_src: yes
+
+    - name: Очистка временной директории mail-rs
+      ansible.builtin.file:
+        path: /tmp/mail-rs
+        state: absent
+
 - name: Проверка наличия yay
   ansible.builtin.shell: command -v yay
   register: packages_yay_check
