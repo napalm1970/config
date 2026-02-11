@@ -73,6 +73,8 @@ system_packages:
 
   # Tools
   - yazi
+  - pcmanfm
+  - gvfs
   - jq
   - fd
   - ripgrep

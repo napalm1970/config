@@ -80,6 +80,32 @@
         path: /tmp/mail-rs
         state: absent
 
+- name: Сборка weather-rs для Waybar
+  block:
+    - name: Копирование исходников weather-rs во временную директорию
+      ansible.builtin.copy:
+        src: "{{ playbook_dir }}/../../waybar/weather-rs"
+        dest: /tmp/
+        mode: '0755'
+
+    - name: Сборка weather-rs через Cargo
+      ansible.builtin.command: cargo build --release
+      args:
+        chdir: /tmp/weather-rs
+      changed_when: true
+
+    - name: Установка weather-rs в ~/.local/bin
+      ansible.builtin.copy:
+        src: /tmp/weather-rs/target/release/weather-rs
+        dest: "{{ ansible_facts['user_dir'] }}/.local/bin/weather-rs"
+        mode: '0755'
+        remote_src: yes
+
+    - name: Очистка временной директории weather-rs
+      ansible.builtin.file:
+        path: /tmp/weather-rs
+        state: absent
+
 - name: Проверка наличия yay
   ansible.builtin.shell: command -v yay
   register: packages_yay_check
