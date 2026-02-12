@@ -1,0 +1,6 @@
+[Unit]
+Description=Sefon Playlist Updater
+
+[Service]
+Type=oneshot
+ExecStart=/home/napalm/.python_venv/bin/python3 /home/napalm/Documents/config/scripts/update_sefon.py

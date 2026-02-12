@@ -17,9 +17,13 @@ function control_mpv
     switch $argv[1]
         case play
             if test -z "$PID"
-                # Start mpv detached with setsid -f
-                setsid -f mpv --no-video --pause=no --shuffle --input-ipc-server=$SOCKET --playlist=$PLAYLIST < /dev/null > /tmp/mpv-sefon.log 2>&1
-                sleep 1
+                # Wait for socket
+                for i in (seq 1 50)
+                    if test -e $SOCKET
+                        break
+                    end
+                    sleep 0.1
+                end
                 if not pgrep -f "mpv .*$SOCKET" > /dev/null
                     notify-send "Sefon Error" "Failed to start mpv. Check /tmp/mpv-sefon.log"
                 end
@@ -82,7 +86,13 @@ function control_mpv
                 # Start new instance detached
                 setsid -f mpv --no-video --pause=no --input-ipc-server=$SOCKET --playlist=$PLAYLIST --playlist-start=$index < /dev/null > /tmp/mpv-sefon.log 2>&1
 
-                sleep 1
+                # Wait for socket
+                for i in (seq 1 50)
+                    if test -e $SOCKET
+                        break
+                    end
+                    sleep 0.1
+                end
                 if not pgrep -f "mpv .*$SOCKET" > /dev/null
                     notify-send "Sefon Error" "Failed to start mpv. Check /tmp/mpv-sefon.log"
                 end

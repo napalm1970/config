@@ -2,11 +2,33 @@
 import time
 import os
 import sys
+import subprocess
+import importlib.metadata
+
+def install_dependencies():
+    required = {'selenium', 'webdriver-manager', 'requests', 'python-dotenv'}
+    installed = {d.metadata['Name'].lower() for d in importlib.metadata.distributions()}
+    missing = required - installed
+
+    if missing:
+        print(f"Installing missing dependencies: {', '.join(missing)}")
+        try:
+            subprocess.check_call([sys.executable, '-m', 'pip', 'install', *missing])
+            print("Dependencies installed successfully.")
+            importlib.invalidate_caches()
+        except subprocess.CalledProcessError as e:
+            print(f"Failed to install dependencies: {e}")
+            sys.exit(1)
+
+install_dependencies()
+
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.firefox.service import Service
+from webdriver_manager.firefox import GeckoDriverManager
 
 # Конфигурация
 URL = "https://sefon.pro/collections/401-nu-metal/sort/clicks/"
@@ -32,7 +54,8 @@ def update_playlist():
 
     driver = None
     try:
-        driver = webdriver.Firefox(options=options)
+        service = Service(GeckoDriverManager().install())
+        driver = webdriver.Firefox(service=service, options=options)
         driver.get(URL)
 
         wait = WebDriverWait(driver, 20)

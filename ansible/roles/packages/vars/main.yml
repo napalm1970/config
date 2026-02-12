@@ -97,7 +97,6 @@ system_packages:
   - python-wheel
   - python-setuptools
   - mpv
-  - pyradio
 
   # Apps
   - firefox
