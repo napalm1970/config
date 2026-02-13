@@ -8,7 +8,7 @@ import re
 
 SOCKET_PATH = "/tmp/mpv-sefon-socket"
 MAX_LEN = 20
-SCROLL_INTERVAL = 0.5  # Размеренная прокрутка
+SCROLL_INTERVAL = 0.4  # Оптимальная скорость
 MPV_POLL_INTERVAL = 1.0
 
 def get_mpv_prop(sock, prop):
