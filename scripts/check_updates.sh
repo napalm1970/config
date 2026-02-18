@@ -2,7 +2,7 @@
 # Проверка обновлений (pacman + yay) для Waybar
 # Результат пишется в JSON файл
 
-OUTPUT_FILE="${XDG_CACHE_HOME:-$HOME/.cache}/updates.json"
+OUTPUT_FILE="/tmp/updates.json"
 mkdir -p "$(dirname "$OUTPUT_FILE")"
 
 if ! command -v checkupdates &>/dev/null; then
