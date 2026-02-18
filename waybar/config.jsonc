@@ -7,7 +7,7 @@
   "modules-center": [
     "custom/updates",
     "custom/mail",
-    "group/sefon",
+    "mpd",
     "clock",
     "hyprland/language",
     "custom/weather"
@@ -167,54 +167,24 @@
     "on-click": "kitty -e /home/napalm/Documents/config/scripts/launch-aerc.sh",
     "signal": 1
   },
-  "custom/sefon-play": {
-    "format": "▶",
-    "return-type": "json",
-    "interval": 1,
-    "exec": "if [ \"$(cat /tmp/sefon-state 2>/dev/null)\" = \"playing\" ]; then echo '{\"class\": \"active\"}'; else echo '{\"class\": \"inactive\"}'; fi",
-    "tooltip": "Играть (ЛКМ) / Список треков (ПКМ)",
-    "on-click": "$HOME/Documents/config/scripts/sefon_control.sh play",
-    "on-click-right": "$HOME/Documents/config/scripts/sefon_control.sh"
-  },
-  "custom/sefon-pause": {
-    "format": "⏸",
-    "return-type": "json",
-    "interval": 1,
-    "exec": "if [ \"$(cat /tmp/sefon-state 2>/dev/null)\" = \"paused\" ]; then echo '{\"class\": \"active\"}'; else echo '{\"class\": \"inactive\"}'; fi",
-    "tooltip": "Пауза (ЛКМ) / Список треков (ПКМ)",
-    "on-click": "$HOME/Documents/config/scripts/sefon_control.sh pause",
-    "on-click-right": "$HOME/Documents/config/scripts/sefon_control.sh"
-  },
-  "custom/sefon-stop": {
-    "format": "⏹",
-    "return-type": "json",
-    "interval": 1,
-    "exec": "if [ \"$(cat /tmp/sefon-state 2>/dev/null)\" = \"stopped\" ]; then echo '{\"class\": \"active\"}'; else echo '{\"class\": \"inactive\"}'; fi",
-    "tooltip": "Стоп (ЛКМ) / Список треков (ПКМ)",
-    "on-click": "$HOME/Documents/config/scripts/sefon_control.sh stop",
-    "on-click-right": "$HOME/Documents/config/scripts/sefon_control.sh"
-  },
-  "custom/sefon-menu": {
-    "format": "☰",
-    "tooltip": "Список треков (ЛКМ) / Обновить ссылки (ПКМ)",
-    "on-click": "$HOME/Documents/config/scripts/sefon_control.sh",
-    "on-click-right": "notify-send 'Sefon' 'Обновление ссылок...' && systemctl --user start sefon-update.service"
-  },
-  "group/sefon": {
-    "orientation": "horizontal",
-    "modules": [
-        "custom/sefon-menu",
-        "custom/sefon-play",
-        "custom/sefon-pause",
-        "custom/sefon-stop",
-        "custom/sefon-title"
-    ]
-  },
-  "custom/sefon-title": {
-    "format": "{}",
-    "return-type": "json",
-    "exec": "/usr/bin/python3 $HOME/Documents/config/scripts/sefon_ticker.py",
-    "on-click": "$HOME/Documents/config/scripts/sefon_control.sh",
-    "on-click-right": "$HOME/Documents/config/scripts/sefon_control.sh"
+  "mpd": {
+    "format": "{stateIcon} {artist} — {title}",
+    "format-disconnected": " MPD отключен",
+    "format-stopped": " Остановлено",
+    "format-paused": "{stateIcon} {artist} — {title}",
+    "unknown-tag": "",
+    "interval": 2,
+    "state-icons": {
+      "paused": "",
+      "playing": ""
+    },
+    "tooltip-format": "MPD: {artist} — {album} — {title}\n{elapsedTime:%M:%S}/{totalTime:%M:%S} ({songPosition}/{queueLength})\nГромкость: {volume}%",
+    "tooltip-format-disconnected": "MPD отключен",
+    "on-click": "mpc toggle",
+    "on-click-right": "mpc stop",
+    "on-scroll-up": "mpc next",
+    "on-scroll-down": "mpc prev",
+    "on-click-middle": "kitty -e ncmpcpp",
+    "max-length": 35
   }
 }

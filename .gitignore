@@ -5,3 +5,5 @@ target/
 waybar/mail-rs/mail-rs
 waybar/weather-rs/weather-rs
 lazy-lock.json
+numetal_sefon.m3u
+scripts/sefon_update.log
