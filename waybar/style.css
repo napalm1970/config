@@ -167,63 +167,38 @@ button:hover {
     min-width: 16px;
 }
 
-/* Sefon Music Player Styles */
+/* MPD Music Player Styles */
 
-#group-sefon {
-    background-color: #282a36; /* Dracula background */
-    border: 1px solid #6272a4; /* Dracula comment/purple border */
+#mpd {
+    background-color: #282a36;
+    border: 1px solid #6272a4;
     border-radius: 12px;
-    padding: 0 4px;
+    padding: 0 10px;
     margin: 4px 6px;
-}
-
-#custom-sefon-menu,
-#custom-sefon-play,
-#custom-sefon-pause,
-#custom-sefon-stop {
-    background-color: transparent;
     color: #f8f8f2;
-    padding: 0 5px;
-    margin: 0;
-}
-
-#custom-sefon-title {
-    background-color: transparent;
-    color: #f8f8f2;
-    padding: 0 5px;
-    margin: 0;
     font-family: "JetBrainsMono Nerd Font", "Cascadia Code", monospace;
     font-size: 13px;
-    min-width: 180px;
 }
 
-#custom-sefon-play.active {
-    color: #50fa7b; /* Зеленый при проигрывании */
-    font-weight: bold;
-}
-
-#custom-sefon-pause.active {
-    color: #ffb86c; /* Оранжевый на паузе */
-    font-weight: bold;
-}
-
-#custom-sefon-stop.active {
-    color: #ff5555; /* Красный при остановке */
-    font-weight: bold;
-}
-
-#custom-sefon-title.playing {
+#mpd.playing {
     color: #50fa7b;
+    border-color: #50fa7b;
 }
 
-#custom-sefon-title.paused {
+#mpd.paused {
     color: #ffb86c;
+    border-color: #ffb86c;
 }
 
-/* Эффект наведения на кнопки */
-#custom-sefon-menu:hover,
-#custom-sefon-play:hover,
-#custom-sefon-pause:hover,
-#custom-sefon-stop:hover {
-    color: #8be9fd; /* Cyan on hover */
+#mpd.stopped {
+    color: #6272a4;
+}
+
+#mpd.disconnected {
+    color: #ff5555;
+    border-color: #ff5555;
+}
+
+#mpd:hover {
+    background-color: #44475a;
 }
