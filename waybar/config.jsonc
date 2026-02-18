@@ -13,7 +13,7 @@
     "custom/weather"
   ],
   "modules-right": [
-    "pulseaudio",
+    "wireplumber",
     "cpu",
     "memory",
     "backlight",
@@ -132,27 +132,13 @@
     "format-disconnected": "Disconnected ⚠",
     "format-alt": "{ifname}: {ipaddr}/{cidr}"
   },
-  "pulseaudio": {
-    "format": "{volume}% {icon} {format_source}",
-    "format-bluetooth": "{volume}% {icon} {format_source}",
-    "format-bluetooth-muted": " {icon} {format_source}",
-    "format-muted": " {format_source}",
-    "format-source": "{volume}% ",
-    "format-source-muted": "",
-    "format-icons": {
-      "headphone": "",
-      "hands-free": "",
-      "headset": "",
-      "phone": "",
-      "portable": "",
-      "car": "",
-      "default": [
-        "",
-        "",
-        ""
-      ]
-    },
-    "on-click": "pavucontrol"
+  "wireplumber": {
+    "format": "{volume}% {icon}",
+    "format-muted": "",
+    "on-click": "pavucontrol",
+    "format-icons": ["", "", ""],
+    "max-volume": 150,
+    "scroll-step": 5
   },
   "custom/weather": {
     "format": "{}",
@@ -160,7 +146,9 @@
     "interval": 5,
     "return-type": "json",
     "exec": "cat /tmp/weather.json 2>/dev/null || echo '{\"text\": \"Loading...\"}'",
-    "on-click": "xdg-open https://wttr.in/Sompa,Kohtla-Jarve; systemctl --user start check-weather.service"
+    // "on-click": "xdg-open https://wttr.in/Sompa,Kohtla-Jarve; systemctl --user start check-weather.service"
+        "on-click": "xdg-open 'https://openweathermap.org/weathermap?basemap=map&cities=true&layer=temrature&lat=59.34&lon=27.28&zoom=10' && systemctl --user start check-weather.service"
+
   },
   "custom/updates": {
     "format": "{} ",
