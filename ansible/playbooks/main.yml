@@ -1,6 +1,7 @@
 ---
 - name: Полная настройка системы Arch Linux
   hosts: localhost
+  gather_facts: true
 
   pre_tasks:
     - name: Установка базовых инструментов (Bootstrap)
@@ -15,12 +16,18 @@
           - openssh
         state: present
         update_cache: true
+      tags:
+        - bootstrap
+        - packages
 
     - name: Смена оболочки пользователя на Fish
       become: true
       ansible.builtin.user:
         name: "{{ ansible_user_id }}"
         shell: /usr/bin/fish
+      tags:
+        - bootstrap
+        - user
 
     - name: Извлечение секретов из Bitwarden (SSH, GPG, Pass)
       ansible.builtin.script: ../../scripts/bitwarden-extract-ssh.fish
@@ -30,11 +37,19 @@
         BW_CLIENTID: "{{ bitwarden_client_id | default('') }}"
         BW_CLIENTSECRET: "{{ bitwarden_client_secret | default('') }}"
         BW_PASSWORD: "{{ bitwarden_password | default('') }}"
+      no_log: true
+      tags:
+        - bootstrap
+        - secrets
       # Эта задача может быть пропущена, если скрипт требует интерактивности,
       # но он критичен для дальнейшей работы (git clone через SSH).
 
   roles:
-    - packages  # Установка софта
-    - system    # Системные конфиги (SDDM, NPM)
-    - user      # Пользовательские настройки (Shell, Venv, Pass)
-    - dotfiles  # Симлинки конфигов
+    - role: packages
+      tags: packages
+    - role: system
+      tags: system
+    - role: user
+      tags: user
+    - role: dotfiles
+      tags: dotfiles

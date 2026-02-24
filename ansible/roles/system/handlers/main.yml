@@ -1,0 +1,11 @@
+---
+- name: restart sddm
+  become: true
+  ansible.builtin.systemd:
+    name: sddm
+    state: restarted
+
+- name: reload systemd user
+  ansible.builtin.systemd:
+    daemon_reload: true
+    scope: user

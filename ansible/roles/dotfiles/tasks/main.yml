@@ -1,13 +1,13 @@
 ---
 - name: Создание директории ~/.config
   ansible.builtin.file:
-    path: "{{ ansible_facts['user_dir'] }}/.config"
+    path: "{{ home_dir }}/.config"
     state: directory
     mode: '0755'
 
 - name: Получение информации о существующих путях dotfiles
   ansible.builtin.stat:
-    path: "{{ ansible_facts['user_dir'] }}/{{ item.dest }}"
+    path: "{{ home_dir }}/{{ item.dest }}"
   loop: "{{ dotfiles_links }}"
   register: dotfiles_stats
 
@@ -24,7 +24,7 @@
 - name: Создание симлинков для dotfiles
   ansible.builtin.file:
     src: "{{ dotfiles_repo_path }}/{{ item.src }}"
-    dest: "{{ ansible_facts['user_dir'] }}/{{ item.dest }}"
+    dest: "{{ home_dir }}/{{ item.dest }}"
     state: link
     force: yes
   loop: "{{ dotfiles_links }}"
@@ -33,7 +33,7 @@
 - name: Симлинк для папки Themes (для совместимости)
   ansible.builtin.file:
     src: "{{ dotfiles_repo_path }}/Themes"
-    dest: "{{ ansible_facts['user_dir'] }}/Documents/Themes"
+    dest: "{{ home_dir }}/Documents/Themes"
     state: link
     force: yes
   become: false

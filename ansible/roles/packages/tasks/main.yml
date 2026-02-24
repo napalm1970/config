@@ -21,31 +21,31 @@
   block:
     - name: Удаление старой директории сборки neovim
       ansible.builtin.file:
-        path: /tmp/neovim
+        path: "{{ neovim_build_dir }}"
         state: absent
 
     - name: Клонирование репозитория Neovim
       ansible.builtin.git:
         repo: https://github.com/neovim/neovim.git
-        dest: /tmp/neovim
+        dest: "{{ neovim_build_dir }}"
         version: stable
 
     - name: Сборка Neovim
       ansible.builtin.command: make CMAKE_BUILD_TYPE=Release
       args:
-        chdir: /tmp/neovim
-      changed_when: true
+        chdir: "{{ neovim_build_dir }}"
+        creates: "{{ neovim_build_dir }}/build/bin/nvim"
 
     - name: Установка Neovim
       become: true
       ansible.builtin.command: make install
       args:
-        chdir: /tmp/neovim
-      changed_when: true
+        chdir: "{{ neovim_build_dir }}"
+        creates: /usr/local/bin/nvim
 
     - name: Очистка директории сборки neovim
       ansible.builtin.file:
-        path: /tmp/neovim
+        path: "{{ neovim_build_dir }}"
         state: absent
 
 - name: Сборка mail-rs для Waybar
@@ -53,31 +53,31 @@
     - name: Копирование исходников mail-rs во временную директорию
       ansible.builtin.copy:
         src: "{{ playbook_dir }}/../../waybar/mail-rs"
-        dest: /tmp/
+        dest: "{{ mail_rs_build_dir }}/"
         mode: '0755'
 
     - name: Сборка mail-rs через Cargo
       ansible.builtin.command: cargo build --release
       args:
-        chdir: /tmp/mail-rs
-      changed_when: true
+        chdir: "{{ mail_rs_build_dir }}"
+        creates: "{{ mail_rs_build_dir }}/target/release/mail-rs"
 
     - name: Создание ~/.local/bin
       ansible.builtin.file:
-        path: "{{ ansible_facts['user_dir'] }}/.local/bin"
+        path: "{{ local_bin_dir }}"
         state: directory
         mode: '0755'
 
     - name: Установка mail-rs в ~/.local/bin
       ansible.builtin.copy:
-        src: /tmp/mail-rs/target/release/mail-rs
-        dest: "{{ ansible_facts['user_dir'] }}/.local/bin/mail-rs"
+        src: "{{ mail_rs_build_dir }}/target/release/mail-rs"
+        dest: "{{ local_bin_dir }}/mail-rs"
         mode: '0755'
         remote_src: yes
 
     - name: Очистка временной директории mail-rs
       ansible.builtin.file:
-        path: /tmp/mail-rs
+        path: "{{ mail_rs_build_dir }}"
         state: absent
 
 - name: Сборка weather-rs для Waybar
@@ -85,25 +85,25 @@
     - name: Копирование исходников weather-rs во временную директорию
       ansible.builtin.copy:
         src: "{{ playbook_dir }}/../../waybar/weather-rs"
-        dest: /tmp/
+        dest: "{{ weather_rs_build_dir }}/"
         mode: '0755'
 
     - name: Сборка weather-rs через Cargo
       ansible.builtin.command: cargo build --release
       args:
-        chdir: /tmp/weather-rs
-      changed_when: true
+        chdir: "{{ weather_rs_build_dir }}"
+        creates: "{{ weather_rs_build_dir }}/target/release/weather-rs"
 
     - name: Установка weather-rs в ~/.local/bin
       ansible.builtin.copy:
-        src: /tmp/weather-rs/target/release/weather-rs
-        dest: "{{ ansible_facts['user_dir'] }}/.local/bin/weather-rs"
+        src: "{{ weather_rs_build_dir }}/target/release/weather-rs"
+        dest: "{{ local_bin_dir }}/weather-rs"
         mode: '0755'
         remote_src: yes
 
     - name: Очистка временной директории weather-rs
       ansible.builtin.file:
-        path: /tmp/weather-rs
+        path: "{{ weather_rs_build_dir }}"
         state: absent
 
 - name: Проверка наличия yay
@@ -118,7 +118,7 @@
     - name: Удаление старой директории сборки yay
       become: true
       ansible.builtin.file:
-        path: /tmp/yay-bin
+        path: "{{ yay_bin_build_dir }}"
         state: absent
 
     - name: Установка зависимостей для сборки yay
@@ -132,20 +132,20 @@
     - name: Клонирование репозитория yay-bin
       ansible.builtin.git:
         repo: https://aur.archlinux.org/yay-bin.git
-        dest: /tmp/yay-bin
+        dest: "{{ yay_bin_build_dir }}"
         version: master
 
     - name: Сборка yay-bin
       ansible.builtin.command: makepkg -s --noconfirm
       args:
-        chdir: /tmp/yay-bin
-      changed_when: true
+        chdir: "{{ yay_bin_build_dir }}"
+        creates: "{{ yay_bin_build_dir }}/yay-bin-*.pkg.tar.*"
       # makepkg -si сам установит пакет через sudo (если настроено) или потребует пароль.
       # Но в Ansible лучше собрать и установить через pacman -U для контроля.
 
     - name: Поиск собранного пакета yay-bin
       ansible.builtin.find:
-        paths: /tmp/yay-bin
+        paths: "{{ yay_bin_build_dir }}"
         patterns: "yay-bin-*.pkg.tar.*"
       register: yay_package_file
 
@@ -157,7 +157,7 @@
 
     - name: Очистка временной директории
       ansible.builtin.file:
-        path: /tmp/yay-bin
+        path: "{{ yay_bin_build_dir }}"
         state: absent
 
     - name: Финальная проверка наличия yay
@@ -178,6 +178,7 @@
     dest: "/etc/sudoers.d/10-{{ ansible_user_id }}-pacman"
     mode: '0440'
     validate: /usr/sbin/visudo -cf %s
+  notify: reload systemd user
 
 - name: Установка AUR пакетов
   kewlfft.aur.aur:

@@ -1,0 +1,139 @@
+---
+# Глобальные переменные для всех хостов
+
+# Домашняя директория пользователя
+home_dir: "{{ ansible_facts['user_dir'] }}"
+local_bin_dir: "{{ home_dir }}/.local/bin"
+
+# Временные директории для сборок
+neovim_build_dir: /tmp/neovim
+mail_rs_build_dir: /tmp/mail-rs
+weather_rs_build_dir: /tmp/weather-rs
+yay_bin_build_dir: /tmp/yay-bin
+
+# Путь к репозиторию dotfiles
+dotfiles_repo_path: "{{ playbook_dir }}/.."
+
+# Системные пакеты (pacman)
+system_packages:
+  # Base & System
+  - base
+  - base-devel
+  - linux
+  - linux-firmware
+  - intel-ucode
+  - networkmanager
+  - iwd
+  - bluez
+  - bluez-utils
+  - pacman-contrib
+  - git
+  - which
+  - wget
+  - curl
+  - zip
+  - unzip
+  - 7zip
+  - unrar
+
+  # UI & Window Manager
+  - hyprland
+  - hyprpaper
+  - hypridle
+  - hyprlock
+  - waybar
+  - dunst
+  - wofi
+  - nwg-look
+  - nwg-displays
+  - qt5-wayland
+  - qt6-wayland
+  - gammastep
+  - xdg-desktop-portal-hyprland
+  - xdg-desktop-portal-gnome
+
+  # Terminal & Shell
+  - kitty
+  - alacritty
+  - fish
+  - starship
+  - zoxide
+  - fzf
+  - eza
+  - bat
+  - tmux
+  - screen
+  - aerc
+
+  # Editors & Dev
+  - vim
+  - nano
+  - go
+  - rust
+  - cargo
+  - npm
+  - python-pip
+  - python-pipenv
+  - python-pipx
+  - uv
+  - cmake
+  - ninja
+  - gettext
+  - meson
+  - clang
+  - gperf
+  - direnv
+  - pre-commit
+
+  # Tools
+  - yazi
+  - pcmanfm
+  - gvfs
+  - jq
+  - fd
+  - ripgrep
+  - btop
+  - htop
+  - dust
+  - duf
+  - tldr
+  - tree
+  - chafa
+  - wl-clipboard
+  - brightnessctl
+  - pavucontrol
+  - libpulse
+  - less
+  - w3m
+  - translate-shell
+  - python-build
+  - python-installer
+  - python-wheel
+  - python-setuptools
+  - mpv
+
+  # Apps
+  - firefox
+  - chromium
+  - obsidian
+  - telegram-desktop
+  - qbittorrent
+  - bitwarden
+
+  # Security
+  - pass
+  - gnupg
+  - bitwarden-cli
+
+  # Fonts
+  - ttf-jetbrains-mono-nerd
+  - otf-font-awesome
+  - noto-fonts-emoji
+
+# AUR пакеты
+aur_packages:
+  - checkupdates-systemd-git
+  - swww
+  - dracula-gtk-theme
+  - dracula-icons-git
+  - xcursor-obsidian
