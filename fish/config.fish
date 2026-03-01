@@ -46,6 +46,7 @@ alias rr "shutdown -r now"
 alias y yazi
 alias c clear
 alias b btop
+alias q qwen
 alias gwk gemini_w_key
 alias gwok gemini
 alias run-ghidra-mcp "uv run /home/napalm/Downloads/GhidraMCP-release-1-4/bridge_mcp_ghidra.py --transport sse --mcp-host 127.0.0.1 --mcp-port 8081 --ghidra-server http://127.0.0.1:8080/"

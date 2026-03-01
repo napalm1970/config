@@ -38,8 +38,8 @@ return {
 
       win = {
         preset = "right-fixed", -- Options: "right-fixed", "left-fixed", "bottom-fixed", "floating"
-        width = 0.8,
-        height = 0.8,
+        -- width = 0.8,
+        -- height = 0.8,
       },
     })
   end,
@@ -52,7 +52,15 @@ return {
     { "<leader>gs", "<cmd>GeminiSwitchSidebarStyle<cr>", desc = "Switch sidebar style" },
     { "<leader>ga", "<cmd>GeminiAccept<cr>", desc = "Accept Gemini suggestion" },
     { "<C-CR>", "<cmd>GeminiAccept<cr>", desc = "Accept Gemini suggestion" },
-    { "<leader>gq", "<cmd>lua require('gemini.ideSidebar').switchSidebar('qwen'); vim.cmd('GeminiToggle')<cr>", desc = "Toggle Qwen sidebar" },
-    { "<leader>gQ", "<cmd>lua require('gemini.ideSidebar').switchSidebar('qwen')<cr>", desc = "Switch to Qwen Sidebar" },
+    {
+      "<leader>gq",
+      "<cmd>lua require('gemini.ideSidebar').switchSidebar('qwen'); vim.cmd('GeminiToggle')<cr>",
+      desc = "Toggle Qwen sidebar",
+    },
+    {
+      "<leader>gQ",
+      "<cmd>lua require('gemini.ideSidebar').switchSidebar('qwen')<cr>",
+      desc = "Switch to Qwen Sidebar",
+    },
   },
 }

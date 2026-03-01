@@ -98,5 +98,6 @@ MIT License.
 | $mainMod SHIFT + V | pypr toggle volume |
 | $mainMod SHIFT + C | pypr toggle calc |
 | $mainMod SHIFT + T | $runprog |
+| $mainMod SHIFT + S | grim -g "$(slurp)" - | wl-copy |
 
-**Packages:** --, base, base-devel, linux, linux-firmware, intel-ucode, networkmanager, iwd, bluez, bluez-utils, pacman-contrib, git, which, wget, curl...
+**Packages:** --...

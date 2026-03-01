@@ -165,13 +165,14 @@ button:hover {
     padding: 0 5px;
     margin: 0 5px;
     min-width: 16px;
+    font-size: 16px;
 }
 
 /* MPD Music Player Styles */
 
 #mpd {
     background-color: #282a36;
-    border: 1px solid #6272a4;
+    border: 2px solid #ff79c6;
     border-radius: 12px;
     padding: 0 10px;
     margin: 4px 6px;
@@ -201,4 +202,31 @@ button:hover {
 
 #mpd:hover {
     background-color: #44475a;
+}
+
+#custom-music-play,
+#custom-music-pause,
+#custom-music-stop {
+    font-size: 24px;
+    padding: 0 8px;
+}
+
+#custom-music-play {
+    color: #50fa7b;
+}
+
+#custom-music-pause {
+    color: #ffb86c;
+}
+
+#custom-music-stop {
+    color: #ff5555;
+}
+
+#music {
+    background-color: #282a36;
+    border: 2px solid #ff79c6;
+    border-radius: 12px;
+    margin: 2px 4px;
+    padding: 2px 4px;
 }
