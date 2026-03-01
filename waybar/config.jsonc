@@ -7,6 +7,7 @@
   "modules-center": [
     "custom/updates",
     "custom/mail",
+    "custom/pension",
     "mpd",
     "clock",
     "hyprland/language",
@@ -173,6 +174,12 @@
     "on-click": "kitty -e /home/napalm/Documents/config/scripts/launch-aerc.sh",
     "signal": 1
   },
+  "custom/pension": {
+         "format": "{}",
+         "interval": 300,
+         "exec": "/home/napalm/Documents/config/scripts/swedbank_pension.py",
+         "return-type": "json"
+     },
   "mpd": {
     "format": "{stateIcon} {artist} \u2014 {title}",
     "format-disconnected": " MPD \u043e\u0442\u043a\u043b\u044e\u0447\u0435\u043d",
