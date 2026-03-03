@@ -166,6 +166,15 @@
     "exec": "cat /tmp/updates.json 2>/dev/null || echo '{\"text\": \"\"}'",
     "on-click": "kitty -e sh -c 'yay; echo Done - Press enter to exit; read'; systemctl --user start check-updates.service"
   },
+  "custom/mail": {
+    "format": "{}",
+    "tooltip": true,
+    "interval": 60,
+    "return-type": "json",
+    "exec": "/home/napalm/Documents/config/scripts/check_mail.py",
+    "on-click": "kitty -e /home/napalm/Documents/config/scripts/launch-aerc.sh",
+    "signal": 1
+  },
   "custom/pension": {
          "format": "{}",
          "interval": 300,

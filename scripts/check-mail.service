@@ -1,0 +1,13 @@
+[Unit]
+Description=Check mail for waybar
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/home/napalm/Documents/config/scripts/check_mail.py
+Environment=HOME=/home/napalm
+Environment=PATH=/usr/local/bin:/usr/bin:/bin
+
+[Install]
+WantedBy=default.target

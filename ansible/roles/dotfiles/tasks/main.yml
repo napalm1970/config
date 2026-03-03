@@ -43,3 +43,44 @@
     path: "{{ dotfiles_repo_path }}/aerc/accounts.conf"
     mode: '0600'
   become: false
+
+- name: Установка скрипта check_mail.py
+  ansible.builtin.copy:
+    src: "{{ dotfiles_repo_path }}/scripts/check_mail.py"
+    dest: "{{ local_bin_dir }}/check_mail.py"
+    mode: '0755'
+    remote_src: no
+  become: false
+
+- name: Создание директории ~/.config/systemd/user
+  ansible.builtin.file:
+    path: "{{ home_dir }}/.config/systemd/user"
+    state: directory
+    mode: '0755'
+  become: false
+
+- name: Установка systemd сервиса check-mail.service
+  ansible.builtin.copy:
+    src: "{{ dotfiles_repo_path }}/scripts/check-mail.service"
+    dest: "{{ home_dir }}/.config/systemd/user/check-mail.service"
+    mode: '0644'
+    remote_src: no
+  become: false
+
+- name: Установка systemd таймера check-mail.timer
+  ansible.builtin.copy:
+    src: "{{ dotfiles_repo_path }}/scripts/check-mail.timer"
+    dest: "{{ home_dir }}/.config/systemd/user/check-mail.timer"
+    mode: '0644'
+    remote_src: no
+  become: false
+
+- name: Активация и запуск check-mail.timer
+  ansible.builtin.systemd:
+    scope: user
+    name: check-mail.timer
+    enabled: true
+    state: started
+    daemon_reload: true
+  become: false
+  failed_when: false
