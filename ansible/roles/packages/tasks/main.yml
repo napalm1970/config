@@ -48,45 +48,18 @@
         path: "{{ neovim_build_dir }}"
         state: absent
 
-- name: Сборка mail-rs для Waybar
+- name: Сборка weather-rs для Waybar
   block:
-    - name: Копирование исходников mail-rs во временную директорию
-      ansible.builtin.copy:
-        src: "{{ playbook_dir }}/../../waybar/mail-rs"
-        dest: "{{ mail_rs_build_dir }}/"
-        mode: '0755'
-
-    - name: Сборка mail-rs через Cargo
-      ansible.builtin.command: cargo build --release
-      args:
-        chdir: "{{ mail_rs_build_dir }}"
-        creates: "{{ mail_rs_build_dir }}/target/release/mail-rs"
-
-    - name: Создание ~/.local/bin
+    - name: Создание временной директории
       ansible.builtin.file:
-        path: "{{ local_bin_dir }}"
+        path: "{{ weather_rs_build_dir }}"
         state: directory
         mode: '0755'
 
-    - name: Установка mail-rs в ~/.local/bin
-      ansible.builtin.copy:
-        src: "{{ mail_rs_build_dir }}/target/release/mail-rs"
-        dest: "{{ local_bin_dir }}/mail-rs"
-        mode: '0755'
-        remote_src: yes
-
-    - name: Очистка временной директории mail-rs
-      ansible.builtin.file:
-        path: "{{ mail_rs_build_dir }}"
-        state: absent
-
-- name: Сборка weather-rs для Waybar
-  block:
     - name: Копирование исходников weather-rs во временную директорию
-      ansible.builtin.copy:
-        src: "{{ playbook_dir }}/../../waybar/weather-rs"
-        dest: "{{ weather_rs_build_dir }}/"
-        mode: '0755'
+      ansible.builtin.shell: cp -r {{ playbook_dir }}/../../waybar/weather-rs/* {{ weather_rs_build_dir }}/
+      args:
+        creates: "{{ weather_rs_build_dir }}/Cargo.toml"
 
     - name: Сборка weather-rs через Cargo
       ansible.builtin.command: cargo build --release

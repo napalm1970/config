@@ -7,7 +7,6 @@ local_bin_dir: "{{ home_dir }}/.local/bin"
 
 # Временные директории для сборок
 neovim_build_dir: /tmp/neovim
-mail_rs_build_dir: /tmp/mail-rs
 weather_rs_build_dir: /tmp/weather-rs
 yay_bin_build_dir: /tmp/yay-bin
 
