@@ -1,3 +1,6 @@
+# Увеличенный таймаут для сканирования директорий
+scan_timeout = 1000
+
 [aws]
 format = '\[[$symbol($profile)(\($region\))(\[$duration\])]($style)\]'
 

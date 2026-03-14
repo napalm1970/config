@@ -2,8 +2,16 @@
   "height": 30,
   "spacing": 4,
   "modules-left": [
-    "hyprland/workspaces"
+    "hyprland/workspaces",
+    "niri/workspaces"
   ],
+  "niri/workspaces": {
+    "format": "{name}",
+    "all-outputs": true,
+    "on-click": "activate",
+    "on-scroll-up": "niri msg action focus-workspace-up",
+    "on-scroll-down": "niri msg action focus-workspace-down"
+  },
   "modules-center": [
     "custom/updates",
     "custom/mail",
@@ -176,11 +184,11 @@
     "signal": 1
   },
   "custom/pension": {
-         "format": "{}",
-         "interval": 300,
-         "exec": "/home/napalm/Documents/config/scripts/swedbank_pension.py",
-         "return-type": "json"
-     },
+    "format": "{}",
+    "interval": 300,
+    "exec": "/home/napalm/Documents/config/scripts/swedbank_pension.py",
+    "return-type": "json"
+  },
   "mpd": {
     "format": "{stateIcon} {artist} \u2014 {title}",
     "format-disconnected": " MPD \u043e\u0442\u043a\u043b\u044e\u0447\u0435\u043d",
