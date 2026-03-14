@@ -2,6 +2,8 @@
 # show_hidden = true
 
 [opener]
+portproton = [{ run = 'portproton "$1"', desc = "PortProton", for = "linux", orphan = true }]
+evince = [{ run = 'sh -c "evince \"$1\" &"', desc = "Evince", for = "linux" }]
 open = [
   { run = 'xdg-open "$1"', desc = "Open", for = "linux" },
   { run = 'open "$@"', desc = "Open", for = "macos" },
@@ -13,5 +15,17 @@ edit = [
   { run = 'code %*', orphan = true, desc = "code", for = "windows" },
   { run = 'code -w %*', block = true, desc = "code (block)", for = "windows" },
 ]
+
+[open]
+rules = [
+  { name = "*.pdf", use = "evince" },
+  { name = "*.djvu", use = "evince" },
+  { mime = "application/pdf", use = "evince" },
+  { mime = "image/vnd.djvu", use = "evince" },
+  { name = "*.exe", use = "portproton" },
+  { mime = "application/x-msdos-program", use = "portproton" },
+  { mime = "application/x-msi", use = "portproton" },
+]
+
 [flavor]
 dark = "catppuccin-macchiato"
