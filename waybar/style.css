@@ -53,7 +53,7 @@ tooltip label {
 #memory,
 #battery,
 #tray {
-    background-color: alpha(@bg, 0.7);
+    background-color: alpha(@bg, 0.5);
     border: none;
     border-radius: 6px;
     padding: 4px 8px;
@@ -149,13 +149,6 @@ tooltip label {
     border-bottom: 2px solid transparent;
 }
 
-/* Base colors for individual workspaces 1-5 */
-#workspaces button.\31  { color: @green; }
-#workspaces button.\32  { color: @orange; }
-#workspaces button.\33  { color: @cyan; }
-#workspaces button.\34  { color: @pink; }
-#workspaces button.\35  { color: @yellow; }
-
 /* Empty workspaces recede */
 #workspaces button.persistent { color: @comment; }
 
@@ -168,9 +161,10 @@ tooltip label {
 #workspaces button.active.\33  { border-bottom-color: @cyan; }
 #workspaces button.active.\34  { border-bottom-color: @pink; }
 #workspaces button.active.\35  { border-bottom-color: @yellow; }
+#workspaces button.active.\36  { border-bottom-color: @purple; }
 
 /* Рабочее пространство с уведомлением (Urgent) */
 #workspaces button.urgent {
     background-color: @red;
-    color: @bg !important;
+    color: @bg;
 }

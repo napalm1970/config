@@ -1,51 +1,48 @@
 {
+  "layer": "top",
+  "position": "top",
   "height": 30,
   "spacing": 4,
   "modules-left": [
     "hyprland/workspaces",
-    "niri/workspaces"
   ],
-  "niri/workspaces": {
-    "format": "{name}",
-    "all-outputs": true,
-    "on-click": "activate",
-    "on-scroll-up": "niri msg action focus-workspace-up",
-    "on-scroll-down": "niri msg action focus-workspace-down"
-  },
   "modules-center": [
-    "custom/updates",
-    "custom/mail",
-    "custom/pension",
-    "mpd",
     "clock",
-    "hyprland/language",
-    "custom/music-play",
-    "custom/music-pause",
-    "custom/music-stop",
-    "custom/weather"
+    "mpd",
+    "hyprland/language"
   ],
   "modules-right": [
+    "custom/updates",
+    "custom/mail",
+    "custom/weather",
+    "custom/pension",
+    "custom/gammastep",
     "wireplumber",
-    "cpu",
-    "memory",
-    "backlight",
+    "group/hardware",
     "battery",
     "tray"
   ],
+  "group/hardware": {
+    "orientation": "horizontal",
+    "modules": [
+      "cpu",
+      "memory"
+    ]
+  },
   "hyprland/workspaces": {
     "disable-scroll": true,
     "all-outputs": true,
     "warp-on-scroll": false,
-    "format": "{name}: {icon}",
+    "format": "{name}",
     "format-icons": {
-      "1": "\uf120",
-      "2": "\uf268",
-      "3": "\uf121",
-      "4": "\uf1bc",
-      "5": "\uf075",
-      "urgent": "\uf06a",
-      "focused": "\uf192",
-      "default": "\uf111"
+      "1": "1",
+      "2": "2",
+      "3": "3",
+      "4": "4",
+      "5": "5",
+      "6": "6",
+      "urgent": "!",
+      "default": ""
     }
   },
   "hyprland/language": {
@@ -54,18 +51,6 @@
     "format-ru": "\ud83c\uddf7\ud83c\uddfa",
     "on-click": "/home/napalm/.local/bin/toggle-layout.sh",
     "on-change": "restart"
-  },
-  "keyboard-state": {
-    "capslock": true,
-    "format": "{icon}",
-    "format-icons": {
-      "locked": "\uf023",
-      "unlocked": "\uf09c"
-    }
-  },
-  "tray": {
-    "icon-size": 21,
-    "spacing": 10
   },
   "clock": {
     "format": "{:%H:%M} \uf017 ",
@@ -97,29 +82,6 @@
   "memory": {
     "format": "{}% \uf0c9"
   },
-  "temperature": {
-    "critical-threshold": 80,
-    "format": "{temperatureC}\u00b0C {icon}",
-    "format-icons": [
-      "\uf76b",
-      "\uf2c9",
-      "\uf769"
-    ]
-  },
-  "backlight": {
-    "format": "{percent}% {icon}",
-    "format-icons": [
-      "\ue38d",
-      "\ue3d3",
-      "\ue3d1",
-      "\ue3cf",
-      "\ue3ce",
-      "\ue3cd",
-      "\ue3ca",
-      "\ue3c8",
-      "\ue39b"
-    ]
-  },
   "battery": {
     "states": {
       "warning": 30,
@@ -138,13 +100,13 @@
       "\uf240"
     ]
   },
-  "network": {
-    "format-wifi": "{essid} ({signalStrength}%) \uf1eb",
-    "format-ethernet": "{ipaddr}/{cidr} \uf796",
-    "tooltip-format": "{ifname} via {gwaddr} \uf796",
-    "format-linked": "{ifname} (No IP) \uf796",
-    "format-disconnected": "Disconnected \u26a0",
-    "format-alt": "{ifname}: {ipaddr}/{cidr}"
+  "custom/gammastep": {
+    "format": "{}",
+    "return-type": "json",
+    "interval": 2,
+    "exec": "/home/napalm/Documents/config/waybar/gammastep_status.sh",
+    "on-click": "if pgrep -x gammastep; then pkill -x gammastep; else gammastep & fi && sleep 0.1 && pkill -RTMIN+3 waybar",
+    "signal": 3
   },
   "wireplumber": {
     "format": "{volume}% {icon}",
@@ -190,18 +152,18 @@
     "return-type": "json"
   },
   "mpd": {
-    "format": "{stateIcon} {artist} \u2014 {title}",
-    "format-disconnected": " MPD \u043e\u0442\u043a\u043b\u044e\u0447\u0435\u043d",
-    "format-stopped": " \u041e\u0441\u0442\u0430\u043d\u043e\u0432\u043b\u0435\u043d\u043e",
-    "format-paused": "{stateIcon} {artist} \u2014 {title}",
+    "format": "{stateIcon} {title}",
+    "format-disconnected": " MPD отключен",
+    "format-stopped": " Остановлено",
+    "format-paused": "{stateIcon} {title}",
     "unknown-tag": "",
     "interval": 2,
     "state-icons": {
-      "paused": "",
-      "playing": ""
+      "paused": "⏸",
+      "playing": "▶"
     },
-    "tooltip-format": "MPD: {artist} \u2014 {album} \u2014 {title}\n{elapsedTime:%M:%S}/{totalTime:%M:%S} ({songPosition}/{queueLength})\n\u0413\u0440\u043e\u043c\u043a\u043e\u0441\u0442\u044c: {volume}%",
-    "tooltip-format-disconnected": "MPD \u043e\u0442\u043a\u043b\u044e\u0447\u0435\u043d",
+    "tooltip-format": "MPD: {artist} — {album} — {title}\n{elapsedTime:%M:%S}/{totalTime:%M:%S} ({songPosition}/{queueLength})\nГромкость: {volume}%",
+    "tooltip-format-disconnected": "MPD отключен",
     "on-click": "mpc toggle",
     "on-click-right": "mpc stop",
     "on-scroll-up": "mpc next",
@@ -209,22 +171,8 @@
     "on-click-middle": "kitty -e ncmpcpp",
     "max-length": 35
   },
-  "custom/music-play": {
-    "format": "\u25b6",
-    "on-click": "/home/napalm/Documents/projects/music-player/target/debug/music-player --resume",
-    "on-click-right": "alacritty -t \"Music Player\" -e /home/napalm/Documents/projects/music-player/target/debug/music-player --tui",
-    "tooltip": false
-  },
-  "custom/music-pause": {
-    "format": "\u23f8",
-    "on-click": "/home/napalm/Documents/projects/music-player/target/debug/music-player --pause",
-    "on-click-right": "alacritty -t \"Music Player\" -e /home/napalm/Documents/projects/music-player/target/debug/music-player --tui",
-    "tooltip": false
-  },
-  "custom/music-stop": {
-    "format": "\u23f9",
-    "on-click": "/home/napalm/Documents/projects/music-player/target/debug/music-player --stop",
-    "on-click-right": "alacritty -t \"Music Player\" -e /home/napalm/Documents/projects/music-player/target/debug/music-player --tui",
-    "tooltip": false
+  "tray": {
+    "icon-size": 24,
+    "spacing": 10
   }
 }

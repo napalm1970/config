@@ -30,6 +30,10 @@ set -Ux FZF_DEFAULT_OPTS "--color=fg:#f8f8f2,bg:#282a36,hl:#bd93f9 --color=fg+:#
 
 # ESP-IDF / ESP8266 SDK Paths
 fish_add_path $HOME/.local/bin
+fish_add_path $HOME/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/
+
+# Rust / cargo binaries (probe-rs, cargo-flash, cargo-embed)
+fish_add_path $HOME/.cargo/bin
 
 # Auto-activate System Python Virtual Environment
 if test -f $HOME/.python_venv/bin/activate.fish
@@ -47,11 +51,13 @@ alias y yazi
 alias c clear
 alias b btop
 alias q qwen
+alias g gemini
 alias gwk gemini_w_key
 alias gwok gemini
 alias run-ghidra-mcp "uv run /home/napalm/Downloads/GhidraMCP-release-1-4/bridge_mcp_ghidra.py --transport sse --mcp-host 127.0.0.1 --mcp-port 8081 --ghidra-server http://127.0.0.1:8080/"
-
+alias uai "sudo npm install -g @qwen-code/qwen-code@latest && sudo npm install -g @google/gemini-cli && npm fund"
 abbr -a bwl 'set -xg BW_SESSION (bw unlock --raw)'
+alias calc "qalculate-gtk & disown"
 
 fish_config theme choose tomorrow-night-bright
 set fish_color_error red --bold

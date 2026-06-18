@@ -7,3 +7,23 @@ waybar/weather-rs/weather-rs
 lazy-lock.json
 numetal_sefon.m3u
 scripts/sefon_update.log
+
+# Python кэш
+__pycache__/
+*.pyc
+
+# Бэкапы и временные скриншоты-черновики (НЕ обои из Themes/)
+*.bak
+hypr/img.png
+nvim/img.png
+waybar/img.png
+
+# Логи pyprland
+hypr/pypr_*.log
+
+# Артефакты сторонних инструментов
+.qwen/
+nvim/telemetry-id
+
+# Локальные настройки Claude Code (settings.json коммитится, local — нет)
+.claude/settings.local.json

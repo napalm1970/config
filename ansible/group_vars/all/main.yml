@@ -101,6 +101,7 @@ system_packages:
   - wl-clipboard
   - brightnessctl
   - pavucontrol
+  - qalculate-gtk   # скретчпад calc (SUPER+SHIFT+C, см. hypr/pyprland.toml)
   - libpulse
   - less
   - w3m
@@ -132,7 +133,8 @@ system_packages:
 # AUR пакеты
 aur_packages:
   - checkupdates-systemd-git
-  - swww
+  - awww            # демон обоев (hyprland.conf: awww-daemon / awww img)
+  - pyprland        # скретчпады (SUPER+SHIFT+P/V/C), см. hypr/pyprland.toml
   - dracula-gtk-theme
   - dracula-icons-git
   - xcursor-obsidian

@@ -78,7 +78,9 @@ def get_fund_data_swedbank_api(token: str) -> dict | None:
             response = requests.get(url, headers=headers, timeout=5)
             if response.status_code == 200:
                 data = response.json()
-                return parse_swedbank_response(data)
+                parsed = parse_swedbank_response(data)
+                if parsed:
+                    return parsed
         except (requests.RequestException, json.JSONDecodeError):
             continue
 
@@ -125,8 +127,9 @@ def get_fund_data_nasdaq() -> dict | None:
         change_match = re.search(r'Change[:\s]+([+-]?[\d,]+\.\d+)%', response.text, re.IGNORECASE)
 
         if nav_match and change_match:
-            nav = float(nav_match.group(1).replace(",", "."))
-            change = float(change_match.group(1).replace(",", "."))
+            # Убираем запятые (разделители тысяч), оставляем точку для float
+            nav = float(nav_match.group(1).replace(",", ""))
+            change = float(change_match.group(1).replace(",", ""))
             return {
                 "name": FUND_NAME,
                 "nav": nav,
@@ -135,7 +138,7 @@ def get_fund_data_nasdaq() -> dict | None:
 
         return None
 
-    except requests.exceptions.RequestException:
+    except (requests.exceptions.RequestException, ValueError, AttributeError):
         return None
 
 
@@ -262,28 +265,26 @@ def get_waybar_output(data: dict | None) -> dict:
 
 
 def main():
-    data = None
+    # 1. В первую очередь проверяем кэш (чтобы не спамить запросами)
+    data = get_cached_data()
 
-    # 1. Пробуем API Swedbank (если есть токен)
-    token = get_token_from_pass()
-    if token:
-        data = get_fund_data_swedbank_api(token)
-
-    # 2. Пробуем Nasdaq Baltic
     if data is None:
-        data = get_fund_data_nasdaq()
+        # 2. Пробуем API Swedbank (если есть токен)
+        token = get_token_from_pass()
+        if token:
+            data = get_fund_data_swedbank_api(token)
 
-    # 3. Пробуем ручной CSV файл
-    if data is None:
-        data = get_fund_data_manual()
+        # 3. Пробуем Nasdaq Baltic
+        if data is None:
+            data = get_fund_data_nasdaq()
 
-    # 4. Пробуем кэш
-    if data is None:
-        data = get_cached_data()
+        # 4. Пробуем ручной CSV файл
+        if data is None:
+            data = get_fund_data_manual()
 
-    # Сохраняем в кэш если получили свежие данные
-    if data and not data.get("error") and not data.get("from_cache"):
-        save_to_cache(data)
+        # Сохраняем свежие данные в кэш
+        if data and not data.get("error"):
+            save_to_cache(data)
 
     output = get_waybar_output(data)
     print(json.dumps(output, ensure_ascii=False))

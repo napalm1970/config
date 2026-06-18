@@ -1,0 +1,4 @@
+[[mgr.prepend_keymap]]
+on = ["g", "s"]
+run = "cd ~/Sklad/Games/Solasta\\ Crown\\ of\\ the\\ Magister/"
+desc = "Cd to Solasta folder"

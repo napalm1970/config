@@ -20,8 +20,8 @@ lazy = true
 
 [scratchpads.calc]
 animation = "fromRight"
-command = "gnome-calculator"
-class = "org.gnome.Calculator"
+command = "qalculate-gtk"
+class = "qalculate-gtk"
 size = "40% 90%"
 unfocus = "hide"
 lazy = true
