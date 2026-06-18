@@ -85,7 +85,6 @@ MIT License.
 
 *   Сообществу [Hyprland](https://hyprland.org/) за отличный композитный менеджер.
 *   Проектам [Catppuccin](https://github.com/catppuccin/catppuccin) и [Dracula](https://draculatheme.com/) за цветовые схемы.
-*   **Gemini CLI** за помощь в автоматизации процессов, рефакторинге кода и написании документации.
 
 ### ⌨️ Hotkeys
 | Key | Action |
@@ -93,7 +92,6 @@ MIT License.
 | $mainMod + Return | $terminal |
 | $mainMod + b | $BROWSER |
 | $mainMod + t | tor |
-| $mainMod + G | [float;center;size 80% 80%] kitty --class gemini-floating -e gemini |
 | $mainMod SHIFT + P | pypr toggle term |
 | $mainMod SHIFT + V | pypr toggle volume |
 | $mainMod SHIFT + C | pypr toggle calc |

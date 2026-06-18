@@ -11,7 +11,7 @@ map("n", "<C-Up>", "<C-w>k", { desc = "Go to upper window", remap = true })
 map("n", "<C-Right>", "<C-w>l", { desc = "Go to right window", remap = true })
 
 -- Terminal mode mappings for easier window navigation
--- These mappings ensure you can switch out of the Gemini CLI or any terminal window
+-- These mappings ensure you can switch out of any terminal window
 map("t", "<C-Left>", "<C-\\><C-n><C-w>h", { desc = "Go to left window" })
 map("t", "<C-Down>", "<C-\\><C-n><C-w>j", { desc = "Go to lower window" })
 map("t", "<C-Up>", "<C-\\><C-n><C-w>k", { desc = "Go to upper window" })

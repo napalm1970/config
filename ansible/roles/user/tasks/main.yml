@@ -14,12 +14,6 @@
     virtualenv: "{{ home_dir }}/.python_venv"
     virtualenv_command: python3 -m venv
 
-- name: Создание директории памяти Gemini
-  ansible.builtin.file:
-    path: "{{ home_dir }}/.gemini/memory"
-    state: directory
-    mode: "0700"
-
 - name: Настройка директории .ssh
   ansible.builtin.file:
     path: "{{ home_dir }}/.ssh"

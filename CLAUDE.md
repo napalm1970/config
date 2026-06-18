@@ -59,15 +59,13 @@ This is a multi-language repo glued together by Hyprland's `exec-once` lines and
 - `generate_docs.py` — pre-commit hook target, see above.
 - `wait-for-net.sh` — used as `$waitnet` in `hyprland.conf` to gate `exec-once` lines that need network.
 
-**`fish/`** — Fish shell config. `config.fish` enables `fish_vi_key_bindings`, sets `EDITOR=nvim`, auto-activates `~/.python_venv`, and defines aliases (`v`=nvim, `u`=`yay -Syu`, `fc`/`hc` to edit configs, `bwl` to unlock Bitwarden, …). `gemini_w_key` pulls `GEMINI_API_KEY` from `pass`. Plugins are managed via Fisher (`fish_plugins`).
+**`fish/`** — Fish shell config. `config.fish` enables `fish_vi_key_bindings`, sets `EDITOR=nvim`, auto-activates `~/.python_venv`, and defines aliases (`v`=nvim, `u`=`yay -Syu`, `fc`/`hc` to edit configs, `bwl` to unlock Bitwarden, …). Plugins are managed via Fisher (`fish_plugins`).
 
-**`nvim/`** — LazyVim distribution; plugin specs in `lua/plugins/` (e.g. `qml.lua`, `rust.lua`, `gemini-companion.lua`). `lazy-lock.json` is gitignored.
+**`nvim/`** — LazyVim distribution; plugin specs in `lua/plugins/` (e.g. `qml.lua`, `rust.lua`, `stm32-dap.lua`). `lazy-lock.json` is gitignored.
 
 **`aerc/`** — Terminal mail client config (`accounts.conf`, `aerc.conf`, `binds.conf`), symlinked into `~/.config/aerc`. Launched via `scripts/launch-aerc.sh`. The Waybar `custom/mail` module (`scripts/check_mail.py`) reads the same mailbox over IMAP. `fetch_emails.py` is a related standalone IMAP fetcher.
 
 **`Themes/wallpapers/`** — Wallpapers. `Themes/` is symlinked to `~/Documents/Themes` for compatibility.
-
-**Submodule:** `gemini-extensions/gemini-cli-prompt-library` — remember `git submodule update --init --recursive` after a fresh clone.
 
 ## Conventions
 

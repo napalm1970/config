@@ -55,6 +55,10 @@ def update_readme():
     else:
         content += "\n\n" + pkg_list
 
+    # Гарантируем ровно один перевод строки в конце,
+    # иначе хук end-of-file-fixer и этот скрипт дерутся на каждом коммите
+    content = content.rstrip("\n") + "\n"
+
     with open(readme_path, "w") as f:
         f.write(content)
 

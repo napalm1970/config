@@ -30,13 +30,6 @@
     enabled: yes
     state: started
 
-- name: Установка глобальных NPM пакетов
-  become: true
-  community.general.npm:
-    name: "@google/gemini-cli"
-    global: yes
-    state: present
-
 - name: Создание директории systemd user
   become: false
   ansible.builtin.file:

@@ -10,19 +10,6 @@ function p
     end
 end
 
-function gemini_w_key
-    if not set -q GEMINI_API_KEY
-        set -l key (pass gemini/GEMINI_API_KEY)
-        if test -n "$key"
-            set -gx GEMINI_API_KEY $key
-        else
-            echo "Error: GEMINI_API_KEY could not be retrieved from pass."
-            return 1
-        end
-    end
-    command gemini $argv
-end
-
 set -Ux EDITOR nvim
 set fzf_history_time_format %d-%m-%y
 set -g fish_user_paths $HOME/.local/bin
@@ -51,11 +38,8 @@ alias y yazi
 alias c clear
 alias b btop
 alias q qwen
-alias g gemini
-alias gwk gemini_w_key
-alias gwok gemini
 alias run-ghidra-mcp "uv run /home/napalm/Downloads/GhidraMCP-release-1-4/bridge_mcp_ghidra.py --transport sse --mcp-host 127.0.0.1 --mcp-port 8081 --ghidra-server http://127.0.0.1:8080/"
-alias uai "sudo npm install -g @qwen-code/qwen-code@latest && sudo npm install -g @google/gemini-cli && npm fund"
+alias uai "sudo npm install -g @qwen-code/qwen-code@latest && npm fund"
 abbr -a bwl 'set -xg BW_SESSION (bw unlock --raw)'
 alias calc "qalculate-gtk & disown"
 
